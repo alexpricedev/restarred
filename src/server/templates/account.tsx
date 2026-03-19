@@ -141,6 +141,8 @@ export const Account = ({
     csrfToken={logoutCsrfToken}
   >
     <div className="account-container">
+      {flash && <Flash type={flash.type}>{flash.message}</Flash>}
+
       <div className="account-header">
         <div>
           <span className="account-label">ACCOUNT</span>
@@ -188,8 +190,6 @@ export const Account = ({
           <span className="account-stat-label">Next digest</span>
         </div>
       </div>
-
-      {flash && <Flash type={flash.type}>{flash.message}</Flash>}
 
       <form method="POST" action="/account" className="account-form">
         <CsrfField token={csrfToken} />
