@@ -2,6 +2,7 @@
 @import "./pages/home.css";
 @import "./pages/login.css";
 @import "./pages/admin.css";
+@import "./pages/welcome.css";
 
 /* Component styles */
 @import "./components/layout.css";
