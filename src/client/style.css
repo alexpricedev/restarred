@@ -1,6 +1,5 @@
 /* Page styles */
 @import "./pages/home.css";
-@import "./pages/stack.css";
 @import "./pages/forms.css";
 @import "./pages/projects.css";
 @import "./pages/login.css";
@@ -15,23 +14,44 @@
 @import "./components/badge.css";
 
 :root {
-  --color-bg: #0a0a0b;
-  --color-surface: #141415;
-  --color-surface-hover: #1c1c1e;
-  --color-border: #222224;
-  --color-text: #ededef;
-  --color-text-secondary: #b4b5b9;
-  --color-text-tertiary: #8a8b8e;
-  --color-text-quaternary: #5c5d60;
-  --color-primary: #7c85f0;
-  --color-primary-hover: #9098f3;
-  --color-success: #34d399;
-  --color-danger: #f87171;
-  --color-warning: #fbbf24;
-  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
-  --font-mono: "SF Mono", "Fira Code", "Fira Mono", Menlo, monospace;
+  /* Palette */
+  --color-bg: #f9f9f9;
+  --color-primary: #000000;
+  --color-primary-container: #3b3b3b;
+  --color-on-primary: #e2e2e2;
+  --color-surface: #ffffff;
+  --color-surface-container-low: #f3f3f4;
+  --color-surface-container: #eeeeee;
+  --color-surface-container-high: #e6e6e6;
+  --color-surface-container-highest: #e2e2e2;
+  --color-border: rgba(198, 198, 198, 0.15);
+
+  /* Text hierarchy */
+  --color-text: #1a1c1c;
+  --color-text-secondary: #5e5e5e;
+  --color-text-tertiary: #777777;
+  --color-text-quaternary: #ababab;
+
+  /* Semantic */
+  --color-success: #2d6a4f;
+  --color-danger: #ba1a1a;
+  --color-warning: #b45309;
+
+  /* Typography */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-main: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", Menlo, monospace;
+
+  /* Radius */
   --radius: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+
+  /* Layout */
+  --max-width-landing: 1080px;
+  --max-width-app: 960px;
+
   --shadow: none;
 }
 
@@ -63,7 +83,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   margin: 0 0 0.5em 0;
   line-height: 1.2;
 }
@@ -71,10 +92,12 @@ h6 {
 h1 {
   font-size: 2.2rem;
   letter-spacing: -0.02em;
+  text-transform: uppercase;
 }
 
 h2 {
   letter-spacing: -0.01em;
+  text-transform: uppercase;
 }
 
 p {
@@ -83,33 +106,34 @@ p {
 
 a {
   color: var(--color-primary);
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
   transition: color 150ms ease;
 
   &:hover,
   &:focus {
-    color: var(--color-primary-hover);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-thickness: 1px;
+    color: var(--color-primary-container);
   }
 }
 
 button {
-  font-family: inherit;
+  font-family: var(--font-display);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
   padding: 8px 16px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-full);
   border: none;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-on-primary);
   cursor: pointer;
-  transition: all 150ms ease;
+  transition: background 150ms ease;
 
   &:hover,
   &:focus {
-    background: var(--color-primary-hover);
+    background: var(--color-primary-container);
   }
 }
 
@@ -120,8 +144,8 @@ img {
 
 .card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  border: none;
+  border-radius: var(--radius-lg);
   display: inline-block;
   margin-bottom: 2rem;
   padding: 24px;
@@ -135,7 +159,7 @@ img {
 
   &:hover,
   &:focus {
-    background: var(--color-surface);
+    background: var(--color-surface-container-low);
     color: var(--color-text);
   }
 }
@@ -146,7 +170,7 @@ img {
 
   &:hover,
   &:focus {
-    background: rgba(248, 113, 113, 0.1);
+    background: rgba(186, 26, 26, 0.08);
   }
 }
 
@@ -155,7 +179,7 @@ textarea,
 select {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   color: var(--color-text);
   font-family: inherit;
   font-size: 14px;

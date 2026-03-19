@@ -2,12 +2,22 @@ import type React from "react";
 
 import { getAssetUrl } from "../services/assets";
 import type { User } from "../services/users";
-import { Logo } from "./logo";
 import { Nav } from "./nav";
 
-const SITE_URL = "https://billet.alexprice.dev";
+const SITE_URL = "http://localhost";
 const SITE_DESCRIPTION =
-  "Full-stack TypeScript starter — designed to be built on by AI coding agents";
+  "GitHub Star Rediscovery. 3 random repos, every week, in your inbox.";
+
+const GoogleFonts = () => (
+  <>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </>
+);
 
 interface LayoutProps {
   title: string;
@@ -25,7 +35,7 @@ export function Layout({
   csrfToken,
 }: LayoutProps) {
   return (
-    <html lang="en" style={{ colorScheme: "dark" }}>
+    <html lang="en" style={{ colorScheme: "light" }}>
       <head>
         <meta charSet="utf-8" />
         <meta
@@ -43,6 +53,7 @@ export function Layout({
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={SITE_DESCRIPTION} />
         <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
+        <GoogleFonts />
         <link rel="stylesheet" href={getAssetUrl("/assets/main.css")} />
         <script
           type="importmap"
@@ -63,22 +74,12 @@ export function Layout({
       <body data-page={name} data-component="layout">
         <header>
           <a href="/" className="logo">
-            <Logo />
-            <span>Billet</span>
+            <span>restarred</span>
           </a>
           <Nav page={name} user={user} csrfToken={csrfToken} />
         </header>
         <main>{children}</main>
-        <footer>
-          <a href="https://github.com/alexpricedev/Billet">GitHub</a>
-          <span>
-            Built by <a href="https://alexprice.dev">alexprice.dev</a>
-          </span>
-        </footer>
-        <script
-          async
-          src="https://unpkg.com/lottie-web@5/build/player/lottie_light.min.js"
-        />
+        <footer />
         <script type="module" src={getAssetUrl("/assets/main.js")} />
       </body>
     </html>
@@ -87,12 +88,13 @@ export function Layout({
 
 interface BaseLayoutProps {
   title: string;
+  name?: string;
   children: React.ReactNode;
 }
 
-export function BaseLayout({ title, children }: BaseLayoutProps) {
+export function BaseLayout({ title, name, children }: BaseLayoutProps) {
   return (
-    <html lang="en" style={{ colorScheme: "dark" }}>
+    <html lang="en" style={{ colorScheme: "light" }}>
       <head>
         <meta charSet="utf-8" />
         <meta
@@ -100,9 +102,13 @@ export function BaseLayout({ title, children }: BaseLayoutProps) {
           content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
         <title>{title}</title>
+        <GoogleFonts />
         <link rel="stylesheet" href={getAssetUrl("/assets/main.css")} />
       </head>
-      <body>{children}</body>
+      <body data-page={name}>
+        {children}
+        <script type="module" src={getAssetUrl("/assets/main.js")} />
+      </body>
     </html>
   );
 }

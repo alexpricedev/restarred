@@ -1,11 +1,17 @@
 [data-component="layout"] {
   & > header {
     align-items: center;
-    background: var(--color-bg);
-    border-bottom: 1px solid var(--color-border);
+    background: rgba(249, 249, 249, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: flex;
     justify-content: space-between;
     padding: 0.75rem 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
 
     @media (width <= 640px) {
       padding: 0.75rem 1rem;
@@ -18,16 +24,16 @@
       text-decoration: none;
 
       svg {
-        width: 22px;
-        height: 22px;
+        display: none;
       }
 
       span {
         color: var(--color-text);
+        font-family: var(--font-display);
         font-size: 1.125rem;
-        font-style: italic;
-        font-weight: 600;
-        letter-spacing: -0.01em;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
       }
 
       &:hover,
@@ -39,26 +45,29 @@
 
   & > main {
     margin: 0 auto;
-    max-width: 960px;
-    padding: 2rem;
+    max-width: var(--max-width-app);
+    padding: 7rem 2rem 2rem;
 
     @media (width <= 768px) {
-      padding: 1.5rem;
+      padding: 6rem 1.5rem 1.5rem;
     }
 
     @media (width <= 640px) {
-      padding: 1rem;
+      padding: 5.5rem 1rem 1rem;
     }
   }
 
   & > footer {
-    border-top: 1px solid var(--color-border);
+    background: var(--color-surface-container-low);
     color: var(--color-text-quaternary);
     display: flex;
-    font-size: 13px;
+    font-family: var(--font-main);
+    font-size: 0.6875rem;
     gap: 1.5rem;
     justify-content: center;
+    letter-spacing: 0.05em;
     padding: 1.5rem 2rem;
+    text-transform: uppercase;
   }
 
   & > footer a {
