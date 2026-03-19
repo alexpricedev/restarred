@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [1.0.1] - 2026-03-19
 
 ### Fixed
-- Redirect authenticated users with completed sync away from `/welcome` page to home, preventing them from unnecessarily re-landing on the welcome screen after their initial sync completes.
+- Prevent users with completed initial sync from re-landing on the `/welcome` page — they're now redirected to home immediately.
 
 ## [1.0.0] - 2026-03-16
 
