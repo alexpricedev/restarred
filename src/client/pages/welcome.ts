@@ -35,7 +35,7 @@ export function init() {
       const statusEl = document.getElementById("sync-status");
       if (statusEl?.textContent?.startsWith("Done")) {
         setTimeout(() => {
-          window.location.href = "/";
+          window.location.href = "/account";
         }, 1500);
       }
       return;

@@ -74,7 +74,7 @@ export const callback = {
 
       const response = new Response("", {
         status: 303,
-        headers: { Location: isNewUser ? "/welcome" : "/" },
+        headers: { Location: isNewUser ? "/welcome" : "/account" },
       });
 
       setSessionCookie(req, sessionId);

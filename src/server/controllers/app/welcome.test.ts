@@ -47,7 +47,7 @@ describe("Welcome Controller", () => {
     expect(html).toContain("TESTUSER");
   });
 
-  test("redirects to / when sync is already done", async () => {
+  test("redirects to /account when sync is already done", async () => {
     const { getSessionContext } = await import("../../middleware/auth");
     (getSessionContext as ReturnType<typeof mock>).mockResolvedValueOnce({
       sessionId: "session-123",
@@ -78,7 +78,7 @@ describe("Welcome Controller", () => {
     const response = await welcome.index(request);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get("location")).toBe("/");
+    expect(response.headers.get("location")).toBe("/account");
   });
 
   test("redirects unauthenticated user to /", async () => {
