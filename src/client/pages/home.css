@@ -100,10 +100,13 @@
   /* ── Hero ───────────────────────────────────────────── */
 
   .landing-hero {
-    padding: 6rem 0 3rem;
+    padding: 4rem 0 3rem;
+    min-height: calc(100vh - 5rem);
+    display: flex;
+    align-items: flex-start;
 
     @media (width >= 768px) {
-      padding: 8rem 0 4rem;
+      padding: 5rem 0 4rem;
     }
   }
 
@@ -217,7 +220,7 @@
 
   .digest-preview {
     background: #ffffff;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     max-width: 36rem;
     margin: 0 auto;
     overflow: hidden;
