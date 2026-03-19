@@ -78,3 +78,71 @@ const fetchPrimaryEmail = async (
   const primary = emails.find((e) => e.primary && e.verified);
   return primary?.email ?? emails[0]?.email ?? null;
 };
+
+export interface StarredRepo {
+  repo_id: number;
+  full_name: string;
+  description: string | null;
+  language: string | null;
+  stargazers_count: number;
+  html_url: string;
+  starred_at: string | null;
+  last_activity_at: string | null;
+}
+
+interface GitHubStarredResponse {
+  starred_at: string;
+  repo: {
+    id: number;
+    full_name: string;
+    description: string | null;
+    language: string | null;
+    stargazers_count: number;
+    html_url: string;
+    pushed_at: string | null;
+  };
+}
+
+export const fetchAllStarredRepos = async (
+  accessToken: string,
+): Promise<StarredRepo[]> => {
+  const allRepos: StarredRepo[] = [];
+  let page = 1;
+
+  while (true) {
+    const response = await fetch(
+      `https://api.github.com/user/starred?per_page=100&page=${page}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/vnd.github.star+json",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status}`);
+    }
+
+    const items = (await response.json()) as GitHubStarredResponse[];
+    if (items.length === 0) break;
+
+    for (const item of items) {
+      allRepos.push({
+        repo_id: item.repo.id,
+        full_name: item.repo.full_name,
+        description: item.repo.description,
+        language: item.repo.language,
+        stargazers_count: item.repo.stargazers_count,
+        html_url: item.repo.html_url,
+        starred_at: item.starred_at,
+        last_activity_at: item.repo.pushed_at,
+      });
+    }
+
+    if (items.length < 100) break;
+    page++;
+  }
+
+  return allRepos;
+};
