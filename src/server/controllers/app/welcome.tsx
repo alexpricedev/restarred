@@ -12,6 +12,10 @@ export const welcome = {
       return redirect("/auth/github");
     }
 
+    if (ctx.user.sync_status === "done") {
+      return redirect("/");
+    }
+
     if (ctx.requiresSetCookie && ctx.sessionId) {
       setSessionCookie(req, ctx.sessionId);
     }
