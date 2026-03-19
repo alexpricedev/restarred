@@ -1,4 +1,5 @@
 import { db } from "./database";
+import { log } from "./logger";
 
 export interface SelectedRepo {
   starId: string;
@@ -90,13 +91,17 @@ export const selectReposForDigest = async (
       ORDER BY random()
       LIMIT 3
     `) as StarRow[];
-    return picks.map((row) => rowToSelectedRepo(row, newCycle));
+    const results = picks.map((row) => rowToSelectedRepo(row, newCycle));
+    log.info("digest", `Selected ${results.length} repos for user ${userId}`);
+    return results;
   }
 
   if (unseen.length >= 3) {
-    return unseen
+    const results = unseen
       .slice(0, 3)
       .map((row) => rowToSelectedRepo(row, currentCycle));
+    log.info("digest", `Selected ${results.length} repos for user ${userId}`);
+    return results;
   }
 
   const results: SelectedRepo[] = unseen.map((row) =>
@@ -126,6 +131,7 @@ export const selectReposForDigest = async (
   }
 
   results.push(...fill.map((row) => rowToSelectedRepo(row, newCycle)));
+  log.info("digest", `Selected ${results.length} repos for user ${userId}`);
   return results;
 };
 
@@ -158,10 +164,12 @@ export const recordDigestSelections = async (
   userId: string,
   selections: { starId: string; cycle: number }[],
 ): Promise<void> => {
-  for (const sel of selections) {
-    await db`
-      INSERT INTO digest_history (user_id, star_id, cycle)
-      VALUES (${userId}, ${sel.starId}, ${sel.cycle})
-    `;
-  }
+  await db.begin(async (tx) => {
+    for (const sel of selections) {
+      await tx`
+        INSERT INTO digest_history (user_id, star_id, cycle)
+        VALUES (${userId}, ${sel.starId}, ${sel.cycle})
+      `;
+    }
+  });
 };
