@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import type { User } from "./auth";
-import type { SelectedRepo } from "./digest";
+import type { SelectedRepo } from "./digest-email";
 import {
   formatRelativeDate,
   formatStarCount,
