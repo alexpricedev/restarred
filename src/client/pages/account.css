@@ -191,3 +191,21 @@
   color: var(--color-text-tertiary);
   font-style: italic;
 }
+
+[data-page="account"] .account-test-email {
+  margin-top: 5rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--color-border);
+}
+
+[data-page="account"] .button-secondary {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid #c6c6c6;
+}
+
+[data-page="account"] .button-secondary:hover,
+[data-page="account"] .button-secondary:focus {
+  background: transparent;
+  border-color: #000;
+}
