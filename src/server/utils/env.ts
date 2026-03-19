@@ -6,7 +6,14 @@ interface EnvConfig {
 }
 
 const config: EnvConfig = {
-  required: ["DATABASE_URL", "CRYPTO_PEPPER"],
+  required: [
+    "DATABASE_URL",
+    "CRYPTO_PEPPER",
+    "GITHUB_CLIENT_ID",
+    "GITHUB_CLIENT_SECRET",
+    "GITHUB_CALLBACK_URL",
+    "ENCRYPTION_KEY",
+  ],
   optional: ["PORT", "APP_NAME", "APP_ORIGIN", "FROM_EMAIL", "FROM_NAME"],
 };
 
