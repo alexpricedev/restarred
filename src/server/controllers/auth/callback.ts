@@ -12,6 +12,7 @@ import {
   deleteSession,
   setSessionCookie,
 } from "../../services/sessions";
+import { syncUserStars } from "../../services/stars";
 import { redirect } from "../../utils/response";
 
 function getStateCookie(req: BunRequest): string | null {
@@ -60,9 +61,20 @@ export const callback = {
 
       const sessionId = await createAuthenticatedSession(user.id);
 
+      const isNewUser = user.sync_status === "idle";
+
+      if (isNewUser) {
+        syncUserStars(user.id, accessToken).catch((err) => {
+          log.error(
+            "stars",
+            `Background sync failed for user ${user.id}: ${err}`,
+          );
+        });
+      }
+
       const response = new Response("", {
         status: 303,
-        headers: { Location: "/" },
+        headers: { Location: isNewUser ? "/welcome" : "/" },
       });
 
       setSessionCookie(req, sessionId);

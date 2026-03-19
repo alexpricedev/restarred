@@ -115,6 +115,7 @@ export const getSessionContextFromDB = async (
       timezone: string | null;
       is_active: boolean | null;
       role: "user" | "admin" | null;
+      sync_status: "idle" | "syncing" | "done" | "error" | null;
       user_created_at: string | null;
       user_updated_at: string | null;
     };
@@ -134,6 +135,9 @@ export const getSessionContextFromDB = async (
           timezone: data.timezone as string,
           is_active: data.is_active as boolean,
           role: (data.role as "user" | "admin") ?? "user",
+          sync_status:
+            (data.sync_status as "idle" | "syncing" | "done" | "error") ??
+            "idle",
           created_at: new Date(data.user_created_at as string),
           updated_at: new Date(data.user_updated_at as string),
         }

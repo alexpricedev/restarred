@@ -1,23 +1,26 @@
 import { describe, expect, mock, test } from "bun:test";
 
+const mockUser = {
+  id: "user-123",
+  github_id: 12345,
+  github_username: "testuser",
+  github_email: "test@example.com",
+  email_override: null,
+  github_token: "encrypted-token",
+  digest_day: 1,
+  digest_hour: 9,
+  timezone: "UTC",
+  is_active: true,
+  sync_status: "idle",
+  role: "user",
+  created_at: new Date(),
+  updated_at: new Date(),
+};
+
+const mockFindOrCreateGitHubUser = mock(() => Promise.resolve({ ...mockUser }));
+
 mock.module("../../services/auth", () => ({
-  findOrCreateGitHubUser: mock(() =>
-    Promise.resolve({
-      id: "user-123",
-      github_id: 12345,
-      github_username: "testuser",
-      github_email: "test@example.com",
-      email_override: null,
-      github_token: "encrypted-token",
-      digest_day: 1,
-      digest_hour: 9,
-      timezone: "UTC",
-      is_active: true,
-      role: "user",
-      created_at: new Date(),
-      updated_at: new Date(),
-    }),
-  ),
+  findOrCreateGitHubUser: mockFindOrCreateGitHubUser,
 }));
 
 mock.module("../../services/encryption", () => ({
@@ -42,6 +45,12 @@ mock.module("../../middleware/auth", () => ({
       requiresSetCookie: false,
     }),
   ),
+}));
+
+const mockSyncUserStars = mock(() => Promise.resolve());
+
+mock.module("../../services/stars", () => ({
+  syncUserStars: mockSyncUserStars,
 }));
 
 const mockExchangeCodeForToken = mock(() => Promise.resolve("gh-token-123"));
@@ -124,7 +133,60 @@ describe("Callback Controller", () => {
       );
     });
 
+    test("redirects new user to /welcome and fires sync", async () => {
+      mockSyncUserStars.mockClear();
+      mockFindOrCreateGitHubUser.mockResolvedValueOnce({
+        ...mockUser,
+        sync_status: "idle",
+      });
+
+      const request = createBunRequest(
+        "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
+        {
+          method: "GET",
+          headers: {
+            cookie: "github_oauth_state=matching-state",
+          },
+        },
+      );
+
+      const response = await callback.index(request);
+
+      expect(response.status).toBe(303);
+      expect(response.headers.get("location")).toBe("/welcome");
+      expect(mockSyncUserStars).toHaveBeenCalledTimes(1);
+    });
+
+    test("redirects returning user to / without sync", async () => {
+      mockSyncUserStars.mockClear();
+      mockFindOrCreateGitHubUser.mockResolvedValueOnce({
+        ...mockUser,
+        sync_status: "done",
+      });
+
+      const request = createBunRequest(
+        "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
+        {
+          method: "GET",
+          headers: {
+            cookie: "github_oauth_state=matching-state",
+          },
+        },
+      );
+
+      const response = await callback.index(request);
+
+      expect(response.status).toBe(303);
+      expect(response.headers.get("location")).toBe("/");
+      expect(mockSyncUserStars).not.toHaveBeenCalled();
+    });
+
     test("successfully authenticates with valid code and state", async () => {
+      mockFindOrCreateGitHubUser.mockResolvedValueOnce({
+        ...mockUser,
+        sync_status: "done",
+      });
+
       const request = createBunRequest(
         "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
         {

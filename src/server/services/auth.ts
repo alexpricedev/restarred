@@ -13,6 +13,7 @@ export interface User {
   timezone: string;
   is_active: boolean;
   role: "user" | "admin";
+  sync_status: "idle" | "syncing" | "done" | "error";
   created_at: Date;
   updated_at: Date;
 }
