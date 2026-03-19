@@ -1,8 +1,8 @@
-# restarred
+# re:starred
 
-GitHub Star Rediscovery. 3 random repos, every week, in your inbox.
+3 of your GitHub stars, resurfaced in your inbox every week.
 
-Most developers star GitHub repos and never look at them again. restarred resurfaces those forgotten stars as a weekly email digest — 3 random repos per week, cycling through your entire list before repeating. No repo is shown twice until you've seen them all.
+Most developers star GitHub repos and never look at them again. re:starred resurfaces those forgotten stars as a weekly email digest — 3 of your starred repos per week, cycling through your entire list before repeating. No repo is shown twice until you've seen them all.
 
 ---
 

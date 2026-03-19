@@ -12,7 +12,7 @@ const errorMessages: Record<string, string> = {
 };
 
 export const Login = ({ error }: LoginProps) => (
-  <Layout title="Sign in — restarred" name="login">
+  <Layout title="Sign in — re:starred" name="login">
     <div className="login-page">
       <div className="login-container">
         <h1>Sign in</h1>

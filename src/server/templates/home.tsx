@@ -7,12 +7,12 @@ interface HomeProps {
 }
 
 export const Home = ({ user, csrfToken }: HomeProps) => (
-  <BaseLayout title="restarred — Give Your Stars a Second Chance" name="home">
+  <BaseLayout title="re:starred — Your Starred Repos, Resurfaced" name="home">
     <div data-page="home">
       {/* Landing Nav */}
       <nav className="landing-nav">
         <div className="landing-nav-inner">
-          <span className="landing-wordmark">restarred</span>
+          <span className="landing-wordmark">re:starred</span>
           <div className="landing-nav-links">
             <a href="#how-it-works">Docs</a>
             <a href="#features">About</a>
@@ -41,15 +41,14 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
         <section className="landing-hero">
           <div className="landing-container">
             <h1 className="hero-heading">
-              GIVE YOUR STARS A
+              YOUR STARRED REPOS,
               <br />
-              SECOND CHANCE
+              RESURFACED
             </h1>
             <div className="hero-grid">
               <div className="hero-description">
                 <p>
-                  GitHub Star Rediscovery. 3 random repos, every week, in your
-                  inbox. No more losing good code in the void.
+                  3 of your GitHub stars, delivered to your inbox every week.
                 </p>
               </div>
               <div className="hero-actions">
@@ -57,7 +56,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
                   CONNECT GITHUB
                 </a>
                 <p className="hero-proof">
-                  JOIN 4,200+ DEVELOPERS CURATING THEIR VOID
+                  JOIN 4,200+ DEVELOPERS REDISCOVERING THEIR STARS
                 </p>
               </div>
             </div>
@@ -86,26 +85,26 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
             <div className="protocol-grid">
               <div className="protocol-step">
                 <div className="step-number">01</div>
-                <h3>SYNC YOUR VOID</h3>
+                <h3>CONNECT YOUR STARS</h3>
                 <p>
-                  Connect your GitHub account. We index your thousands of
-                  forgotten stars into our secure discovery engine.
+                  Sign in with GitHub. We pull in every repo you've ever starred
+                  and start cycling through them.
                 </p>
               </div>
               <div className="protocol-step">
                 <div className="step-number">02</div>
-                <h3>WEEKLY TRINITY</h3>
+                <h3>WEEKLY DIGEST</h3>
                 <p>
-                  Every Monday, our algorithm picks 3 repos you starred years
-                  ago. High quality, zero clutter, pure rediscovery.
+                  Each week, you get 3 of your starred repos in a single email.
+                  No repeats until you've seen them all.
                 </p>
               </div>
               <div className="protocol-step">
                 <div className="step-number">03</div>
-                <h3>RE-ENGAGE</h3>
+                <h3>REDISCOVER</h3>
                 <p>
-                  Read the summary, check the latest commits, and decide if it
-                  stays in your star list or gets archived.
+                  See what's changed — activity status, latest commits, star
+                  count. Revisit the ones worth keeping.
                 </p>
               </div>
             </div>
@@ -118,16 +117,16 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
             <div className="bento-grid">
               <div className="bento-large">
                 <div className="bento-large-content">
-                  <h3>ARCHITECTURAL CURATION</h3>
+                  <h3>FULL CONTEXT, NOT JUST LINKS</h3>
                   <p>
-                    We don't just send links. We provide deep context — why you
-                    starred it, what changed since then, and why it's still
-                    relevant today.
+                    Each repo comes with its description, primary language, star
+                    count, and activity status — so you know if it's still alive
+                    before you click.
                   </p>
                 </div>
                 <div className="bento-large-footer">
                   <div className="bento-line" />
-                  <span className="bento-link-label">VIEW THE ALGORITHM</span>
+                  <span className="bento-link-label">SEE HOW IT WORKS</span>
                 </div>
               </div>
               <div className="bento-stack">
@@ -153,7 +152,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
         {/* CTA */}
         <section className="landing-cta">
           <div className="landing-cta-inner">
-            <h2>READY TO UNVOID?</h2>
+            <h2>READY TO REDISCOVER?</h2>
             <div className="cta-buttons">
               <a href="/login" className="cta-primary">
                 CONNECT GITHUB NOW
@@ -169,7 +168,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
       {/* Footer */}
       <footer className="landing-footer">
         <div className="landing-footer-inner">
-          <span className="landing-footer-wordmark">restarred</span>
+          <span className="landing-footer-wordmark">re:starred</span>
           <div className="landing-footer-links">
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
@@ -177,7 +176,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
             <a href="https://twitter.com">Twitter</a>
           </div>
           <div className="landing-footer-copy">
-            &copy; 2024 RESTARRED. ARCHITECTURAL PRECISION.
+            &copy; 2024 RE:STARRED. ARCHITECTURAL PRECISION.
           </div>
         </div>
       </footer>
