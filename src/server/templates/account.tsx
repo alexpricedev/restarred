@@ -201,9 +201,13 @@ export const Account = ({
           <div className="account-schedule-grid">
             <div className="form-field">
               <label htmlFor="digest_day">Day</label>
-              <select id="digest_day" name="digest_day">
+              <select
+                id="digest_day"
+                name="digest_day"
+                defaultValue={user.digest_day}
+              >
                 {DAYS.map((day, i) => (
-                  <option key={day} value={i} selected={i === user.digest_day}>
+                  <option key={day} value={i}>
                     {day}
                   </option>
                 ))}
@@ -211,13 +215,13 @@ export const Account = ({
             </div>
             <div className="form-field">
               <label htmlFor="digest_hour">Time</label>
-              <select id="digest_hour" name="digest_hour">
+              <select
+                id="digest_hour"
+                name="digest_hour"
+                defaultValue={user.digest_hour}
+              >
                 {Array.from({ length: 24 }, (_, h) => (
-                  <option
-                    key={formatHour(h)}
-                    value={h}
-                    selected={h === user.digest_hour}
-                  >
+                  <option key={formatHour(h)} value={h}>
                     {formatHour(h)}
                   </option>
                 ))}
@@ -226,11 +230,11 @@ export const Account = ({
           </div>
           <div className="form-field">
             <label htmlFor="timezone">Timezone</label>
-            <select id="timezone" name="timezone">
+            <select id="timezone" name="timezone" defaultValue={user.timezone}>
               {COMMON_TIMEZONES.map((group) => (
                 <optgroup key={group.group} label={group.group}>
                   {group.zones.map((tz) => (
-                    <option key={tz} value={tz} selected={tz === user.timezone}>
+                    <option key={tz} value={tz}>
                       {formatTimezone(tz)}
                     </option>
                   ))}
