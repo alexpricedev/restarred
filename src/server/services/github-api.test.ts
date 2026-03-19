@@ -101,7 +101,7 @@ describe("fetchAllStarredRepos", () => {
   test("throws on API error", async () => {
     mockFetch.mockResolvedValueOnce(new Response("Forbidden", { status: 403 }));
 
-    expect(fetchAllStarredRepos("bad-token")).rejects.toThrow(
+    await expect(fetchAllStarredRepos("bad-token")).rejects.toThrow(
       "GitHub API error: 403",
     );
   });
