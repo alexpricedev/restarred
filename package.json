@@ -1,0 +1,42 @@
+{
+  "name": "billet",
+  "description": "A full-stack TypeScript starter designed to be built on by AI coding agents",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "bun run build:client && bun run build:css",
+    "build:client": "bun build ./src/client/main.ts --outdir ./dist/assets --external preact --external preact/hooks --external preact/jsx-dev-runtime --external preact/jsx-runtime",
+    "build:css": "bun build ./src/client/style.css --outdir ./dist/assets --entry-naming main.css --minify",
+    "start": "bun run src/server/main.ts",
+    "dev": "bun run dev:client & bun run dev:server & bun run dev:css",
+    "dev:client": "bun --watch build ./src/client/main.ts --outdir ./dist/assets --external preact --external preact/hooks --external preact/jsx-dev-runtime --external preact/jsx-runtime",
+    "dev:server": "bun --watch run src/server/main.ts",
+    "dev:css": "bun build ./src/client/style.css --outdir ./dist/assets --entry-naming main.css --watch",
+    "test": "NODE_ENV=test bun run src/server/database/cli.ts up && NODE_ENV=test bun test src",
+    "test:setup": "NODE_ENV=test bun run src/server/test-utils/bootstrap.ts",
+    "test:file": "NODE_ENV=test bun run src/server/database/cli.ts up && NODE_ENV=test bun test",
+    "commit": "git add --all && git commit",
+    "lint": "bunx @biomejs/biome@beta check src",
+    "lint:write": "bunx @biomejs/biome@beta check src --write",
+    "typecheck": "bun --bun tsc --noEmit",
+    "check": "bun run lint && bun run typecheck",
+    "generate:pepper": "bun -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"",
+    "seed": "bun run src/server/database/seed.ts",
+    "migrate:up": "bun run src/server/database/cli.ts up",
+    "migrate:status": "bun run src/server/database/cli.ts status",
+    "migrate:create": "bun run src/server/database/cli.ts create",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.0.5",
+    "@happy-dom/global-registrator": "^20.8.3",
+    "@types/bun": "1.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "19.1.9",
+    "happy-dom": "^20.8.3",
+    "husky": "9.1.7",
+    "react": "^19.1.1",
+    "preact": "^10.28.4",
+    "react-dom": "^19.1.1",
+    "typescript": "^5.9.3"
+  }
+}
