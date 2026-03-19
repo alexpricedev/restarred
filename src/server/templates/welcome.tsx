@@ -6,7 +6,12 @@ interface WelcomeProps {
 }
 
 export const Welcome = ({ user }: WelcomeProps) => (
-  <Layout title="restarred — Syncing Your Stars" name="welcome" user={user}>
+  <Layout
+    title="re:starred — Syncing Your Stars"
+    description="We're syncing your starred GitHub repos. This only happens once."
+    name="welcome"
+    user={user}
+  >
     <div className="welcome-container">
       <div className="welcome-content">
         <span className="welcome-label">

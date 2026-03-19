@@ -135,7 +135,8 @@ export const Account = ({
   flash,
 }: AccountProps) => (
   <Layout
-    title="restarred — Account"
+    title="re:starred — Account"
+    description="Manage your re:starred digest preferences — delivery day, frequency, and starred repos."
     name="account"
     user={user}
     csrfToken={logoutCsrfToken}

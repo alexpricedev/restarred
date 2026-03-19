@@ -13,7 +13,14 @@ const config: EnvConfig = {
     "GITHUB_CLIENT_SECRET",
     "ENCRYPTION_KEY",
   ],
-  optional: ["PORT", "APP_NAME", "APP_ORIGIN", "FROM_EMAIL", "FROM_NAME"],
+  optional: [
+    "PORT",
+    "APP_NAME",
+    "APP_URL",
+    "APP_ORIGIN",
+    "FROM_EMAIL",
+    "FROM_NAME",
+  ],
 };
 
 export function validateEnv(): void {
