@@ -1,0 +1,101 @@
+[data-page="account"] .account-container {
+  max-width: var(--max-width-app);
+  margin: 0 auto;
+  padding: 4rem 2rem 2rem;
+}
+
+[data-page="account"] .account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+[data-page="account"] .account-label {
+  font-family: var(--font-main);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+}
+
+[data-page="account"] .account-heading {
+  margin-bottom: 0;
+  text-transform: none;
+}
+
+[data-page="account"] .account-stats {
+  display: flex;
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+[data-page="account"] .account-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+}
+
+[data-page="account"] .account-stat-value {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+[data-page="account"] .account-stat-label {
+  font-family: var(--font-main);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+}
+
+[data-page="account"] .account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+[data-page="account"] .account-form select {
+  width: 100%;
+}
+
+[data-page="account"] .account-section-heading {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+[data-page="account"] .account-section-description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+[data-page="account"] .account-schedule-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+[data-page="account"] .account-toggle {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+[data-page="account"] .account-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
