@@ -219,3 +219,9 @@ For an **API endpoint**, the flow is similar but skips templates:
 - **Services** own all business logic and data access — controllers never query the DB directly
 - **Templates** are pure presentation — they receive fully resolved data as props
 - **Client scripts** use `data-page` on `<body>` for page routing (set by the `Layout` component's `name` prop)
+
+## Design System
+Always read DESIGN.md before making any visual or UI decisions.
+All font choices, colors, spacing, and aesthetic direction are defined there.
+Do not deviate without explicit user approval.
+In QA mode, flag any code that doesn't match DESIGN.md.

@@ -15,7 +15,6 @@ mock.module("../../services/database", () => ({
 }));
 
 import { forms } from "./forms";
-import { stack } from "./stack";
 
 describe("Static Page Controllers", () => {
   beforeEach(async () => {
@@ -25,19 +24,6 @@ describe("Static Page Controllers", () => {
   afterAll(async () => {
     await connection.end();
     mock.restore();
-  });
-
-  describe("Stack Controller", () => {
-    test("renders stack page", async () => {
-      const req = createBunRequest("http://localhost:3000/stack");
-      const response = await stack.index(req);
-      const html = await response.text();
-
-      expect(response).toBeInstanceOf(Response);
-      expect(response.headers.get("content-type")).toBe("text/html");
-
-      expect(html).toContain("The Stack");
-    });
   });
 
   describe("Forms Controller", () => {

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error": "#ffffff",
+              "error-container": "#ffdad6",
+              "on-primary": "#e2e2e2",
+              "on-surface-variant": "#474747",
+              "tertiary": "#3b3b3b",
+              "primary-fixed-dim": "#474747",
+              "tertiary-container": "#747474",
+              "inverse-primary": "#c6c6c6",
+              "surface-bright": "#f9f9f9",
+              "on-primary-fixed": "#ffffff",
+              "surface-dim": "#dadada",
+              "on-secondary-fixed-variant": "#3b3b3b",
+              "on-surface": "#1a1c1c",
+              "on-tertiary-container": "#ffffff",
+              "tertiary-fixed": "#5e5e5e",
+              "error": "#ba1a1a",
+              "surface-container": "#eeeeee",
+              "surface-variant": "#e2e2e2",
+              "on-background": "#1a1c1c",
+              "inverse-on-surface": "#f0f1f1",
+              "primary": "#000000",
+              "secondary-fixed": "#c6c6c6",
+              "tertiary-fixed-dim": "#474747",
+              "secondary": "#5e5e5e",
+              "on-secondary-container": "#1b1b1b",
+              "surface-container-lowest": "#ffffff",
+              "surface-tint": "#5e5e5e",
+              "outline-variant": "#c6c6c6",
+              "outline": "#777777",
+              "surface-container-highest": "#e2e2e2",
+              "inverse-surface": "#2f3131",
+              "on-primary-fixed-variant": "#e2e2e2",
+              "secondary-fixed-dim": "#ababab",
+              "on-primary-container": "#ffffff",
+              "on-secondary": "#ffffff",
+              "primary-container": "#3b3b3b",
+              "secondary-container": "#d4d4d4",
+              "on-tertiary-fixed": "#ffffff",
+              "surface-container-high": "#e8e8e8",
+              "background": "#f9f9f9",
+              "primary-fixed": "#5e5e5e",
+              "surface": "#f9f9f9",
+              "on-tertiary-fixed-variant": "#e2e2e2",
+              "on-tertiary": "#e2e2e2",
+              "on-error-container": "#410002",
+              "surface-container-low": "#f3f3f4",
+              "on-secondary-fixed": "#1b1b1b"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "1rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9f9;
+            color: #1a1c1c;
+        }
+        h1, h2, h3, .font-headline {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f9f9f9]/80 dark:bg-[#1a1c1c]/80 backdrop-blur-md">
+<div class="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
+<div class="text-xl font-black tracking-tighter text-black dark:text-white uppercase font-headline">restarred</div>
+<div class="hidden md:flex items-center gap-12">
+<a class="font-['Space_Grotesk'] uppercase tracking-tight font-bold text-black dark:text-white border-b-2 border-black dark:border-white pb-1 transition-colors duration-200" href="#">Docs</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-tight font-bold text-[#5e5e5e] dark:text-[#ababab] hover:text-black dark:hover:text-white transition-colors duration-200" href="#">About</a>
+</div>
+<button class="bg-primary text-on-primary px-8 py-2 rounded-full font-headline font-bold uppercase tracking-tight scale-95 active:scale-90 transition-transform">Sign in</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-32">
+<!-- Hero Section: The Monolith -->
+<section class="px-8 py-24 md:py-48 max-w-7xl mx-auto flex flex-col items-start gap-12">
+<div class="w-full">
+<h1 class="text-[clamp(3.5rem,12vw,8.5rem)] font-black leading-[0.85] tracking-tighter uppercase font-headline text-primary mb-12">
+                    GIVE YOUR STARS A<br/>SECOND CHANCE
+                </h1>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
+<div class="md:col-span-6">
+<p class="text-xl md:text-2xl font-body text-secondary leading-relaxed max-w-xl">
+                            GitHub Star Rediscovery. 3 random repos, every week, in your inbox. No more losing good code in the void.
+                        </p>
+</div>
+<div class="md:col-span-6 flex flex-col gap-6">
+<button class="bg-primary text-on-primary px-10 py-5 rounded-full font-headline font-black uppercase tracking-tight hover:bg-primary-container transition-all duration-300 active:scale-95 w-full sm:w-fit">
+                                CONNECT GITHUB
+                            </button>
+<p class="font-label text-[0.6875rem] uppercase tracking-[0.15em] text-outline">JOIN 4,200+ DEVELOPERS CURATING THEIR VOID</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Inspiration Visual Block -->
+<section class="px-8 pb-24 max-w-7xl mx-auto">
+<div class="aspect-[21/9] w-full overflow-hidden bg-surface-container rounded-xl">
+<img class="w-full h-full object-cover grayscale brightness-90 hover:scale-105 transition-transform duration-1000" data-alt="Abstract architectural composition of sharp black shadows and white structural elements" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBClwuX03EvWQpRlXi7__BUjsIdA1SxAZ9TWqd9Gv1nPzw8T5t63VK7v6DjTlWlEbgYEhwg4USfAo_0V6V53m3tRyHT5yKUj4GKVZtyXBF6abumWDTGJ4DzggKQbRBiVWHBYBXIhxk0bNDU7BsBDeWEi5CJbcvPNgAP0QgdyYEziknN3KP_QEwMqDqfJJdJd3hkL-y_WKi3dlzg6BjlePcd1o9RJXAr14136aI8Vi1XIbd9jNOIklUQCwwX1oX_DL_PN9R0Yn5nXl4F"/>
+</div>
+</section>
+<!-- How It Works: Minimalist Grid -->
+<section class="bg-surface-container-low py-32 px-8">
+<div class="max-w-7xl mx-auto">
+<div class="mb-24">
+<span class="font-label text-[0.6875rem] uppercase tracking-widest text-secondary block mb-4">THE PROTOCOL</span>
+<h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter font-headline text-primary">HOW IT WORKS</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-24">
+<!-- Step 1 -->
+<div class="flex flex-col gap-8 group">
+<div class="text-[4rem] font-black font-headline leading-none text-surface-container-highest group-hover:text-primary transition-colors duration-500">01</div>
+<h3 class="text-xl font-bold uppercase tracking-tight font-headline">SYNC YOUR VOID</h3>
+<p class="text-secondary leading-relaxed font-body">Connect your GitHub account. We index your thousands of forgotten stars into our secure discovery engine.</p>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col gap-8 group">
+<div class="text-[4rem] font-black font-headline leading-none text-surface-container-highest group-hover:text-primary transition-colors duration-500">02</div>
+<h3 class="text-xl font-bold uppercase tracking-tight font-headline">WEEKLY TRINITY</h3>
+<p class="text-secondary leading-relaxed font-body">Every Monday, our algorithm picks 3 repos you starred years ago. High quality, zero clutter, pure rediscovery.</p>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col gap-8 group">
+<div class="text-[4rem] font-black font-headline leading-none text-surface-container-highest group-hover:text-primary transition-colors duration-500">03</div>
+<h3 class="text-xl font-bold uppercase tracking-tight font-headline">RE-ENGAGE</h3>
+<p class="text-secondary leading-relaxed font-body">Read the summary, check the latest commits, and decide if it stays in your star list or gets archived.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Bento Grid -->
+<section class="py-32 px-8 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Large Feature Card -->
+<div class="md:col-span-8 bg-surface-container-lowest p-12 flex flex-col justify-between aspect-square md:aspect-auto md:h-[600px] group">
+<div>
+<span class="material-symbols-outlined text-4xl mb-8" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="text-5xl font-black uppercase font-headline tracking-tighter max-w-sm mb-6">ARCHITECTURAL CURATION</h3>
+<p class="text-secondary max-w-md">We don't just send links. We provide deep context—why you starred it, what changed since then, and why it's still relevant today.</p>
+</div>
+<div class="flex items-center gap-4 mt-12">
+<div class="h-[2px] w-12 bg-primary"></div>
+<span class="font-label text-[0.6875rem] uppercase tracking-widest font-bold">VIEW THE ALGORITHM</span>
+</div>
+</div>
+<!-- Smaller Asymmetric Cards -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<div class="bg-primary text-on-primary p-12 flex-1 flex flex-col justify-end">
+<h4 class="text-2xl font-black font-headline uppercase mb-4">NO NOISE.</h4>
+<p class="text-on-primary/70 text-sm">One email. Three repos. That's it. No advertisements, no tracking, no social features.</p>
+</div>
+<div class="bg-surface-container-highest p-12 flex-1">
+<span class="material-symbols-outlined text-4xl mb-6" data-icon="lock" data-weight="fill" style="font-variation-settings: 'FILL' 1;">lock</span>
+<h4 class="text-xl font-black font-headline uppercase">SECURE BY DESIGN</h4>
+<p class="text-secondary text-sm mt-4">Read-only access to public stars. Your data is never sold or used for training.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA: The Last Call -->
+<section class="py-48 px-8 bg-black text-white text-center">
+<div class="max-w-4xl mx-auto">
+<h2 class="text-5xl md:text-8xl font-black uppercase tracking-tighter font-headline mb-12 leading-none">
+                    READY TO UNVOID?
+                </h2>
+<div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+<button class="bg-white text-black px-12 py-6 rounded-full font-headline font-black uppercase tracking-tight hover:bg-surface-variant transition-all scale-100 hover:scale-105 active:scale-95 w-full sm:w-auto">
+                        CONNECT GITHUB NOW
+                    </button>
+<button class="border border-white/20 text-white px-12 py-6 rounded-full font-headline font-black uppercase tracking-tight hover:bg-white/10 transition-all w-full sm:w-auto">
+                        LEARN MORE
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-24 bg-[#f3f3f4] dark:bg-[#121212]">
+<div class="flex flex-col md:flex-row justify-between items-center px-8 w-full max-w-7xl mx-auto gap-8">
+<div class="font-black text-black dark:text-white font-headline text-xl uppercase">restarred</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-['Inter'] text-[0.6875rem] uppercase tracking-widest text-[#5e5e5e] dark:text-[#ababab] hover:text-black dark:hover:text-white underline decoration-1 underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Privacy</a>
+<a class="font-['Inter'] text-[0.6875rem] uppercase tracking-widest text-[#5e5e5e] dark:text-[#ababab] hover:text-black dark:hover:text-white underline decoration-1 underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Terms</a>
+<a class="font-['Inter'] text-[0.6875rem] uppercase tracking-widest text-[#5e5e5e] dark:text-[#ababab] hover:text-black dark:hover:text-white underline decoration-1 underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">GitHub</a>
+<a class="font-['Inter'] text-[0.6875rem] uppercase tracking-widest text-[#5e5e5e] dark:text-[#ababab] hover:text-black dark:hover:text-white underline decoration-1 underline-offset-4 opacity-80 hover:opacity-100 transition-opacity" href="#">Twitter</a>
+</div>
+<div class="font-['Inter'] text-[0.6875rem] uppercase tracking-widest text-secondary">
+                © 2024 RESTARRED. ARCHITECTURAL PRECISION.
+            </div>
+</div>
+</footer>
+</body></html>
