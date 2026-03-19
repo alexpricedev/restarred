@@ -15,18 +15,19 @@ mock.module("./database", () => ({
 }));
 
 import { db } from "./database";
-import { getUsers } from "./users";
+import { getUsers, updateUserPreferences } from "./users";
+
+beforeEach(async () => {
+  await cleanupTestData(db);
+});
+
+afterAll(async () => {
+  await cleanupTestData(db);
+  await connection.end();
+  mock.restore();
+});
 
 describe("Users Service", () => {
-  beforeEach(async () => {
-    await cleanupTestData(db);
-  });
-
-  afterAll(async () => {
-    await connection.end();
-    mock.restore();
-  });
-
   test("returns empty array when no users exist", async () => {
     const result = await getUsers();
     expect(result).toEqual([]);
@@ -57,5 +58,56 @@ describe("Users Service", () => {
 
     expect(result[0].github_email).toBe("second@test.com");
     expect(result[1].github_email).toBe("first@test.com");
+  });
+});
+
+describe("updateUserPreferences", () => {
+  test("updates all preference fields", async () => {
+    const userId = randomUUID();
+    await db`INSERT INTO users (id, github_id, github_username, github_email, role) VALUES (${userId}, 3001, 'prefuser', 'prefuser@test.com', 'user')`;
+
+    const result = await updateUserPreferences(userId, {
+      emailOverride: "custom@example.com",
+      digestDay: 3,
+      digestHour: 14,
+      timezone: "America/New_York",
+      isActive: false,
+    });
+
+    expect(result.id).toBe(userId);
+    expect(result.email_override).toBe("custom@example.com");
+    expect(result.digest_day).toBe(3);
+    expect(result.digest_hour).toBe(14);
+    expect(result.timezone).toBe("America/New_York");
+    expect(result.is_active).toBe(false);
+  });
+
+  test("sets email_override to null when empty string", async () => {
+    const userId = randomUUID();
+    await db`INSERT INTO users (id, github_id, github_username, github_email, role, email_override) VALUES (${userId}, 3002, 'nullemail', 'nullemail@test.com', 'user', 'old@example.com')`;
+
+    const result = await updateUserPreferences(userId, {
+      emailOverride: "",
+      digestDay: 1,
+      digestHour: 9,
+      timezone: "UTC",
+      isActive: true,
+    });
+
+    expect(result.email_override).toBeNull();
+  });
+
+  test("throws for non-existent user", async () => {
+    const fakeId = randomUUID();
+
+    await expect(
+      updateUserPreferences(fakeId, {
+        emailOverride: "test@example.com",
+        digestDay: 1,
+        digestHour: 9,
+        timezone: "UTC",
+        isActive: true,
+      }),
+    ).rejects.toThrow("User not found");
   });
 });
