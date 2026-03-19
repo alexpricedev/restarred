@@ -13,6 +13,7 @@ mock.module("../../services/auth", () => ({
       digest_hour: 9,
       timezone: "UTC",
       is_active: true,
+      sync_status: "idle",
       role: "user",
       created_at: new Date(),
       updated_at: new Date(),
@@ -45,9 +46,11 @@ mock.module("../../middleware/auth", () => ({
 }));
 
 const mockSyncUserStars = mock(() => Promise.resolve());
+const mockGetStarCount = mock(() => Promise.resolve(0));
 
 mock.module("../../services/stars", () => ({
   syncUserStars: mockSyncUserStars,
+  getStarCount: mockGetStarCount,
 }));
 
 const mockExchangeCodeForToken = mock(() => Promise.resolve("gh-token-123"));
@@ -130,8 +133,9 @@ describe("Callback Controller", () => {
       );
     });
 
-    test("syncs stars after successful authentication", async () => {
+    test("redirects new user to /welcome and fires sync", async () => {
       mockSyncUserStars.mockClear();
+      mockGetStarCount.mockResolvedValueOnce(0);
 
       const request = createBunRequest(
         "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
@@ -143,16 +147,37 @@ describe("Callback Controller", () => {
         },
       );
 
-      await callback.index(request);
+      const response = await callback.index(request);
 
+      expect(response.status).toBe(303);
+      expect(response.headers.get("location")).toBe("/welcome");
       expect(mockSyncUserStars).toHaveBeenCalledTimes(1);
-      expect(mockSyncUserStars).toHaveBeenCalledWith(
-        "user-123",
-        "gh-token-123",
+    });
+
+    test("redirects returning user to / without sync", async () => {
+      mockSyncUserStars.mockClear();
+      mockGetStarCount.mockResolvedValueOnce(42);
+
+      const request = createBunRequest(
+        "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
+        {
+          method: "GET",
+          headers: {
+            cookie: "github_oauth_state=matching-state",
+          },
+        },
       );
+
+      const response = await callback.index(request);
+
+      expect(response.status).toBe(303);
+      expect(response.headers.get("location")).toBe("/");
+      expect(mockSyncUserStars).not.toHaveBeenCalled();
     });
 
     test("successfully authenticates with valid code and state", async () => {
+      mockGetStarCount.mockResolvedValueOnce(100);
+
       const request = createBunRequest(
         "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
         {
