@@ -21,7 +21,7 @@ function getStateCookie(req: BunRequest): string | null {
 }
 
 function clearStateCookie(): string {
-  return "github_oauth_state=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0";
+  return `github_oauth_state=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0${process.env.NODE_ENV === "production" ? "; Secure" : ""}`;
 }
 
 export const callback = {
@@ -32,13 +32,11 @@ export const callback = {
     const storedState = getStateCookie(req);
 
     if (!code || !state) {
-      return redirect("/login?error=Missing OAuth parameters");
+      return redirect("/login?error=missing_params");
     }
 
     if (!storedState || state !== storedState) {
-      const res = redirect(
-        "/login?error=Invalid OAuth state. Please try again.",
-      );
+      const res = redirect("/login?error=state_mismatch");
       res.headers.append("Set-Cookie", clearStateCookie());
       return res;
     }
@@ -73,9 +71,7 @@ export const callback = {
       return response;
     } catch (error) {
       log.error("auth", `GitHub OAuth callback failed: ${error}`);
-      const res = redirect(
-        "/login?error=Authentication failed. Please try again.",
-      );
+      const res = redirect("/login?error=auth_failed");
       res.headers.append("Set-Cookie", clearStateCookie());
       return res;
     }

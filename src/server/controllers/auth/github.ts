@@ -23,7 +23,7 @@ export const github = {
 
     response.headers.append(
       "Set-Cookie",
-      `github_oauth_state=${state}; HttpOnly; SameSite=Lax; Path=/; Max-Age=600`,
+      `github_oauth_state=${state}; HttpOnly; SameSite=Lax; Path=/; Max-Age=600${process.env.NODE_ENV === "production" ? "; Secure" : ""}`,
     );
 
     return response;

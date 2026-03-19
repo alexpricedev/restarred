@@ -13,7 +13,7 @@ const errorMessages: Record<string, string> = {
 
 export const Login = ({ error }: LoginProps) => (
   <Layout title="Sign in — restarred" name="login">
-    <main className="login-page">
+    <div className="login-page">
       <div className="login-container">
         <h1>Sign in</h1>
         {error && (
@@ -25,6 +25,6 @@ export const Login = ({ error }: LoginProps) => (
           Sign in with GitHub
         </a>
       </div>
-    </main>
+    </div>
   </Layout>
 );

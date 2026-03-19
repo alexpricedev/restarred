@@ -73,7 +73,7 @@ describe("Callback Controller", () => {
 
       expect(response.status).toBe(303);
       expect(response.headers.get("location")).toBe(
-        "/login?error=Missing OAuth parameters",
+        "/login?error=missing_params",
       );
     });
 
@@ -87,7 +87,7 @@ describe("Callback Controller", () => {
 
       expect(response.status).toBe(303);
       expect(response.headers.get("location")).toBe(
-        "/login?error=Missing OAuth parameters",
+        "/login?error=missing_params",
       );
     });
 
@@ -101,7 +101,7 @@ describe("Callback Controller", () => {
 
       expect(response.status).toBe(303);
       expect(response.headers.get("location")).toContain(
-        "/login?error=Invalid OAuth state",
+        "/login?error=state_mismatch",
       );
     });
 
@@ -120,7 +120,7 @@ describe("Callback Controller", () => {
 
       expect(response.status).toBe(303);
       expect(response.headers.get("location")).toContain(
-        "/login?error=Invalid OAuth state",
+        "/login?error=state_mismatch",
       );
     });
 
