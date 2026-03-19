@@ -1,6 +1,7 @@
 {
     "scripts": {
         "setup": "main_dir=\"$(cd \"$(git rev-parse --git-common-dir)/..\" && pwd)\" && cp \"$main_dir/.env\" \"$main_dir/.env.test\" . && bun install",
-        "run": "PORT=$CONDUCTOR_PORT APP_ORIGIN=http://localhost:$CONDUCTOR_PORT bun run dev"
-    }
+        "run": "bun run dev"
+    },
+    "runScriptMode": "nonconcurrent"
 }

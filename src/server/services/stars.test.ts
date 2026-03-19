@@ -175,4 +175,46 @@ describe("stars service", () => {
     const count = await getStarCount(userId);
     expect(count).toBe(0);
   });
+
+  test("syncUserStars sets sync_status to done on success", async () => {
+    const { syncUserStars } = await import("./stars");
+
+    mockFetchAllStarredRepos.mockResolvedValueOnce([
+      makeRepo(1, "owner/repo-a"),
+    ]);
+
+    await syncUserStars(userId, "access-token");
+
+    const users = await db`SELECT sync_status FROM users WHERE id = ${userId}`;
+    expect(users[0].sync_status).toBe("done");
+  });
+
+  test("syncUserStars sets sync_status to error on failure", async () => {
+    const { syncUserStars } = await import("./stars");
+
+    mockFetchAllStarredRepos.mockRejectedValueOnce(new Error("API failed"));
+
+    try {
+      await syncUserStars(userId, "access-token");
+    } catch {
+      // expected
+    }
+
+    const users = await db`SELECT sync_status FROM users WHERE id = ${userId}`;
+    expect(users[0].sync_status).toBe("error");
+  });
+
+  test("getSyncStatus returns status and count", async () => {
+    const { syncUserStars, getSyncStatus } = await import("./stars");
+
+    mockFetchAllStarredRepos.mockResolvedValueOnce([
+      makeRepo(1, "owner/repo-a"),
+      makeRepo(2, "owner/repo-b"),
+    ]);
+    await syncUserStars(userId, "access-token");
+
+    const result = await getSyncStatus(userId);
+    expect(result.status).toBe("done");
+    expect(result.count).toBe(2);
+  });
 });
