@@ -1,4 +1,4 @@
-import { Layout } from "@server/components/layouts";
+import { BaseLayout } from "@server/components/layouts";
 import type { User } from "@server/services/users";
 
 interface HomeProps {
@@ -6,158 +6,174 @@ interface HomeProps {
   csrfToken?: string;
 }
 
-export const Home = ({ user, csrfToken }: HomeProps) => (
-  <Layout
-    title="Billet — The AI-native TypeScript starter"
-    name="home"
-    user={user}
-    csrfToken={csrfToken}
-  >
-    <section className="hero">
-      <div className="hero-lottie" id="hero-lottie" />
-      <p className="hero-tag">Full-stack TypeScript starter</p>
-      <h1>
-        Designed to be built&nbsp;on
-        <br />
-        by AI coding agents
-      </h1>
-      <p className="hero-sub">
-        Server-rendered JSX, light-touch client JS, custom CSS — one codebase,
-        one test runner, one deploy target. Deterministic templates with strong
-        types that agents can reason about and test with confidence.
-      </p>
-      <div className="hero-actions">
-        <a
-          href="https://github.com/alexpricedev/Billet?tab=readme-ov-file#quick-start"
-          className="btn-primary"
-        >
-          Get Started
-        </a>
-        <a href="/stack" className="btn-ghost">
-          View Stack
-        </a>
-      </div>
-    </section>
+export const Home = ({ user }: HomeProps) => (
+  <BaseLayout title="restarred — Give Your Stars a Second Chance" name="home">
+    <div data-page="home">
+      {/* Landing Nav */}
+      <nav className="landing-nav">
+        <div className="landing-nav-inner">
+          <span className="landing-wordmark">restarred</span>
+          <div className="landing-nav-links">
+            <a href="#how-it-works">Docs</a>
+            <a href="#features">About</a>
+          </div>
+          {user ? (
+            <a href="/projects" className="landing-nav-cta">
+              Dashboard
+            </a>
+          ) : (
+            <a href="/login" className="landing-nav-cta">
+              Sign in
+            </a>
+          )}
+        </div>
+      </nav>
 
-    <section className="story">
-      <aside className="etymology">
-        <strong>Billet</strong> <span className="text-quaternary">(noun)</span>{" "}
-        — A semi-finished piece of steel, shaped and ready to be worked into
-        something specific. Named for Sheffield — the Steel City, where crucible
-        steel was invented.
-      </aside>
-      <div className="story-grid">
-        <div>
-          <h3 className="section-label">The problem</h3>
-          <p className="text-secondary">
-            Left to their own choices, AI coding agents reach for what they know
-            best: React with Next.js. The result is a thick-frontend app split
-            across client and server, locked into a specific ecosystem,
-            requiring multiple test systems to simulate browser state, and
-            unnecessarily complex to deploy.
-          </p>
-        </div>
-        <div>
-          <h3 className="section-label">The approach</h3>
-          <p className="text-secondary">
-            Single-instance server rendering with light-touch client JavaScript.
-            Templates are deterministic functions of their props — given the
-            same input, they produce the same HTML. Trivial to test without
-            browser simulation. One process, one deploy target.
-          </p>
-        </div>
-      </div>
-    </section>
+      <main className="landing-main">
+        {/* Hero */}
+        <section className="landing-hero">
+          <div className="landing-container">
+            <h1 className="hero-heading">
+              GIVE YOUR STARS A
+              <br />
+              SECOND CHANCE
+            </h1>
+            <div className="hero-grid">
+              <div className="hero-description">
+                <p>
+                  GitHub Star Rediscovery. 3 random repos, every week, in your
+                  inbox. No more losing good code in the void.
+                </p>
+              </div>
+              <div className="hero-actions">
+                <a href="/login" className="hero-cta">
+                  CONNECT GITHUB
+                </a>
+                <p className="hero-proof">
+                  JOIN 4,200+ DEVELOPERS CURATING THEIR VOID
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-    <section className="backpressure">
-      <div className="backpressure-intro">
-        <h2>Capture your backpressure</h2>
-        <p className="text-secondary">
-          AI agents work best when they get told they're wrong immediately — not
-          by you, by the toolchain. Type errors, failing tests, lint warnings:
-          that's backpressure. Every automated check that catches a mistake is
-          one less time you have to context-switch back in to fix something a
-          machine should have caught.
-        </p>
-      </div>
-      <div className="feedback-stack">
-        <div className="stack-row">
-          <span className="stack-layer">TypeScript strict mode</span>
-          <span className="stack-catches">
-            Type mismatches, missing properties, unused code
-          </span>
-        </div>
-        <div className="stack-row">
-          <span className="stack-layer">Biome linting</span>
-          <span className="stack-catches">
-            Style violations, unsafe patterns, console usage
-          </span>
-        </div>
-        <div className="stack-row">
-          <span className="stack-layer">Pre-commit hooks</span>
-          <span className="stack-catches">
-            Anything that slipped past the editor
-          </span>
-        </div>
-        <div className="stack-row">
-          <span className="stack-layer">Test suite</span>
-          <span className="stack-catches">
-            Behavioural regressions, broken templates, bad responses
-          </span>
-        </div>
-      </div>
-    </section>
+        {/* Hero Image */}
+        <section className="landing-hero-image">
+          <div className="landing-container">
+            <div className="hero-image-wrap">
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBClwuX03EvWQpRlXi7__BUjsIdA1SxAZ9TWqd9Gv1nPzw8T5t63VK7v6DjTlWlEbgYEhwg4USfAo_0V6V53m3tRyHT5yKUj4GKVZtyXBF6abumWDTGJ4DzggKQbRBiVWHBYBXIhxk0bNDU7BsBDeWEi5CJbcvPNgAP0QgdyYEziknN3KP_QEwMqDqfJJdJd3hkL-y_WKi3dlzg6BjlePcd1o9RJXAr14136aI8Vi1XIbd9jNOIklUQCwwX1oX_DL_PN9R0Yn5nXl4F"
+                alt="Abstract architectural composition"
+              />
+            </div>
+          </div>
+        </section>
 
-    <section className="features">
-      <h2>What's included</h2>
-      <p className="features-lead text-secondary">
-        Auth, security, database, testing, linting — the rails are laid so your
-        agent can focus on building your product.
-      </p>
-      <div className="feature-grid">
-        <div className="feature-card">
-          <h3>Authentication</h3>
-          <p>
-            Magic-link email login, session management, guest sessions, admin
-            roles
-          </p>
+        {/* How It Works */}
+        <section className="landing-protocol" id="how-it-works">
+          <div className="landing-container">
+            <div className="protocol-header">
+              <span className="protocol-label">THE PROTOCOL</span>
+              <h2>HOW IT WORKS</h2>
+            </div>
+            <div className="protocol-grid">
+              <div className="protocol-step">
+                <div className="step-number">01</div>
+                <h3>SYNC YOUR VOID</h3>
+                <p>
+                  Connect your GitHub account. We index your thousands of
+                  forgotten stars into our secure discovery engine.
+                </p>
+              </div>
+              <div className="protocol-step">
+                <div className="step-number">02</div>
+                <h3>WEEKLY TRINITY</h3>
+                <p>
+                  Every Monday, our algorithm picks 3 repos you starred years
+                  ago. High quality, zero clutter, pure rediscovery.
+                </p>
+              </div>
+              <div className="protocol-step">
+                <div className="step-number">03</div>
+                <h3>RE-ENGAGE</h3>
+                <p>
+                  Read the summary, check the latest commits, and decide if it
+                  stays in your star list or gets archived.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Bento Grid */}
+        <section className="landing-bento" id="features">
+          <div className="landing-container">
+            <div className="bento-grid">
+              <div className="bento-large">
+                <div className="bento-large-content">
+                  <h3>ARCHITECTURAL CURATION</h3>
+                  <p>
+                    We don't just send links. We provide deep context — why you
+                    starred it, what changed since then, and why it's still
+                    relevant today.
+                  </p>
+                </div>
+                <div className="bento-large-footer">
+                  <div className="bento-line" />
+                  <span className="bento-link-label">VIEW THE ALGORITHM</span>
+                </div>
+              </div>
+              <div className="bento-stack">
+                <div className="bento-dark">
+                  <h4>NO NOISE.</h4>
+                  <p>
+                    One email. Three repos. That's it. No advertisements, no
+                    tracking, no social features.
+                  </p>
+                </div>
+                <div className="bento-grey">
+                  <h4>SECURE BY DESIGN</h4>
+                  <p>
+                    Read-only access to public stars. Your data is never sold or
+                    used for training.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="landing-cta">
+          <div className="landing-cta-inner">
+            <h2>READY TO UNVOID?</h2>
+            <div className="cta-buttons">
+              <a href="/login" className="cta-primary">
+                CONNECT GITHUB NOW
+              </a>
+              <a href="#how-it-works" className="cta-secondary">
+                LEARN MORE
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="landing-footer">
+        <div className="landing-footer-inner">
+          <span className="landing-footer-wordmark">restarred</span>
+          <div className="landing-footer-links">
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+            <a href="https://github.com">GitHub</a>
+            <a href="https://twitter.com">Twitter</a>
+          </div>
+          <div className="landing-footer-copy">
+            &copy; 2024 RESTARRED. ARCHITECTURAL PRECISION.
+          </div>
         </div>
-        <div className="feature-card">
-          <h3>Security</h3>
-          <p>
-            CSRF protection, rate limiting, session fixation prevention,
-            security headers
-          </p>
-        </div>
-        <div className="feature-card">
-          <h3>Database</h3>
-          <p>
-            PostgreSQL via Bun.SQL, auto-migrations, seed scripts, parameterised
-            queries
-          </p>
-        </div>
-        <div className="feature-card">
-          <h3>Testing</h3>
-          <p>
-            220+ tests, deterministic templates, real database testing, no
-            browser simulation
-          </p>
-        </div>
-        <div className="feature-card">
-          <h3>Frontend</h3>
-          <p>
-            Server-rendered JSX, custom CSS via Bun bundler, opt-in client
-            interactivity, flash messages
-          </p>
-        </div>
-        <div className="feature-card">
-          <h3>Code Quality</h3>
-          <p>
-            Biome linting, strict TypeScript, pre-commit hooks, structured
-            logging
-          </p>
-        </div>
-      </div>
-    </section>
-  </Layout>
+      </footer>
+    </div>
+  </BaseLayout>
 );

@@ -27,7 +27,7 @@ describe("Home Controller", () => {
   });
 
   describe("GET /", () => {
-    test("renders home page with hero and feature grid", async () => {
+    test("renders landing page with all sections", async () => {
       const request = createBunRequest("http://localhost:3000/", {
         method: "GET",
       });
@@ -36,14 +36,21 @@ describe("Home Controller", () => {
 
       expect(response.headers.get("content-type")).toBe("text/html");
 
-      expect(html).toContain("Designed to be built\u00A0on");
-      expect(html).toContain("by AI coding agents");
-      expect(html).toContain("Authentication");
-      expect(html).toContain("Security");
-      expect(html).toContain("Database");
-      expect(html).toContain("Testing");
-      expect(html).toContain("Frontend");
-      expect(html).toContain("Code Quality");
+      expect(html).toContain("GIVE YOUR STARS A");
+      expect(html).toContain("SECOND CHANCE");
+      expect(html).toContain("CONNECT GITHUB");
+
+      expect(html).toContain("THE PROTOCOL");
+      expect(html).toContain("HOW IT WORKS");
+      expect(html).toContain("SYNC YOUR VOID");
+      expect(html).toContain("WEEKLY TRINITY");
+      expect(html).toContain("RE-ENGAGE");
+
+      expect(html).toContain("ARCHITECTURAL CURATION");
+      expect(html).toContain("NO NOISE");
+      expect(html).toContain("SECURE BY DESIGN");
+
+      expect(html).toContain("READY TO UNVOID?");
     });
   });
 });
