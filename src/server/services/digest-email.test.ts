@@ -1,10 +1,13 @@
 import { describe, expect, test } from "bun:test";
+import type { User } from "./auth";
 import type { SelectedRepo } from "./digest";
 import {
   formatRelativeDate,
   formatStarCount,
   generateSubjectLine,
   getActivityStatus,
+  renderDigestEmail,
+  renderDigestPlainText,
 } from "./digest-email";
 
 const MINUTE = 60 * 1000;
@@ -24,6 +27,7 @@ const makeRepo = (overrides: Partial<SelectedRepo> = {}): SelectedRepo => ({
   htmlUrl: "https://github.com/owner/repo",
   starredAt: null,
   lastActivityAt: null,
+  isArchived: false,
   ...overrides,
 });
 
@@ -211,5 +215,142 @@ describe("generateSubjectLine", () => {
     expect(generateSubjectLine(repos)).toBe(
       "re:starred — framework and 2 others",
     );
+  });
+});
+
+const mockUser: User = {
+  id: "user-1",
+  github_id: 12345,
+  github_username: "testuser",
+  github_email: "test@example.com",
+  email_override: null,
+  github_token: "encrypted-token",
+  digest_day: 1,
+  digest_hour: 9,
+  timezone: "America/New_York",
+  is_active: true,
+  role: "user",
+  sync_status: "done",
+  created_at: new Date("2024-01-01"),
+  updated_at: new Date("2024-01-01"),
+};
+
+describe("renderDigestPlainText", () => {
+  test("contains all repo details", () => {
+    const repos = [
+      makeRepo({
+        fullName: "owner/test-repo",
+        description: "A test repository",
+        language: "TypeScript",
+        stargazersCount: 1500,
+        htmlUrl: "https://github.com/owner/test-repo",
+        lastActivityAt: ago(14 * DAY),
+      }),
+    ];
+    const text = renderDigestPlainText(
+      repos,
+      "http://localhost:3000/account",
+      "http://localhost:3000/unsubscribe?token=abc",
+    );
+
+    expect(text).toContain("owner/test-repo");
+    expect(text).toContain("A test repository");
+    expect(text).toContain("TypeScript");
+    expect(text).toContain("1.5k");
+    expect(text).toContain("https://github.com/owner/test-repo");
+    expect(text).toContain("Active");
+  });
+
+  test("contains footer links", () => {
+    const repos = [makeRepo()];
+    const text = renderDigestPlainText(
+      repos,
+      "http://localhost:3000/account",
+      "http://localhost:3000/unsubscribe?token=abc",
+    );
+
+    expect(text).toContain("Manage preferences: http://localhost:3000/account");
+    expect(text).toContain(
+      "Unsubscribe: http://localhost:3000/unsubscribe?token=abc",
+    );
+  });
+
+  test("handles null description", () => {
+    const repos = [makeRepo({ description: null })];
+    const text = renderDigestPlainText(repos, "http://x", "http://y");
+
+    expect(text).not.toContain("null");
+  });
+
+  test("handles null language", () => {
+    const repos = [makeRepo({ language: null })];
+    const text = renderDigestPlainText(repos, "http://x", "http://y");
+
+    expect(text).not.toContain("null");
+  });
+});
+
+describe("renderDigestEmail", () => {
+  const repos = [
+    makeRepo({
+      starId: "star-1",
+      fullName: "owner/test-repo",
+      description: "A test repository",
+      language: "TypeScript",
+      stargazersCount: 1500,
+      htmlUrl: "https://github.com/owner/test-repo",
+      lastActivityAt: ago(14 * DAY),
+    }),
+    makeRepo({
+      starId: "star-2",
+      fullName: "org/another-repo",
+      description: "Another repo",
+      language: "Rust",
+      stargazersCount: 5000,
+      htmlUrl: "https://github.com/org/another-repo",
+      lastActivityAt: ago(30 * DAY),
+    }),
+  ];
+
+  test("returns subject, html, and text", () => {
+    const result = renderDigestEmail(mockUser, repos, "token-123");
+    expect(result.subject).toBeDefined();
+    expect(result.html).toBeDefined();
+    expect(result.text).toBeDefined();
+  });
+
+  test("subject contains re:starred and top repo name", () => {
+    const result = renderDigestEmail(mockUser, repos, "token-123");
+    expect(result.subject).toContain("re:starred");
+    expect(result.subject).toContain("another-repo");
+  });
+
+  test("html contains DOCTYPE and key content", () => {
+    const result = renderDigestEmail(mockUser, repos, "token-123");
+    expect(result.html).toStartWith("<!DOCTYPE html>");
+    expect(result.html).toContain("owner/test-repo");
+    expect(result.html).toContain("org/another-repo");
+    expect(result.html).toContain("re:starred");
+    expect(result.html).toContain("Your weekly digest");
+    expect(result.html).toContain("Manage your digest");
+    expect(result.html).toContain("Unsubscribe");
+  });
+
+  test("text contains repo details", () => {
+    const result = renderDigestEmail(mockUser, repos, "token-123");
+    expect(result.text).toContain("owner/test-repo");
+    expect(result.text).toContain("org/another-repo");
+  });
+
+  test("unsubscribe URL includes the token", () => {
+    const result = renderDigestEmail(mockUser, repos, "token-123");
+    expect(result.html).toContain("unsubscribe?token=token-123");
+    expect(result.text).toContain("unsubscribe?token=token-123");
+  });
+
+  test("account URL is present", () => {
+    const result = renderDigestEmail(mockUser, repos, "token-123");
+    expect(result.html).toContain("/account");
+    expect(result.text).toContain("/account");
   });
 });

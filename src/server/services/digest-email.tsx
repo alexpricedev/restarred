@@ -1,4 +1,7 @@
+import { renderToString } from "react-dom/server";
+import { DigestEmail } from "../components/email/digest-email";
 import type { SelectedRepo } from "./digest";
+import type { User } from "./users";
 
 export type { SelectedRepo };
 
@@ -133,4 +136,55 @@ export const generateSubjectLine = (repos: SelectedRepo[]): string => {
   if (repos.length === 1) return `re:starred — ${name}`;
   if (repos.length === 2) return `re:starred — ${name} and 1 other`;
   return `re:starred — ${name} and ${repos.length - 1} others`;
+};
+
+export const renderDigestPlainText = (
+  repos: SelectedRepo[],
+  accountUrl: string,
+  unsubscribeUrl: string,
+): string => {
+  const lines: string[] = [
+    `re:starred — ${repos.length} repos from your stars`,
+    "",
+  ];
+
+  repos.forEach((repo, i) => {
+    lines.push(`${i + 1}. ${repo.fullName}`);
+    if (repo.description) {
+      lines.push(`   ${repo.description}`);
+    }
+
+    const activity = getActivityStatus(repo.lastActivityAt, repo.isArchived);
+    const parts = [`★ ${formatStarCount(repo.stargazersCount)}`];
+    if (repo.language) {
+      parts.push(repo.language);
+    }
+    parts.push(activity.label);
+    lines.push(`   ${parts.join(" · ")}`);
+    lines.push(`   ${repo.htmlUrl}`);
+    lines.push("");
+  });
+
+  lines.push("---");
+  lines.push(`Manage preferences: ${accountUrl}`);
+  lines.push(`Unsubscribe: ${unsubscribeUrl}`);
+
+  return lines.join("\n");
+};
+
+const APP_URL = process.env.APP_URL || "http://localhost:3000";
+
+export const renderDigestEmail = (
+  _user: User,
+  repos: SelectedRepo[],
+  unsubscribeToken: string,
+): { subject: string; html: string; text: string } => {
+  const accountUrl = `${APP_URL}/account`;
+  const unsubscribeUrl = `${APP_URL}/unsubscribe?token=${unsubscribeToken}`;
+
+  const subject = generateSubjectLine(repos);
+  const html = `<!DOCTYPE html>${renderToString(<DigestEmail repos={repos} accountUrl={accountUrl} unsubscribeUrl={unsubscribeUrl} />)}`;
+  const text = renderDigestPlainText(repos, accountUrl, unsubscribeUrl);
+
+  return { subject, html, text };
 };
