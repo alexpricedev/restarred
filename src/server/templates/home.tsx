@@ -18,7 +18,7 @@ export const Home = ({ user }: HomeProps) => (
             <a href="#features">About</a>
           </div>
           {user ? (
-            <a href="/projects" className="landing-nav-cta">
+            <a href="/" className="landing-nav-cta">
               Dashboard
             </a>
           ) : (

@@ -1,11 +1,7 @@
 import type { User } from "../services/users";
 import { CsrfField } from "./csrf-field";
 
-const navLinks = [
-  { href: "/", label: "Home", name: "home" },
-  { href: "/projects", label: "CRUD", name: "projects" },
-  { href: "/forms", label: "Forms", name: "forms" },
-];
+const navLinks = [{ href: "/", label: "Home", name: "home" }];
 
 interface NavProps {
   page: string;
