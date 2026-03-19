@@ -5,9 +5,11 @@
 
   label {
     color: var(--color-text-secondary);
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.01em;
+    font-family: var(--font-main);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 
   input,

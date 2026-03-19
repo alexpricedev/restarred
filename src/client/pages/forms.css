@@ -12,6 +12,8 @@
 
   .form-card {
     display: block;
+    border: none;
+    border-radius: var(--radius-lg);
   }
 
   form {
@@ -39,7 +41,7 @@
 
     h3 {
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 0.25rem;
     }
 
@@ -50,8 +52,8 @@
     }
 
     code {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
+      background: var(--color-surface-container-highest);
+      border: none;
       border-radius: var(--radius);
       color: var(--color-text-secondary);
       font-family: var(--font-mono);
@@ -62,13 +64,15 @@
 
   .step-num {
     align-items: center;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+    background: var(--color-surface-container-highest);
+    border: none;
     border-radius: 50%;
-    color: var(--color-primary);
+    color: var(--color-text);
     display: flex;
     flex-shrink: 0;
+    font-family: var(--font-display);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     height: 28px;
     justify-content: center;
     width: 28px;

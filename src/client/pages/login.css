@@ -18,24 +18,30 @@
   margin-bottom: 32px;
 
   a {
-    display: inline-flex;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
     color: var(--color-text);
+    text-decoration: none;
   }
 }
 
 .login-card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  border: none;
+  border-radius: var(--radius-lg);
   padding: 32px;
 }
 
 .login-title {
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-text);
   margin-bottom: 4px;
   text-align: center;
+  text-transform: none;
 }
 
 .login-subtitle {
@@ -76,6 +82,10 @@
 
 .login-submit {
   width: 100%;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .login-footer {

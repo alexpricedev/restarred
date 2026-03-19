@@ -1,7 +1,6 @@
 import { Flash } from "../components/flash";
 import { FormField } from "../components/form-field";
 import { BaseLayout } from "../components/layouts";
-import { Logo } from "../components/logo";
 
 export interface LoginState {
   state?: "email-sent" | "validation-error";
@@ -14,13 +13,11 @@ export interface LoginProps {
 
 export const Login = ({ state }: LoginProps) => {
   return (
-    <BaseLayout title="Login - Billet">
+    <BaseLayout title="Login - Restarred">
       <main className="login-page">
         <div className="login-wrapper">
           <div className="login-header">
-            <a href="/">
-              <Logo />
-            </a>
+            <a href="/">restarred</a>
           </div>
 
           <div className="login-card">
