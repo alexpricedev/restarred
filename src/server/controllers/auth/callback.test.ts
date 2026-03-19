@@ -81,9 +81,7 @@ describe("Callback Controller", () => {
       const response = await callback.index(request);
 
       expect(response.status).toBe(303);
-      expect(response.headers.get("location")).toBe(
-        "/login?error=missing_params",
-      );
+      expect(response.headers.get("location")).toBe("/?error=missing_params");
     });
 
     test("redirects with error for missing state parameter", async () => {
@@ -95,9 +93,7 @@ describe("Callback Controller", () => {
       const response = await callback.index(request);
 
       expect(response.status).toBe(303);
-      expect(response.headers.get("location")).toBe(
-        "/login?error=missing_params",
-      );
+      expect(response.headers.get("location")).toBe("/?error=missing_params");
     });
 
     test("redirects with error for missing state cookie", async () => {
@@ -110,7 +106,7 @@ describe("Callback Controller", () => {
 
       expect(response.status).toBe(303);
       expect(response.headers.get("location")).toContain(
-        "/login?error=state_mismatch",
+        "/?error=state_mismatch",
       );
     });
 
@@ -129,7 +125,7 @@ describe("Callback Controller", () => {
 
       expect(response.status).toBe(303);
       expect(response.headers.get("location")).toContain(
-        "/login?error=state_mismatch",
+        "/?error=state_mismatch",
       );
     });
 

@@ -33,11 +33,11 @@ export const callback = {
     const storedState = getStateCookie(req);
 
     if (!code || !state) {
-      return redirect("/login?error=missing_params");
+      return redirect("/?error=missing_params");
     }
 
     if (!storedState || state !== storedState) {
-      const res = redirect("/login?error=state_mismatch");
+      const res = redirect("/?error=state_mismatch");
       res.headers.append("Set-Cookie", clearStateCookie());
       return res;
     }
@@ -83,7 +83,7 @@ export const callback = {
       return response;
     } catch (error) {
       log.error("auth", `GitHub OAuth callback failed: ${error}`);
-      const res = redirect("/login?error=auth_failed");
+      const res = redirect("/?error=auth_failed");
       res.headers.append("Set-Cookie", clearStateCookie());
       return res;
     }
