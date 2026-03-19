@@ -144,7 +144,33 @@ export const Account = ({
       <div className="account-header">
         <div>
           <span className="account-label">ACCOUNT</span>
-          <h1 className="account-heading">{user.github_username}</h1>
+          <h1 className="account-heading">
+            <a
+              href={`https://github.com/${user.github_username}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="account-github-link"
+            >
+              {user.github_username}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-label="External link"
+                role="img"
+              >
+                <path d="M15 3h6v6" />
+                <path d="M10 14 21 3" />
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              </svg>
+            </a>
+          </h1>
         </div>
       </div>
 
@@ -240,6 +266,9 @@ export const Account = ({
 
         <div className="account-section">
           <h2 className="account-section-heading">Digest Status</h2>
+          <p className="account-section-description">
+            When paused, no digests will be sent until you reactivate.
+          </p>
           <div className="account-toggle">
             <label className="account-radio">
               <input
@@ -260,12 +289,14 @@ export const Account = ({
               Paused
             </label>
           </div>
-          <p className="account-section-description">
-            When paused, no digests will be sent until you reactivate.
-          </p>
         </div>
 
-        <button type="submit">Save preferences</button>
+        <div className="account-form-footer">
+          <button type="submit">Save preferences</button>
+          <span id="unsaved-indicator" className="account-unsaved" hidden>
+            Unsaved changes
+          </span>
+        </div>
       </form>
     </div>
   </Layout>
