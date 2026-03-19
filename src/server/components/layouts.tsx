@@ -6,7 +6,7 @@ import { Nav } from "./nav";
 
 const SITE_URL = "http://localhost";
 const SITE_DESCRIPTION =
-  "GitHub Star Rediscovery. 3 random repos, every week, in your inbox.";
+  "3 of your GitHub stars, resurfaced in your inbox every week.";
 
 const GoogleFonts = () => (
   <>
@@ -74,7 +74,7 @@ export function Layout({
       <body data-page={name} data-component="layout">
         <header>
           <a href="/" className="logo">
-            <span>restarred</span>
+            <span>re:starred</span>
           </a>
           <Nav page={name} user={user} csrfToken={csrfToken} />
         </header>

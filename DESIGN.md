@@ -1,4 +1,4 @@
-# Design System — Restarred
+# Design System — Re:Starred
 
 ## Product Context
 - **What this is:** A microservice that emails developers 3 forgotten GitHub stars every week, so good repos don't disappear into the void.
@@ -7,7 +7,7 @@
 - **Project type:** Web app (landing page + authenticated account dashboard) + transactional email digest.
 
 ## Branding
-- **Name:** restarred
+- **Name:** re:starred
 - **Logo lockup:** `re:` as the mark, `starred` as the wordmark — **re:**starred
 - **Concept:** Plays on "re-starred" (revisiting your stars) and "re: starred" (like an email subject line). The `re:` prefix reinforces the email-native nature.
 - **Tone:** Developer-friendly, minimal, slightly dry humour. Not corporate.
