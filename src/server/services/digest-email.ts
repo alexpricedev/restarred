@@ -1,5 +1,7 @@
 import type { SelectedRepo } from "./digest";
 
+export type { SelectedRepo };
+
 export type ActivityStatus = "active" | "quiet" | "dormant";
 
 export interface RepoActivity {
