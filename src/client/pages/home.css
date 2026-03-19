@@ -58,10 +58,19 @@
     }
   }
 
+  .landing-nav-logout {
+    margin: 0;
+    padding: 0;
+  }
+
   .landing-nav-cta {
     background: var(--color-primary);
     color: var(--color-on-primary);
     padding: 0.5rem 2rem;
+    border: none;
+    font-size: inherit;
+    line-height: inherit;
+    cursor: pointer;
     border-radius: var(--radius-full);
     font-family: var(--font-display);
     font-weight: 700;

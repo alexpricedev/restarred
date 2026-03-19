@@ -9,7 +9,7 @@ export const welcome = {
     const ctx = await getSessionContext(req);
 
     if (!ctx.isAuthenticated || !ctx.user) {
-      return redirect("/login");
+      return redirect("/auth/github");
     }
 
     if (ctx.requiresSetCookie && ctx.sessionId) {

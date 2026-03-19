@@ -50,7 +50,7 @@ describe("Admin Middleware", () => {
     }
   });
 
-  test("redirects unauthenticated user to /login", async () => {
+  test("redirects unauthenticated user to /auth/github", async () => {
     const request = createBunRequest("http://localhost:3000/admin");
 
     const result = await requireAdmin(request);
@@ -58,7 +58,7 @@ describe("Admin Middleware", () => {
     expect(result.authorized).toBe(false);
     if (!result.authorized) {
       expect(result.response.status).toBe(303);
-      expect(result.response.headers.get("location")).toBe("/login");
+      expect(result.response.headers.get("location")).toBe("/auth/github");
     }
   });
 
@@ -81,7 +81,7 @@ describe("Admin Middleware", () => {
     }
   });
 
-  test("redirects guest session to /login", async () => {
+  test("redirects guest session to /auth/github", async () => {
     const sessionId = await createGuestSession();
 
     const request = createBunRequest("http://localhost:3000/admin", {
@@ -93,7 +93,7 @@ describe("Admin Middleware", () => {
     expect(result.authorized).toBe(false);
     if (!result.authorized) {
       expect(result.response.status).toBe(303);
-      expect(result.response.headers.get("location")).toBe("/login");
+      expect(result.response.headers.get("location")).toBe("/auth/github");
     }
   });
 });
