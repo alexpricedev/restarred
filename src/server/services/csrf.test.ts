@@ -1,7 +1,6 @@
 import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import { SQL } from "bun";
-import { cleanupTestData } from "../test-utils/helpers";
-import { findOrCreateUser } from "./auth";
+import { cleanupTestData, createTestUser } from "../test-utils/helpers";
 import {
   createCsrfToken,
   ensureCsrfSecret,
@@ -31,10 +30,8 @@ describe("CSRF Service", () => {
     await connection.end();
     mock.restore();
   });
-  const createTestSession = async (
-    email = `test-${Date.now()}-${Math.random()}@example.com`,
-  ) => {
-    const user = await findOrCreateUser(email);
+  const createTestSession = async () => {
+    const user = await createTestUser(db);
     return createAuthenticatedSession(user.id);
   };
 

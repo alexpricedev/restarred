@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import { SQL } from "bun";
-import { cleanupTestData } from "../../test-utils/helpers";
+import { cleanupTestData, createTestUser } from "../../test-utils/helpers";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is required for tests");
@@ -13,7 +13,6 @@ mock.module("../../services/database", () => ({
   },
 }));
 
-import { findOrCreateUser } from "../../services/auth";
 import { db } from "../../services/database";
 import { createAuthenticatedSession } from "../../services/sessions";
 import { createBunRequest } from "../../test-utils/bun-request";
@@ -30,8 +29,10 @@ describe("Admin Dashboard Controller", () => {
   });
 
   test("renders admin dashboard for admin user", async () => {
-    const user = await findOrCreateUser("admin@example.com");
-    await db`UPDATE users SET role = 'admin' WHERE id = ${user.id}`;
+    const user = await createTestUser(db, {
+      githubEmail: "admin@example.com",
+      role: "admin",
+    });
     const sessionId = await createAuthenticatedSession(user.id);
 
     const request = createBunRequest("http://localhost:3000/admin", {
@@ -56,7 +57,9 @@ describe("Admin Dashboard Controller", () => {
   });
 
   test("redirects non-admin user to /", async () => {
-    const user = await findOrCreateUser("regular@example.com");
+    const user = await createTestUser(db, {
+      githubEmail: "regular@example.com",
+    });
     const sessionId = await createAuthenticatedSession(user.id);
 
     const request = createBunRequest("http://localhost:3000/admin", {
@@ -70,9 +73,11 @@ describe("Admin Dashboard Controller", () => {
   });
 
   test("renders users table with user data", async () => {
-    const adminUser = await findOrCreateUser("admin@example.com");
-    await db`UPDATE users SET role = 'admin' WHERE id = ${adminUser.id}`;
-    await findOrCreateUser("regular@example.com");
+    const adminUser = await createTestUser(db, {
+      githubEmail: "admin@example.com",
+      role: "admin",
+    });
+    await createTestUser(db, { githubEmail: "regular@example.com" });
     const sessionId = await createAuthenticatedSession(adminUser.id);
 
     const request = createBunRequest("http://localhost:3000/admin", {

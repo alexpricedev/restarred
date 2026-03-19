@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import { SQL } from "bun";
-import { findOrCreateUser } from "../services/auth";
+import { findOrCreateGitHubUser } from "../services/auth";
 import { createCsrfToken } from "../services/csrf";
 import { db } from "../services/database";
 import { createAuthenticatedSession } from "../services/sessions";
@@ -28,10 +28,13 @@ describe("CSRF Middleware", () => {
     await connection.end();
     mock.restore();
   });
-  const createTestSession = async (
-    email = `test-${Date.now()}-${Math.random()}@example.com`,
-  ) => {
-    const user = await findOrCreateUser(email);
+  const createTestSession = async () => {
+    const user = await findOrCreateGitHubUser({
+      githubId: Math.floor(Math.random() * 1_000_000),
+      githubUsername: `testuser-${Date.now()}`,
+      githubEmail: `test-${Date.now()}@example.com`,
+      encryptedToken: "encrypted-token",
+    });
     return createAuthenticatedSession(user.id);
   };
 

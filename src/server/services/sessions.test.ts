@@ -22,10 +22,21 @@ const {
   renewSession,
 } = await import("./sessions");
 
-const { findOrCreateUser } = await import("./auth");
+const { findOrCreateGitHubUser } = await import("./auth");
 const { computeHMAC } = await import("../utils/crypto");
 
 const db = connection;
+
+let testGithubIdCounter = 100_000;
+const createTestUser = async (email: string) => {
+  testGithubIdCounter++;
+  return findOrCreateGitHubUser({
+    githubId: testGithubIdCounter,
+    githubUsername: `testuser-${testGithubIdCounter}`,
+    githubEmail: email,
+    encryptedToken: "encrypted-token",
+  });
+};
 
 afterAll(async () => {
   await connection.end();
@@ -63,7 +74,7 @@ describe("createGuestSession", () => {
 
 describe("createAuthenticatedSession", () => {
   test("creates a session with type authenticated and user_id", async () => {
-    const user = await findOrCreateUser("test@example.com");
+    const user = await createTestUser("test@example.com");
     const rawId = await createAuthenticatedSession(user.id);
 
     const hash = computeHMAC(rawId);
@@ -74,7 +85,7 @@ describe("createAuthenticatedSession", () => {
   });
 
   test("authenticated session expires in ~30 days", async () => {
-    const user = await findOrCreateUser("test@example.com");
+    const user = await createTestUser("test@example.com");
     const rawId = await createAuthenticatedSession(user.id);
     const hash = computeHMAC(rawId);
     const rows =
@@ -107,7 +118,7 @@ describe("getSessionContextFromDB", () => {
   });
 
   test("returns authenticated context with user for authenticated session", async () => {
-    const user = await findOrCreateUser("auth@example.com");
+    const user = await createTestUser("auth@example.com");
     const rawId = await createAuthenticatedSession(user.id);
     const ctx = await getSessionContextFromDB(rawId);
 
@@ -116,7 +127,7 @@ describe("getSessionContextFromDB", () => {
     expect(ctx?.isGuest).toBe(false);
     expect(ctx?.isAuthenticated).toBe(true);
     expect(ctx?.user).not.toBeNull();
-    expect(ctx?.user?.email).toBe("auth@example.com");
+    expect(ctx?.user?.github_email).toBe("auth@example.com");
   });
 
   test("returns null for expired session", async () => {
@@ -133,7 +144,7 @@ describe("convertGuestToAuthenticated", () => {
   test("converts guest session to authenticated", async () => {
     const rawId = await createGuestSession();
     const hash = computeHMAC(rawId);
-    const user = await findOrCreateUser("upgrade@example.com");
+    const user = await createTestUser("upgrade@example.com");
 
     const result = await convertGuestToAuthenticated(hash, user.id);
     expect(result).toBe(true);
@@ -146,7 +157,7 @@ describe("convertGuestToAuthenticated", () => {
   test("extends expiry to 30 days on conversion", async () => {
     const rawId = await createGuestSession();
     const hash = computeHMAC(rawId);
-    const user = await findOrCreateUser("upgrade@example.com");
+    const user = await createTestUser("upgrade@example.com");
 
     await convertGuestToAuthenticated(hash, user.id);
 
@@ -158,7 +169,7 @@ describe("convertGuestToAuthenticated", () => {
   });
 
   test("returns false for already-authenticated session", async () => {
-    const user = await findOrCreateUser("auth@example.com");
+    const user = await createTestUser("auth@example.com");
     const rawId = await createAuthenticatedSession(user.id);
     const hash = computeHMAC(rawId);
 
@@ -171,7 +182,7 @@ describe("convertGuestToAuthenticated", () => {
     const hash = computeHMAC(rawId);
     await db`UPDATE sessions SET expires_at = NOW() - INTERVAL '1 hour' WHERE id_hash = ${hash}`;
 
-    const user = await findOrCreateUser("upgrade@example.com");
+    const user = await createTestUser("upgrade@example.com");
     const result = await convertGuestToAuthenticated(hash, user.id);
     expect(result).toBe(false);
   });
@@ -196,7 +207,7 @@ describe("deleteSession", () => {
 
 describe("renewSession", () => {
   test("updates last_activity_at", async () => {
-    const user = await findOrCreateUser("renew@example.com");
+    const user = await createTestUser("renew@example.com");
     const rawId = await createAuthenticatedSession(user.id);
     const hash = computeHMAC(rawId);
 

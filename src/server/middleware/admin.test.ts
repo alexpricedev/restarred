@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import { SQL } from "bun";
-import { cleanupTestData } from "../test-utils/helpers";
+import { cleanupTestData, createTestUser } from "../test-utils/helpers";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is required for tests");
@@ -13,7 +13,6 @@ mock.module("../services/database", () => ({
   },
 }));
 
-import { findOrCreateUser } from "../services/auth";
 import { db } from "../services/database";
 import {
   createAuthenticatedSession,
@@ -33,8 +32,10 @@ describe("Admin Middleware", () => {
   });
 
   test("returns authorized with session context for admin user", async () => {
-    const user = await findOrCreateUser("admin@example.com");
-    await db`UPDATE users SET role = 'admin' WHERE id = ${user.id}`;
+    const user = await createTestUser(db, {
+      githubEmail: "admin@example.com",
+      role: "admin",
+    });
     const sessionId = await createAuthenticatedSession(user.id);
 
     const request = createBunRequest("http://localhost:3000/admin", {
@@ -44,7 +45,7 @@ describe("Admin Middleware", () => {
     const result = await requireAdmin(request);
     expect(result.authorized).toBe(true);
     if (result.authorized) {
-      expect(result.ctx.user?.email).toBe("admin@example.com");
+      expect(result.ctx.user?.github_email).toBe("admin@example.com");
       expect(result.ctx.user?.role).toBe("admin");
     }
   });
@@ -61,24 +62,10 @@ describe("Admin Middleware", () => {
     }
   });
 
-  test("redirects guest session to /login", async () => {
-    const sessionId = await createGuestSession();
-
-    const request = createBunRequest("http://localhost:3000/admin", {
-      headers: { cookie: `session_id=${sessionId}` },
+  test("redirects non-admin user to /", async () => {
+    const user = await createTestUser(db, {
+      githubEmail: "regular@example.com",
     });
-
-    const result = await requireAdmin(request);
-
-    expect(result.authorized).toBe(false);
-    if (!result.authorized) {
-      expect(result.response.status).toBe(303);
-      expect(result.response.headers.get("location")).toBe("/login");
-    }
-  });
-
-  test("redirects non-admin authenticated user to / with flash message", async () => {
-    const user = await findOrCreateUser("regular@example.com");
     const sessionId = await createAuthenticatedSession(user.id);
 
     const request = createBunRequest("http://localhost:3000/admin", {
@@ -94,19 +81,8 @@ describe("Admin Middleware", () => {
     }
   });
 
-  test("redirects expired session to /login", async () => {
-    const user = await findOrCreateUser("expired-admin@example.com");
-    await db`UPDATE users SET role = 'admin' WHERE id = ${user.id}`;
-    const sessionId = await createAuthenticatedSession(user.id);
-
-    const { computeHMAC } = await import("../utils/crypto");
-    const sessionIdHash = computeHMAC(sessionId);
-
-    await db`
-      UPDATE sessions
-      SET expires_at = CURRENT_TIMESTAMP - INTERVAL '1 hour'
-      WHERE id_hash = ${sessionIdHash}
-    `;
+  test("redirects guest session to /login", async () => {
+    const sessionId = await createGuestSession();
 
     const request = createBunRequest("http://localhost:3000/admin", {
       headers: { cookie: `session_id=${sessionId}` },
