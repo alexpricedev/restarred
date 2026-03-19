@@ -1,8 +1,6 @@
 import type { User } from "../services/users";
 import { CsrfField } from "./csrf-field";
 
-const navLinks = [{ href: "/", label: "Home", name: "home" }];
-
 interface NavProps {
   page: string;
   user?: User | null;
@@ -11,41 +9,26 @@ interface NavProps {
 
 export const Nav = ({ page, user, csrfToken }: NavProps) => (
   <nav data-component="nav" aria-label="Main navigation">
-    <ul>
-      {navLinks.map(({ href, label, name }) => (
-        <li key={name}>
-          <a
-            href={href}
-            className={page === name ? "active" : undefined}
-            aria-current={page === name ? "page" : undefined}
-          >
-            {label}
-          </a>
-        </li>
-      ))}
-    </ul>
-    <div className="nav-auth">
-      {user ? (
-        <>
-          <a
-            href="/account"
-            className="btn-ghost"
-            aria-current={page === "account" ? "page" : undefined}
-          >
-            Account
-          </a>
-          <form method="post" action="/auth/logout">
-            <CsrfField token={csrfToken ?? null} />
-            <button type="submit" className="btn-ghost">
-              Logout
-            </button>
-          </form>
-        </>
-      ) : (
-        <a href="/auth/github" className="btn-ghost">
-          Login
+    {user ? (
+      <div className="nav-actions">
+        <a
+          href="/account"
+          className="nav-link"
+          aria-current={page === "account" ? "page" : undefined}
+        >
+          Account
         </a>
-      )}
-    </div>
+        <form method="post" action="/auth/logout" className="nav-logout">
+          <CsrfField token={csrfToken ?? null} />
+          <button type="submit" className="nav-cta">
+            Sign out
+          </button>
+        </form>
+      </div>
+    ) : (
+      <a href="/auth/github" className="nav-cta">
+        Sign in
+      </a>
+    )}
   </nav>
 );

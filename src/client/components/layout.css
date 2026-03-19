@@ -1,40 +1,35 @@
 [data-component="layout"] {
   & > header {
-    align-items: center;
     background: rgba(249, 249, 249, 0.8);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    display: flex;
-    justify-content: space-between;
-    padding: 0.75rem 2rem;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 50;
 
-    @media (width <= 640px) {
-      padding: 0.75rem 1rem;
-    }
-
-    .logo {
+    .header-inner {
       align-items: center;
       display: flex;
-      gap: 0.5rem;
+      justify-content: space-between;
+      max-width: var(--max-width-landing);
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+
+      @media (width <= 640px) {
+        padding: 1rem;
+      }
+    }
+
+    .wordmark {
+      color: var(--color-primary);
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
       text-decoration: none;
-
-      svg {
-        display: none;
-      }
-
-      span {
-        color: var(--color-text);
-        font-family: var(--font-display);
-        font-size: 1.125rem;
-        font-weight: 900;
-        letter-spacing: -0.02em;
-        text-transform: uppercase;
-      }
+      text-transform: uppercase;
 
       &:hover,
       &:focus {

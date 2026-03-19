@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.4] - 2026-03-19
+
+### Changed
+- Navigation unified across landing and app pages using shared Layout component
+- App page nav now matches landing page design with filled CTA buttons
+- Account page nav displays with same width (1280px) as marketing landing page
+- Account link shows underline indicator when on account page
+- Save Preferences button now styled as primary green CTA with larger padding
+
+### Fixed
+- Removed duplicate nav implementations between landing and app pages
+- Improved visual consistency between authentication buttons across all pages
+
 ## [1.0.3] - 2026-03-19
 
 ### Added

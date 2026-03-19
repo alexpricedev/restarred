@@ -172,6 +172,17 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  button[type="submit"] {
+    background: var(--color-success);
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+
+    &:hover,
+    &:focus {
+      background: #1b5e3b;
+    }
+  }
 }
 
 [data-page="account"] .account-unsaved {
