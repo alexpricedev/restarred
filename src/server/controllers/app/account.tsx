@@ -8,6 +8,7 @@ import { getStarCount } from "../../services/stars";
 import type { User } from "../../services/users";
 import { updateUserPreferences } from "../../services/users";
 import { Account } from "../../templates/account";
+import { getFlashCookie, setFlashCookie } from "../../utils/flash";
 import { redirect, render } from "../../utils/response";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -47,7 +48,13 @@ async function handleGet(req: BunRequest): Promise<Response> {
     setSessionCookie(req, ctx.sessionId);
   }
 
-  return renderAccountPage(ctx.user, ctx.sessionId);
+  const flash = getFlashCookie<{ type: "success" | "error"; message: string }>(
+    req,
+    "account",
+  );
+  const flashMessage = flash.type ? flash : undefined;
+
+  return renderAccountPage(ctx.user, ctx.sessionId, flashMessage);
 }
 
 async function handlePost(req: BunRequest): Promise<Response> {
@@ -117,6 +124,11 @@ async function handlePost(req: BunRequest): Promise<Response> {
     });
 
     log.info("account", `Preferences updated for user ${ctx.user.id}`);
+
+    setFlashCookie(req, "account", {
+      type: "success",
+      message: "Preferences saved.",
+    });
 
     return redirect("/account");
   } catch (error) {
