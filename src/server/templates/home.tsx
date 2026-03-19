@@ -14,7 +14,6 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
         <div className="landing-nav-inner">
           <span className="landing-wordmark">re:starred</span>
           <div className="landing-nav-links">
-            <a href="#how-it-works">Docs</a>
             <a href="#features">About</a>
           </div>
           {user ? (
@@ -40,6 +39,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
         {/* Hero */}
         <section className="landing-hero">
           <div className="landing-container">
+            <span className="hero-badge">FREE FOREVER</span>
             <h1 className="hero-heading">
               YOUR STARRED REPOS,
               <br />
@@ -53,10 +53,25 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
               </div>
               <div className="hero-actions">
                 <a href="/auth/github" className="hero-cta">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                    <path d="M9 18c-4.51 2-5-2-7-2" />
+                  </svg>
                   CONNECT GITHUB
                 </a>
                 <p className="hero-proof">
-                  JOIN 4,200+ DEVELOPERS REDISCOVERING THEIR STARS
+                  JOIN HUNDREDS OF DEVELOPERS REDISCOVERING THEIR STARS
                 </p>
               </div>
             </div>
@@ -173,10 +188,9 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
             <a href="https://github.com">GitHub</a>
-            <a href="https://twitter.com">Twitter</a>
           </div>
           <div className="landing-footer-copy">
-            &copy; 2024 RE:STARRED. ARCHITECTURAL PRECISION.
+            &copy; {new Date().getFullYear()} INFINITE CHAPTERS LTD
           </div>
         </div>
       </footer>
