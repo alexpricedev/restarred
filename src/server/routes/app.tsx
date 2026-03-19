@@ -11,6 +11,9 @@ export const appRoutes = {
     GET: account.index,
     POST: account.update,
   }),
+  "/account/test-email": createRouteHandler({
+    POST: account.testEmail,
+  }),
   "/auth/logout": createRouteHandler({
     POST: logout.create,
   }),

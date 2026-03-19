@@ -12,6 +12,7 @@ export interface SelectedRepo {
   htmlUrl: string;
   starredAt: Date | null;
   lastActivityAt: Date | null;
+  isArchived: boolean;
 }
 
 interface StarRow {
@@ -24,6 +25,7 @@ interface StarRow {
   html_url: string;
   starred_at: Date | null;
   last_activity_at: Date | null;
+  is_archived: boolean;
 }
 
 const rowToSelectedRepo = (row: StarRow, cycle: number): SelectedRepo => ({
@@ -37,6 +39,7 @@ const rowToSelectedRepo = (row: StarRow, cycle: number): SelectedRepo => ({
   htmlUrl: row.html_url,
   starredAt: row.starred_at,
   lastActivityAt: row.last_activity_at,
+  isArchived: Boolean(row.is_archived),
 });
 
 export const selectReposForDigest = async (
@@ -68,14 +71,14 @@ export const selectReposForDigest = async (
   let unseen: StarRow[];
   if (sentIdList.length === 0) {
     unseen = (await db`
-      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at
+      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
       FROM stars
       WHERE user_id = ${userId}
       ORDER BY random()
     `) as StarRow[];
   } else {
     unseen = (await db`
-      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at
+      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
       FROM stars
       WHERE user_id = ${userId} AND id NOT IN ${db(sentIdList)}
       ORDER BY random()
@@ -85,7 +88,7 @@ export const selectReposForDigest = async (
   if (unseen.length === 0) {
     const newCycle = currentCycle + 1;
     const picks = (await db`
-      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at
+      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
       FROM stars
       WHERE user_id = ${userId}
       ORDER BY random()
@@ -114,7 +117,7 @@ export const selectReposForDigest = async (
   let fill: StarRow[];
   if (excludeIds.length === 0) {
     fill = (await db`
-      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at
+      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
       FROM stars
       WHERE user_id = ${userId}
       ORDER BY random()
@@ -122,7 +125,7 @@ export const selectReposForDigest = async (
     `) as StarRow[];
   } else {
     fill = (await db`
-      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at
+      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
       FROM stars
       WHERE user_id = ${userId} AND id NOT IN ${db(excludeIds)}
       ORDER BY random()
