@@ -11,7 +11,7 @@ interface RepoCardProps {
 }
 
 export const RepoCard = ({ repo }: RepoCardProps) => {
-  const activity = getActivityStatus(repo.lastActivityAt, false);
+  const activity = getActivityStatus(repo.lastActivityAt, repo.isArchived);
 
   return (
     <table
