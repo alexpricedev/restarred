@@ -153,7 +153,7 @@ describe("Callback Controller", () => {
       expect(mockSyncUserStars).toHaveBeenCalledTimes(1);
     });
 
-    test("redirects returning user to / without sync", async () => {
+    test("redirects returning user to /account without sync", async () => {
       mockSyncUserStars.mockClear();
       mockFindOrCreateGitHubUser.mockResolvedValueOnce({
         ...mockUser,
@@ -173,7 +173,7 @@ describe("Callback Controller", () => {
       const response = await callback.index(request);
 
       expect(response.status).toBe(303);
-      expect(response.headers.get("location")).toBe("/");
+      expect(response.headers.get("location")).toBe("/account");
       expect(mockSyncUserStars).not.toHaveBeenCalled();
     });
 
@@ -196,7 +196,7 @@ describe("Callback Controller", () => {
       const response = await callback.index(request);
 
       expect(response.status).toBe(303);
-      expect(response.headers.get("location")).toBe("/");
+      expect(response.headers.get("location")).toBe("/account");
     });
   });
 });

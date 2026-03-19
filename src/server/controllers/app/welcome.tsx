@@ -13,7 +13,7 @@ export const welcome = {
     }
 
     if (ctx.user.sync_status === "done") {
-      return redirect("/");
+      return redirect("/account");
     }
 
     if (ctx.requiresSetCookie && ctx.sessionId) {
