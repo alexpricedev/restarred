@@ -24,6 +24,8 @@ export async function bootstrap() {
 
   try {
     console.log("  Dropping existing tables...");
+    await db`DROP TABLE IF EXISTS digest_history CASCADE`;
+    await db`DROP TABLE IF EXISTS stars CASCADE`;
     await db`DROP TABLE IF EXISTS user_tokens CASCADE`;
     await db`DROP TABLE IF EXISTS sessions CASCADE`;
     await db`DROP TABLE IF EXISTS users CASCADE`;

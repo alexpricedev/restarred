@@ -10,9 +10,9 @@
 ~~Fetch the authenticated user's starred repos via GitHub API (`GET /user/starred`, paginated) on first login and store in a `stars` table. Fields: `repo_id`, `full_name`, `description`, `language`, `stargazers_count`, `html_url`, `starred_at`, `last_activity_at`. GitHub returns up to 100 per page — need to paginate until empty. Re-sync on subsequent logins to pick up new stars and prune unstarred repos. Rate limit: 5000 req/hr with OAuth token, so even 10k stars only needs 100 pages.~~
 **Status:** Done.
 
-### Digest selection algorithm
-Pick 3 repos the user hasn't seen recently. Track selections in a `digest_history` table (`user_id`, `star_id`, `sent_at`). Selection criteria: exclude repos sent in the last 90 days, prefer repos with recent activity (commits in last 6 months), randomize within that pool. If fewer than 3 eligible repos remain, reset the history window. Pure service function — no UI, consumed by the digest job.
-**Depends on:** Star syncing (stars must exist in DB to select from).
+### ~~Digest selection algorithm~~
+~~Pick 3 repos the user hasn't seen recently. Track selections in a `digest_history` table (`user_id`, `star_id`, `sent_at`). Selection criteria: exclude repos sent in the last 90 days, prefer repos with recent activity (commits in last 6 months), randomize within that pool. If fewer than 3 eligible repos remain, reset the history window. Pure service function — no UI, consumed by the digest job.~~
+**Status:** Done.
 
 ### Digest email template
 HTML email with 3 repo cards. Each card: repo name (linked), description, primary language badge, star count, last commit date, and an activity indicator (active/stale/archived). Inline CSS only (email client compatibility). Includes unsubscribe link in footer. Matches the Editorial Precision design system — light background, Space Grotesk headings, clean layout. Rendered server-side with JSX, sent via transactional email service.
