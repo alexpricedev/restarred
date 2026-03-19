@@ -44,6 +44,12 @@ mock.module("../../middleware/auth", () => ({
   ),
 }));
 
+const mockSyncUserStars = mock(() => Promise.resolve());
+
+mock.module("../../services/stars", () => ({
+  syncUserStars: mockSyncUserStars,
+}));
+
 const mockExchangeCodeForToken = mock(() => Promise.resolve("gh-token-123"));
 const mockFetchGitHubUser = mock(() =>
   Promise.resolve({
@@ -121,6 +127,28 @@ describe("Callback Controller", () => {
       expect(response.status).toBe(303);
       expect(response.headers.get("location")).toContain(
         "/login?error=state_mismatch",
+      );
+    });
+
+    test("syncs stars after successful authentication", async () => {
+      mockSyncUserStars.mockClear();
+
+      const request = createBunRequest(
+        "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
+        {
+          method: "GET",
+          headers: {
+            cookie: "github_oauth_state=matching-state",
+          },
+        },
+      );
+
+      await callback.index(request);
+
+      expect(mockSyncUserStars).toHaveBeenCalledTimes(1);
+      expect(mockSyncUserStars).toHaveBeenCalledWith(
+        "user-123",
+        "gh-token-123",
       );
     });
 
