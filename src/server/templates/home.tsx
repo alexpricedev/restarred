@@ -14,20 +14,22 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
       <nav className="landing-nav">
         <div className="landing-nav-inner">
           <span className="landing-wordmark">re:starred</span>
-          <div className="landing-nav-links">
-            <a href="#features">About</a>
-          </div>
           {user ? (
-            <form
-              method="post"
-              action="/auth/logout"
-              className="landing-nav-logout"
-            >
-              <input type="hidden" name="_csrf" value={csrfToken ?? ""} />
-              <button type="submit" className="landing-nav-cta">
-                Sign out
-              </button>
-            </form>
+            <div className="landing-nav-actions">
+              <a href="/account" className="landing-nav-link">
+                Account
+              </a>
+              <form
+                method="post"
+                action="/auth/logout"
+                className="landing-nav-logout"
+              >
+                <input type="hidden" name="_csrf" value={csrfToken ?? ""} />
+                <button type="submit" className="landing-nav-cta">
+                  Sign out
+                </button>
+              </form>
+            </div>
           ) : (
             <a href="/auth/github" className="landing-nav-cta">
               Sign in

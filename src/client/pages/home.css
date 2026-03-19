@@ -34,27 +34,23 @@
     color: var(--color-primary);
   }
 
-  .landing-nav-links {
-    display: none;
+  .landing-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
 
-    @media (width >= 768px) {
-      display: flex;
-      align-items: center;
-      gap: 3rem;
-    }
+  .landing-nav-link {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color 200ms ease;
 
-    a {
-      font-family: var(--font-display);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: -0.01em;
-      color: var(--color-text-secondary);
-      text-decoration: none;
-      transition: color 200ms ease;
-
-      &:hover {
-        color: var(--color-primary);
-      }
+    &:hover {
+      color: var(--color-primary);
     }
   }
 
@@ -684,24 +680,24 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 2rem;
+  }
 
-    a {
-      font-family: var(--font-main);
-      font-size: 0.6875rem;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--color-text-secondary);
-      text-decoration: underline;
-      text-decoration-thickness: 1px;
-      text-underline-offset: 4px;
-      opacity: 0.8;
-      transition: opacity 200ms ease;
+  .landing-footer-links a {
+    font-family: var(--font-main);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    opacity: 0.8;
+    transition: opacity 200ms ease;
+  }
 
-      &:hover {
-        opacity: 1;
-        color: var(--color-primary);
-      }
-    }
+  .landing-footer-links a:hover {
+    opacity: 1;
+    color: var(--color-primary);
   }
 
   .landing-footer-copy {
