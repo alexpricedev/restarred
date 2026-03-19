@@ -175,7 +175,7 @@ describe("Auth Middleware", () => {
 
       expect(result).not.toBeNull();
       expect(result?.status).toBe(303);
-      expect(result?.headers.get("location")).toBe("/auth/github");
+      expect(result?.headers.get("location")).toBe("/");
     });
 
     test("returns redirect for guest session", async () => {
@@ -189,7 +189,7 @@ describe("Auth Middleware", () => {
 
       expect(result).not.toBeNull();
       expect(result?.status).toBe(303);
-      expect(result?.headers.get("location")).toBe("/auth/github");
+      expect(result?.headers.get("location")).toBe("/");
     });
 
     test("returns redirect for expired session", async () => {
@@ -215,7 +215,7 @@ describe("Auth Middleware", () => {
 
       expect(result).not.toBeNull();
       expect(result?.status).toBe(303);
-      expect(result?.headers.get("location")).toBe("/auth/github");
+      expect(result?.headers.get("location")).toBe("/");
     });
   });
 
@@ -293,7 +293,7 @@ describe("Auth Middleware", () => {
       let request = createBunRequest("http://localhost:3000/protected");
       let authResult = await requireAuth(request);
       expect(authResult?.status).toBe(303);
-      expect(authResult?.headers.get("location")).toBe("/auth/github");
+      expect(authResult?.headers.get("location")).toBe("/");
 
       request = createBunRequest("http://localhost:3000/login");
       let redirectResult = await redirectIfAuthenticated(request);

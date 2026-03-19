@@ -70,7 +70,7 @@ export const requireAuth = async (
   if (!ctx.isAuthenticated) {
     return new Response("", {
       status: 303,
-      headers: { Location: "/auth/github" },
+      headers: { Location: "/" },
     });
   }
 

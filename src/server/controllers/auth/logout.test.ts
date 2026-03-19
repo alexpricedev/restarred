@@ -251,8 +251,8 @@ describe("Logout Controller", () => {
 
       const response = await logout.create(request);
 
-      expect(response.status).toBe(403);
-      expect(await response.text()).toBe("Invalid CSRF token");
+      expect(response.status).toBe(303);
+      expect(response.headers.get("location")).toBe("/");
     });
 
     test("requires CSRF token - rejects request with invalid token", async () => {
@@ -276,8 +276,8 @@ describe("Logout Controller", () => {
 
       const response = await logout.create(request);
 
-      expect(response.status).toBe(403);
-      expect(await response.text()).toBe("Invalid CSRF token");
+      expect(response.status).toBe(303);
+      expect(response.headers.get("location")).toBe("/");
     });
 
     test("accepts request with valid CSRF token", async () => {

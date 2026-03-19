@@ -9,7 +9,7 @@ export const welcome = {
     const ctx = await getSessionContext(req);
 
     if (!ctx.isAuthenticated || !ctx.user) {
-      return redirect("/auth/github");
+      return redirect("/");
     }
 
     if (ctx.user.sync_status === "done") {
