@@ -1,4 +1,25 @@
-import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import {
+  afterAll,
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  mock,
+  test,
+} from "bun:test";
+import { SQL } from "bun";
+
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is required for tests");
+}
+const connection = new SQL(process.env.DATABASE_URL);
+
+mock.module("./database", () => ({
+  get db() {
+    return connection;
+  },
+}));
+
 import { db } from "./database";
 
 describe("auth service", () => {
@@ -10,6 +31,11 @@ describe("auth service", () => {
   afterEach(async () => {
     await db`DELETE FROM sessions`;
     await db`DELETE FROM users`;
+  });
+
+  afterAll(async () => {
+    await connection.end();
+    mock.restore();
   });
 
   test("findOrCreateGitHubUser creates a new user", async () => {

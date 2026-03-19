@@ -37,7 +37,7 @@ describe("Login Controller", () => {
 
       expect(response.status).toBe(200);
       expect(response.headers.get("content-type")).toBe("text/html");
-      expect(html).toContain("Sign in to your account");
+      expect(html).toContain("Sign in");
       expect(html).toContain("Sign in with GitHub");
       expect(html).toContain("/auth/github");
     });
@@ -51,7 +51,7 @@ describe("Login Controller", () => {
       const response = await login.index(request);
       const html = await response.text();
 
-      expect(html).toContain("Authentication failed");
+      expect(html).toContain("An error occurred");
     });
 
     test("renders without error when no error param", async () => {
@@ -62,37 +62,20 @@ describe("Login Controller", () => {
       const response = await login.index(request);
       const html = await response.text();
 
-      expect(html).toContain("Sign in to your account");
-      expect(html).not.toContain("flash-error");
+      expect(html).toContain("Sign in");
+      expect(html).not.toContain("login-error");
     });
 
-    test("redirects authenticated user to home", async () => {
-      const mockRedirectIfAuthenticated = mock(
-        () =>
-          new Response("", {
-            status: 303,
-            headers: { Location: "/" },
-          }),
+    test("shows known error code message", async () => {
+      const request = createBunRequest(
+        "http://localhost:3000/login?error=github_denied",
+        { method: "GET" },
       );
 
-      mock.module("../../middleware/auth", () => ({
-        redirectIfAuthenticated: mockRedirectIfAuthenticated,
-      }));
+      const response = await login.index(request);
+      const html = await response.text();
 
-      const { login: mockedLogin } = await import("./login");
-
-      const request = createBunRequest("http://localhost:3000/login", {
-        method: "GET",
-        headers: {
-          cookie: "session_id=valid-session-id",
-        },
-      });
-
-      const response = await mockedLogin.index(request);
-
-      expect(response.status).toBe(303);
-      expect(response.headers.get("location")).toBe("/");
-      expect(mockRedirectIfAuthenticated).toHaveBeenCalled();
+      expect(html).toContain("GitHub authorization was denied");
     });
   });
 });

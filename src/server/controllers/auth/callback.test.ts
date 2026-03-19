@@ -44,13 +44,19 @@ mock.module("../../middleware/auth", () => ({
   ),
 }));
 
-const mockFetch = mock(
-  (_url?: string | URL | Request): Promise<Response> =>
-    Promise.resolve(Response.json({ access_token: "gh-token-123" })),
+const mockExchangeCodeForToken = mock(() => Promise.resolve("gh-token-123"));
+const mockFetchGitHubUser = mock(() =>
+  Promise.resolve({
+    id: 12345,
+    login: "testuser",
+    email: "test@example.com",
+  }),
 );
 
-const originalFetch = globalThis.fetch;
-globalThis.fetch = mockFetch as unknown as typeof globalThis.fetch;
+mock.module("../../services/github-api", () => ({
+  exchangeCodeForToken: mockExchangeCodeForToken,
+  fetchGitHubUser: mockFetchGitHubUser,
+}));
 
 import { createBunRequest } from "../../test-utils/bun-request";
 import { callback } from "./callback";
@@ -119,22 +125,6 @@ describe("Callback Controller", () => {
     });
 
     test("successfully authenticates with valid code and state", async () => {
-      mockFetch.mockImplementation((url?: string | URL | Request) => {
-        const urlStr = typeof url === "string" ? url : (url?.toString() ?? "");
-        if (urlStr.includes("access_token")) {
-          return Promise.resolve(
-            Response.json({ access_token: "gh-token-123" }),
-          );
-        }
-        return Promise.resolve(
-          Response.json({
-            id: 12345,
-            login: "testuser",
-            email: "test@example.com",
-          }),
-        );
-      });
-
       const request = createBunRequest(
         "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
         {
@@ -152,6 +142,3 @@ describe("Callback Controller", () => {
     });
   });
 });
-
-// Restore original fetch
-globalThis.fetch = originalFetch;
