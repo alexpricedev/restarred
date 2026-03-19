@@ -131,11 +131,10 @@ export const generateSubjectLine = (repos: SelectedRepo[]): string => {
   const top = repos.reduce((best, repo) =>
     repo.stargazersCount > best.stargazersCount ? repo : best,
   );
-  const name = top.fullName.split("/").pop() as string;
 
-  if (repos.length === 1) return `re:starred — ${name}`;
-  if (repos.length === 2) return `re:starred — ${name} and 1 other`;
-  return `re:starred — ${name} and ${repos.length - 1} others`;
+  if (repos.length === 1) return `re:starred — ${top.fullName}`;
+  if (repos.length === 2) return `re:starred — ${top.fullName} and 1 other`;
+  return `re:starred — ${top.fullName} and ${repos.length - 1} others`;
 };
 
 export const renderDigestPlainText = (

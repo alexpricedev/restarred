@@ -186,7 +186,7 @@ describe("generateSubjectLine", () => {
     const repos = [
       makeRepo({ fullName: "facebook/react", stargazersCount: 200000 }),
     ];
-    expect(generateSubjectLine(repos)).toBe("re:starred — react");
+    expect(generateSubjectLine(repos)).toBe("re:starred — facebook/react");
   });
 
   test("two repos uses singular other", () => {
@@ -194,7 +194,9 @@ describe("generateSubjectLine", () => {
       makeRepo({ fullName: "facebook/react", stargazersCount: 200000 }),
       makeRepo({ fullName: "vuejs/vue", stargazersCount: 190000 }),
     ];
-    expect(generateSubjectLine(repos)).toBe("re:starred — react and 1 other");
+    expect(generateSubjectLine(repos)).toBe(
+      "re:starred — facebook/react and 1 other",
+    );
   });
 
   test("three repos uses plural others", () => {
@@ -203,7 +205,9 @@ describe("generateSubjectLine", () => {
       makeRepo({ fullName: "vuejs/vue", stargazersCount: 190000 }),
       makeRepo({ fullName: "angular/angular", stargazersCount: 80000 }),
     ];
-    expect(generateSubjectLine(repos)).toBe("re:starred — react and 2 others");
+    expect(generateSubjectLine(repos)).toBe(
+      "re:starred — facebook/react and 2 others",
+    );
   });
 
   test("picks repo with highest star count", () => {
@@ -213,7 +217,7 @@ describe("generateSubjectLine", () => {
       makeRepo({ fullName: "medium/tool", stargazersCount: 5000 }),
     ];
     expect(generateSubjectLine(repos)).toBe(
-      "re:starred — framework and 2 others",
+      "re:starred — big/framework and 2 others",
     );
   });
 });
