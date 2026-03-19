@@ -1,3 +1,4 @@
+import { DigestPreview } from "@server/components/digest-preview";
 import { BaseLayout } from "@server/components/layouts";
 import type { User } from "@server/services/users";
 
@@ -78,15 +79,10 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
           </div>
         </section>
 
-        {/* Hero Image */}
+        {/* Digest Preview */}
         <section className="landing-hero-image">
           <div className="landing-container">
-            <div className="hero-image-wrap">
-              <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBClwuX03EvWQpRlXi7__BUjsIdA1SxAZ9TWqd9Gv1nPzw8T5t63VK7v6DjTlWlEbgYEhwg4USfAo_0V6V53m3tRyHT5yKUj4GKVZtyXBF6abumWDTGJ4DzggKQbRBiVWHBYBXIhxk0bNDU7BsBDeWEi5CJbcvPNgAP0QgdyYEziknN3KP_QEwMqDqfJJdJd3hkL-y_WKi3dlzg6BjlePcd1o9RJXAr14136aI8Vi1XIbd9jNOIklUQCwwX1oX_DL_PN9R0Yn5nXl4F"
-                alt="Abstract architectural composition"
-              />
-            </div>
+            <DigestPreview />
           </div>
         </section>
 
@@ -187,7 +183,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
           <div className="landing-footer-links">
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
-            <a href="https://github.com">GitHub</a>
+            <a href="https://github.com/alexpricedev/restarred">GitHub</a>
           </div>
           <div className="landing-footer-copy">
             &copy; {new Date().getFullYear()} INFINITE CHAPTERS LTD

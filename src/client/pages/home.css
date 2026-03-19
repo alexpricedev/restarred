@@ -206,34 +206,180 @@
     margin: 0;
   }
 
-  /* ── Hero Image ─────────────────────────────────────── */
+  /* ── Digest Preview ──────────────────────────────────── */
 
   .landing-hero-image {
-    padding-bottom: 3rem;
+    background: var(--color-primary);
+    padding: 3rem 0;
+    perspective: 1200px;
+    overflow: hidden;
 
     @media (width >= 768px) {
-      padding-bottom: 4rem;
+      padding: 4rem 0;
     }
   }
 
-  .hero-image-wrap {
-    aspect-ratio: 21 / 9;
-    width: 100%;
+  .digest-preview {
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    max-width: 36rem;
+    margin: 0 auto;
     overflow: hidden;
-    background: var(--color-surface-container);
-    border-radius: 0.75rem;
+    box-shadow:
+      0 40px 100px rgba(0, 0, 0, 0.35),
+      0 12px 32px rgba(0, 0, 0, 0.2);
+    transform: rotateY(-10deg) rotateX(5deg) skewY(-2deg) scale(0.9)
+      translateY(8%);
+    transform-origin: center center;
+    transition: transform 600ms ease;
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(1) brightness(0.9);
-      transition: transform 1000ms ease;
+    @media (width >= 768px) {
+      transform: rotateY(-18deg) rotateX(8deg) skewY(-3deg) scale(1.35)
+        translateY(12%);
     }
 
-    &:hover img {
-      transform: scale(1.05);
+    &:hover {
+      transform: rotateY(-4deg) rotateX(1deg) skewY(-0.5deg) scale(0.9)
+        translateY(8%);
+
+      @media (width >= 768px) {
+        transform: rotateY(-6deg) rotateX(2deg) skewY(-1deg) scale(1.35)
+          translateY(12%);
+      }
     }
+  }
+
+  .digest-chrome {
+    background: #2a2a2a;
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .digest-chrome-dots {
+    display: flex;
+    gap: 0.375rem;
+
+    span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  .digest-chrome-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .digest-chrome-field {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-main);
+    font-size: 0.625rem;
+  }
+
+  .digest-chrome-label {
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-width: 3rem;
+  }
+
+  .digest-chrome-value {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .digest-email {
+    background: #ffffff;
+  }
+
+  .digest-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(198, 198, 198, 0.15);
+  }
+
+  .digest-wordmark {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+
+  .digest-date {
+    font-family: var(--font-main);
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+    color: var(--color-text-tertiary);
+  }
+
+  .digest-body {
+    padding: 1rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .digest-repo {
+    background: var(--color-surface-container-low);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+  }
+
+  .digest-repo-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.375rem;
+  }
+
+  .digest-repo-name {
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .digest-repo-stars {
+    font-family: var(--font-main);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .digest-repo-desc {
+    font-family: var(--font-main);
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0 0 0.5rem;
+  }
+
+  .digest-repo-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-family: var(--font-main);
+    font-size: 0.6875rem;
+    color: var(--color-text-tertiary);
+  }
+
+  .digest-repo-lang {
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+
+  .digest-repo-dot {
+    opacity: 0.4;
   }
 
   /* ── Protocol / How It Works ────────────────────────── */
