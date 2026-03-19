@@ -85,7 +85,10 @@ export const getSessionContextFromDB = async (
       SELECT
         s.id_hash, s.user_id, s.session_type,
         s.expires_at, s.last_activity_at, s.created_at,
-        u.id as user_id_result, u.email, u.role, u.created_at as user_created_at
+        u.id as user_id_result, u.github_id, u.github_username,
+        u.github_email, u.email_override, u.github_token,
+        u.digest_day, u.digest_hour, u.timezone, u.is_active,
+        u.role, u.created_at as user_created_at, u.updated_at as user_updated_at
       FROM sessions s
       LEFT JOIN users u ON s.user_id = u.id
       WHERE s.id_hash = ${sessionIdHash}
@@ -102,9 +105,18 @@ export const getSessionContextFromDB = async (
       last_activity_at: string;
       created_at: string;
       user_id_result: string | null;
-      email: string | null;
+      github_id: number | null;
+      github_username: string | null;
+      github_email: string | null;
+      email_override: string | null;
+      github_token: string | null;
+      digest_day: number | null;
+      digest_hour: number | null;
+      timezone: string | null;
+      is_active: boolean | null;
       role: "user" | "admin" | null;
       user_created_at: string | null;
+      user_updated_at: string | null;
     };
 
     const isAuthenticated =
@@ -112,9 +124,18 @@ export const getSessionContextFromDB = async (
     const user: User | null = isAuthenticated
       ? {
           id: data.user_id_result as string,
-          email: data.email as string,
+          github_id: data.github_id as number,
+          github_username: data.github_username as string,
+          github_email: data.github_email as string,
+          email_override: data.email_override,
+          github_token: data.github_token as string,
+          digest_day: data.digest_day as number,
+          digest_hour: data.digest_hour as number,
+          timezone: data.timezone as string,
+          is_active: data.is_active as boolean,
           role: (data.role as "user" | "admin") ?? "user",
           created_at: new Date(data.user_created_at as string),
+          updated_at: new Date(data.user_updated_at as string),
         }
       : null;
 

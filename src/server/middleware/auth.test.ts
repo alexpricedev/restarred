@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import { SQL } from "bun";
-import { cleanupTestData } from "../test-utils/helpers";
+import { cleanupTestData, createTestUser } from "../test-utils/helpers";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is required for tests");
@@ -13,7 +13,6 @@ mock.module("../services/database", () => ({
   },
 }));
 
-import { findOrCreateUser } from "../services/auth";
 import { db } from "../services/database";
 import {
   createAuthenticatedSession,
@@ -66,7 +65,9 @@ describe("Auth Middleware", () => {
     });
 
     test("returns authenticated context with user data for valid authenticated session", async () => {
-      const user = await findOrCreateUser("valid@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "valid@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
 
       const request = createBunRequest("http://localhost:3000/test", {
@@ -79,7 +80,7 @@ describe("Auth Middleware", () => {
       expect(context.requiresSetCookie).toBe(false);
       expect(context.user).not.toBeNull();
       expect(context.user?.id).toBe(user.id);
-      expect(context.user?.email).toBe(user.email);
+      expect(context.user?.github_email).toBe("valid@example.com");
       expect(context.sessionId).toBe(sessionId);
       expect(context.sessionType).toBe("authenticated");
     });
@@ -97,7 +98,9 @@ describe("Auth Middleware", () => {
     });
 
     test("returns guest context with requiresSetCookie for expired session", async () => {
-      const user = await findOrCreateUser("expired@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "expired@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
 
       const { computeHMAC } = await import("../utils/crypto");
@@ -133,7 +136,9 @@ describe("Auth Middleware", () => {
     });
 
     test("handles multiple cookies correctly", async () => {
-      const user = await findOrCreateUser("cookies@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "cookies@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
 
       const request = createBunRequest("http://localhost:3000/test", {
@@ -150,7 +155,9 @@ describe("Auth Middleware", () => {
 
   describe("requireAuth", () => {
     test("returns null for authenticated user", async () => {
-      const user = await findOrCreateUser("authed@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "authed@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
 
       const request = createBunRequest("http://localhost:3000/protected", {
@@ -186,7 +193,9 @@ describe("Auth Middleware", () => {
     });
 
     test("returns redirect for expired session", async () => {
-      const user = await findOrCreateUser("expired2@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "expired2@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
 
       const { computeHMAC } = await import("../utils/crypto");
@@ -212,7 +221,9 @@ describe("Auth Middleware", () => {
 
   describe("redirectIfAuthenticated", () => {
     test("returns redirect response for authenticated user", async () => {
-      const user = await findOrCreateUser("authredirect@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "authredirect@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
 
       const request = createBunRequest("http://localhost:3000/login", {
@@ -245,7 +256,9 @@ describe("Auth Middleware", () => {
     });
 
     test("returns null for expired session", async () => {
-      const user = await findOrCreateUser("expiredredirect@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "expiredredirect@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
 
       const { computeHMAC } = await import("../utils/crypto");
@@ -277,8 +290,6 @@ describe("Auth Middleware", () => {
 
   describe("integration scenarios", () => {
     test("complete auth flow with middleware", async () => {
-      const email = "integration@example.com";
-
       let request = createBunRequest("http://localhost:3000/protected");
       let authResult = await requireAuth(request);
       expect(authResult?.status).toBe(303);
@@ -288,7 +299,9 @@ describe("Auth Middleware", () => {
       let redirectResult = await redirectIfAuthenticated(request);
       expect(redirectResult).toBeNull();
 
-      const user = await findOrCreateUser(email);
+      const user = await createTestUser(db, {
+        githubEmail: "integration@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
 
       request = createBunRequest("http://localhost:3000/protected", {
@@ -306,7 +319,7 @@ describe("Auth Middleware", () => {
 
       const context = await getSessionContext(request);
       expect(context.isAuthenticated).toBe(true);
-      expect(context.user?.email).toBe(email);
+      expect(context.user?.github_email).toBe("integration@example.com");
     });
   });
 });

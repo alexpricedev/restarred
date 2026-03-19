@@ -6,7 +6,7 @@ interface HomeProps {
   csrfToken?: string;
 }
 
-export const Home = ({ user }: HomeProps) => (
+export const Home = ({ user, csrfToken }: HomeProps) => (
   <BaseLayout title="restarred — Give Your Stars a Second Chance" name="home">
     <div data-page="home">
       {/* Landing Nav */}
@@ -18,9 +18,16 @@ export const Home = ({ user }: HomeProps) => (
             <a href="#features">About</a>
           </div>
           {user ? (
-            <a href="/projects" className="landing-nav-cta">
-              Dashboard
-            </a>
+            <form
+              method="post"
+              action="/auth/logout"
+              className="landing-nav-logout"
+            >
+              <input type="hidden" name="_csrf" value={csrfToken ?? ""} />
+              <button type="submit" className="landing-nav-cta">
+                Sign out
+              </button>
+            </form>
           ) : (
             <a href="/login" className="landing-nav-cta">
               Sign in

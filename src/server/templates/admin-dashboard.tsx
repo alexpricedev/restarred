@@ -48,7 +48,7 @@ export const AdminDashboard = (props: {
             ) : (
               props.users.map((user) => (
                 <tr key={user.id}>
-                  <td className="admin-email">{user.email}</td>
+                  <td className="admin-email">{user.github_email}</td>
                   <td>
                     <Badge variant={user.role === "admin" ? "admin" : "user"}>
                       {user.role}

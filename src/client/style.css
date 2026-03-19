@@ -1,7 +1,5 @@
 /* Page styles */
 @import "./pages/home.css";
-@import "./pages/forms.css";
-@import "./pages/projects.css";
 @import "./pages/login.css";
 @import "./pages/admin.css";
 

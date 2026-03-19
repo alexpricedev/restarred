@@ -1,70 +1,30 @@
-import { Flash } from "../components/flash";
-import { FormField } from "../components/form-field";
-import { BaseLayout } from "../components/layouts";
+import { Layout } from "../components/layouts";
 
-export interface LoginState {
-  state?: "email-sent" | "validation-error";
+export interface LoginProps {
   error?: string;
 }
 
-export interface LoginProps {
-  state?: LoginState;
-}
-
-export const Login = ({ state }: LoginProps) => {
-  return (
-    <BaseLayout title="Login - Restarred">
-      <main className="login-page">
-        <div className="login-wrapper">
-          <div className="login-header">
-            <a href="/">restarred</a>
-          </div>
-
-          <div className="login-card">
-            <h2 className="login-title">Sign in to your account</h2>
-            <p className="login-subtitle">
-              We'll send you a magic link to sign in instantly
-            </p>
-
-            {state?.state === "email-sent" ? (
-              <Flash type="success">
-                <p>Check your email!</p>
-                <p>
-                  We've sent you a magic link. Click it to sign in instantly.
-                </p>
-                <p>For testing: Check the server console for the magic link.</p>
-              </Flash>
-            ) : (
-              <form method="POST" action="/login">
-                {state?.state === "validation-error" && state.error && (
-                  <Flash type="error">
-                    <span>{state.error}</span>
-                  </Flash>
-                )}
-
-                <FormField label="Email address" id="email">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    placeholder="Enter your email"
-                  />
-                </FormField>
-
-                <button type="submit" className="login-submit">
-                  Send magic link
-                </button>
-              </form>
-            )}
-
-            <div className="login-footer">
-              <a href="/">Back to home</a>
-            </div>
-          </div>
-        </div>
-      </main>
-    </BaseLayout>
-  );
+const errorMessages: Record<string, string> = {
+  github_denied: "GitHub authorization was denied.",
+  missing_params: "Invalid callback parameters.",
+  state_mismatch: "Security check failed. Please try again.",
+  auth_failed: "Authentication failed. Please try again.",
 };
+
+export const Login = ({ error }: LoginProps) => (
+  <Layout title="Sign in — restarred" name="login">
+    <div className="login-page">
+      <div className="login-container">
+        <h1>Sign in</h1>
+        {error && (
+          <div className="login-error" role="alert">
+            {errorMessages[error] || "An error occurred. Please try again."}
+          </div>
+        )}
+        <a href="/auth/github" className="btn-github">
+          Sign in with GitHub
+        </a>
+      </div>
+    </div>
+  </Layout>
+);

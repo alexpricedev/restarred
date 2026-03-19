@@ -35,14 +35,14 @@ describe("Users Service", () => {
   test("returns all users with expected fields", async () => {
     const userId1 = randomUUID();
     const userId2 = randomUUID();
-    await db`INSERT INTO users (id, email, role) VALUES (${userId1}, 'alice@test.com', 'admin')`;
-    await db`INSERT INTO users (id, email, role) VALUES (${userId2}, 'bob@test.com', 'user')`;
+    await db`INSERT INTO users (id, github_id, github_username, github_email, role) VALUES (${userId1}, 1001, 'alice', 'alice@test.com', 'admin')`;
+    await db`INSERT INTO users (id, github_id, github_username, github_email, role) VALUES (${userId2}, 1002, 'bob', 'bob@test.com', 'user')`;
 
     const result = await getUsers();
 
     expect(result).toHaveLength(2);
     expect(result[0]).toHaveProperty("id");
-    expect(result[0]).toHaveProperty("email");
+    expect(result[0]).toHaveProperty("github_email");
     expect(result[0]).toHaveProperty("role");
     expect(result[0]).toHaveProperty("created_at");
   });
@@ -50,12 +50,12 @@ describe("Users Service", () => {
   test("returns users ordered by created_at descending (newest first)", async () => {
     const userId1 = randomUUID();
     const userId2 = randomUUID();
-    await db`INSERT INTO users (id, email, role, created_at) VALUES (${userId1}, 'first@test.com', 'user', '2026-01-01')`;
-    await db`INSERT INTO users (id, email, role, created_at) VALUES (${userId2}, 'second@test.com', 'admin', '2026-03-01')`;
+    await db`INSERT INTO users (id, github_id, github_username, github_email, role, created_at) VALUES (${userId1}, 2001, 'first', 'first@test.com', 'user', '2026-01-01')`;
+    await db`INSERT INTO users (id, github_id, github_username, github_email, role, created_at) VALUES (${userId2}, 2002, 'second', 'second@test.com', 'admin', '2026-03-01')`;
 
     const result = await getUsers();
 
-    expect(result[0].email).toBe("second@test.com");
-    expect(result[1].email).toBe("first@test.com");
+    expect(result[0].github_email).toBe("second@test.com");
+    expect(result[1].github_email).toBe("first@test.com");
   });
 });

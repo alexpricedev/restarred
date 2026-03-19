@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import { SQL } from "bun";
-import { cleanupTestData } from "../../test-utils/helpers";
+import { cleanupTestData, createTestUser } from "../../test-utils/helpers";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is required for tests");
@@ -13,11 +13,120 @@ mock.module("../../services/database", () => ({
   },
 }));
 
-import { findOrCreateUser } from "../../services/auth";
+mock.module("../../middleware/auth", () => {
+  const { computeHMAC } = require("../../utils/crypto");
+
+  const SESSION_COOKIE_NAME = "session_id";
+
+  return {
+    getSessionContext: async (req: import("bun").BunRequest) => {
+      const sessionId = req.cookies?.get(SESSION_COOKIE_NAME) || null;
+
+      if (!sessionId) {
+        const { randomUUID } = require("node:crypto");
+        const rawId = randomUUID();
+        const idHash = computeHMAC(rawId);
+        const expiresAt = new Date(Date.now() + 86400000);
+        await connection`
+          INSERT INTO sessions (id_hash, session_type, expires_at)
+          VALUES (${idHash}, 'guest', ${expiresAt.toISOString()})
+        `;
+        return {
+          sessionId: rawId,
+          sessionHash: null,
+          sessionType: "guest",
+          user: null,
+          isGuest: true,
+          isAuthenticated: false,
+          requiresSetCookie: true,
+        };
+      }
+
+      const sessionIdHash = computeHMAC(sessionId);
+      const result = await connection`
+        SELECT
+          s.id_hash, s.user_id, s.session_type,
+          u.id as user_id_result, u.github_id, u.github_username,
+          u.github_email, u.email_override, u.github_token,
+          u.digest_day, u.digest_hour, u.timezone, u.is_active,
+          u.role, u.created_at as user_created_at, u.updated_at as user_updated_at
+        FROM sessions s
+        LEFT JOIN users u ON s.user_id = u.id
+        WHERE s.id_hash = ${sessionIdHash}
+          AND s.expires_at > CURRENT_TIMESTAMP
+      `;
+
+      if (result.length === 0) {
+        const { randomUUID } = require("node:crypto");
+        const rawId = randomUUID();
+        const idHash = computeHMAC(rawId);
+        const expiresAt = new Date(Date.now() + 86400000);
+        await connection`
+          INSERT INTO sessions (id_hash, session_type, expires_at)
+          VALUES (${idHash}, 'guest', ${expiresAt.toISOString()})
+        `;
+        return {
+          sessionId: rawId,
+          sessionHash: null,
+          sessionType: "guest",
+          user: null,
+          isGuest: true,
+          isAuthenticated: false,
+          requiresSetCookie: true,
+        };
+      }
+
+      const data = result[0] as Record<string, unknown>;
+      const isAuthenticated =
+        data.session_type === "authenticated" && data.user_id_result !== null;
+
+      const user = isAuthenticated
+        ? {
+            id: data.user_id_result as string,
+            github_id: data.github_id as number,
+            github_username: data.github_username as string,
+            github_email: data.github_email as string,
+            email_override: data.email_override as string | null,
+            github_token: data.github_token as string,
+            digest_day: data.digest_day as number,
+            digest_hour: data.digest_hour as number,
+            timezone: data.timezone as string,
+            is_active: data.is_active as boolean,
+            role: (data.role as "user" | "admin") ?? "user",
+            created_at: new Date(data.user_created_at as string),
+            updated_at: new Date(data.user_updated_at as string),
+          }
+        : null;
+
+      return {
+        sessionId,
+        sessionHash: data.id_hash as string,
+        sessionType: data.session_type as string,
+        user,
+        isGuest: data.session_type === "guest",
+        isAuthenticated,
+        requiresSetCookie: false,
+      };
+    },
+  };
+});
+
+import { randomUUID } from "node:crypto";
 import { db } from "../../services/database";
-import { createAuthenticatedSession } from "../../services/sessions";
 import { createBunRequest } from "../../test-utils/bun-request";
+import { computeHMAC } from "../../utils/crypto";
 import { admin } from "./dashboard";
+
+const createAuthenticatedSession = async (userId: string): Promise<string> => {
+  const rawSessionId = randomUUID();
+  const sessionIdHash = computeHMAC(rawSessionId);
+  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+  await connection`
+    INSERT INTO sessions (id_hash, user_id, session_type, expires_at)
+    VALUES (${sessionIdHash}, ${userId}, 'authenticated', ${expiresAt.toISOString()})
+  `;
+  return rawSessionId;
+};
 
 describe("Admin Dashboard Controller", () => {
   beforeEach(async () => {
@@ -30,8 +139,10 @@ describe("Admin Dashboard Controller", () => {
   });
 
   test("renders admin dashboard for admin user", async () => {
-    const user = await findOrCreateUser("admin@example.com");
-    await db`UPDATE users SET role = 'admin' WHERE id = ${user.id}`;
+    const user = await createTestUser(db, {
+      githubEmail: "admin@example.com",
+      role: "admin",
+    });
     const sessionId = await createAuthenticatedSession(user.id);
 
     const request = createBunRequest("http://localhost:3000/admin", {
@@ -56,7 +167,9 @@ describe("Admin Dashboard Controller", () => {
   });
 
   test("redirects non-admin user to /", async () => {
-    const user = await findOrCreateUser("regular@example.com");
+    const user = await createTestUser(db, {
+      githubEmail: "regular@example.com",
+    });
     const sessionId = await createAuthenticatedSession(user.id);
 
     const request = createBunRequest("http://localhost:3000/admin", {
@@ -70,9 +183,11 @@ describe("Admin Dashboard Controller", () => {
   });
 
   test("renders users table with user data", async () => {
-    const adminUser = await findOrCreateUser("admin@example.com");
-    await db`UPDATE users SET role = 'admin' WHERE id = ${adminUser.id}`;
-    await findOrCreateUser("regular@example.com");
+    const adminUser = await createTestUser(db, {
+      githubEmail: "admin@example.com",
+      role: "admin",
+    });
+    await createTestUser(db, { githubEmail: "regular@example.com" });
     const sessionId = await createAuthenticatedSession(adminUser.id);
 
     const request = createBunRequest("http://localhost:3000/admin", {

@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import { SQL } from "bun";
-import { cleanupTestData } from "../../test-utils/helpers";
+import { cleanupTestData, createTestUser } from "../../test-utils/helpers";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is required for tests");
@@ -49,7 +49,6 @@ mock.module("../../middleware/auth", () => {
   };
 });
 
-import { findOrCreateUser } from "../../services/auth";
 import { createCsrfToken } from "../../services/csrf";
 import { db } from "../../services/database";
 import { createAuthenticatedSession } from "../../services/sessions";
@@ -68,7 +67,9 @@ describe("Logout Controller", () => {
 
   describe("POST /auth/logout", () => {
     test("successfully logs out user with valid session", async () => {
-      const user = await findOrCreateUser("logout@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "logout@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
       const csrfToken = await createCsrfToken(
         sessionId,
@@ -155,7 +156,9 @@ describe("Logout Controller", () => {
     });
 
     test("multiple session cookies - uses correct session_id", async () => {
-      const user = await findOrCreateUser("multi@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "multi@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
       const csrfToken = await createCsrfToken(
         sessionId,
@@ -191,7 +194,9 @@ describe("Logout Controller", () => {
 
     test("handles database error during session deletion gracefully", async () => {
       // Create session then delete the user to cause foreign key issues
-      const user = await findOrCreateUser("dbError@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "dbError@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
 
       // Delete user (this will cascade delete the session in real DB, but might cause errors in test)
@@ -230,7 +235,9 @@ describe("Logout Controller", () => {
     });
 
     test("requires CSRF token - rejects request without token", async () => {
-      const user = await findOrCreateUser("csrf-test@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "csrf-test@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
       const cookieHeader = `session_id=${sessionId}`;
 
@@ -249,7 +256,9 @@ describe("Logout Controller", () => {
     });
 
     test("requires CSRF token - rejects request with invalid token", async () => {
-      const user = await findOrCreateUser("csrf-test2@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "csrf-test2@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
       const cookieHeader = `session_id=${sessionId}`;
 
@@ -272,7 +281,9 @@ describe("Logout Controller", () => {
     });
 
     test("accepts request with valid CSRF token", async () => {
-      const user = await findOrCreateUser("csrf-test3@example.com");
+      const user = await createTestUser(db, {
+        githubEmail: "csrf-test3@example.com",
+      });
       const sessionId = await createAuthenticatedSession(user.id);
       const cookieHeader = `session_id=${sessionId}`;
       const csrfToken = await createCsrfToken(
