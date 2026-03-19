@@ -34,16 +34,43 @@ export const exchangeCodeForToken = async (code: string): Promise<string> => {
 export const fetchGitHubUser = async (
   accessToken: string,
 ): Promise<GitHubUserProfile> => {
-  const response = await fetch(GITHUB_USER_URL, {
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+    Accept: "application/vnd.github.v3+json",
+  };
+
+  const response = await fetch(GITHUB_USER_URL, { headers });
+  if (!response.ok) {
+    throw new Error(`GitHub API error: ${response.status}`);
+  }
+
+  const profile = (await response.json()) as GitHubUserProfile;
+
+  if (!profile.email) {
+    profile.email = await fetchPrimaryEmail(accessToken);
+  }
+
+  return profile;
+};
+
+const fetchPrimaryEmail = async (
+  accessToken: string,
+): Promise<string | null> => {
+  const response = await fetch(`${GITHUB_USER_URL}/emails`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       Accept: "application/vnd.github.v3+json",
     },
   });
 
-  if (!response.ok) {
-    throw new Error(`GitHub API error: ${response.status}`);
-  }
+  if (!response.ok) return null;
 
-  return response.json() as Promise<GitHubUserProfile>;
+  const emails = (await response.json()) as Array<{
+    email: string;
+    primary: boolean;
+    verified: boolean;
+  }>;
+
+  const primary = emails.find((e) => e.primary && e.verified);
+  return primary?.email ?? emails[0]?.email ?? null;
 };
