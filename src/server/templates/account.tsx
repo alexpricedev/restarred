@@ -146,12 +146,6 @@ export const Account = ({
           <span className="account-label">ACCOUNT</span>
           <h1 className="account-heading">{user.github_username}</h1>
         </div>
-        <form method="POST" action="/auth/logout" className="account-logout">
-          <CsrfField token={logoutCsrfToken} />
-          <button type="submit" className="btn-ghost">
-            Sign out
-          </button>
-        </form>
       </div>
 
       <div className="account-stats">
@@ -175,7 +169,7 @@ export const Account = ({
         <CsrfField token={csrfToken} />
 
         <div className="account-section">
-          <h2 className="account-section-heading">Delivery Email</h2>
+          <h2 className="account-section-heading">Delivery Email Address</h2>
           <p className="account-section-description">
             By default, digests are sent to your GitHub email. Set an override
             to use a different address.

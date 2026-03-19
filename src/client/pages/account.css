@@ -64,12 +64,17 @@
   gap: 3rem;
 }
 
+[data-page="account"] .account-form input,
+[data-page="account"] .account-form select {
+  border: 1px solid var(--color-surface-container-high);
+}
+
 [data-page="account"] .account-form select {
   width: 100%;
 }
 
 [data-page="account"] .account-section-heading {
-  font-size: 1.25rem;
+  font-size: 2.5rem;
   margin-bottom: 0.25rem;
 }
 
