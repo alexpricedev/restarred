@@ -8,6 +8,7 @@ interface AccountProps {
   starCount: number;
   csrfToken: string;
   logoutCsrfToken: string;
+  testEmailCsrfToken?: string;
   flash?: { type: "success" | "error"; message: string };
 }
 
@@ -132,6 +133,7 @@ export const Account = ({
   starCount,
   csrfToken,
   logoutCsrfToken,
+  testEmailCsrfToken,
   flash,
 }: AccountProps) => (
   <Layout
@@ -298,6 +300,27 @@ export const Account = ({
           </span>
         </div>
       </form>
+
+      {testEmailCsrfToken && (
+        <form
+          method="POST"
+          action="/account/test-email"
+          className="account-test-email"
+        >
+          <CsrfField token={testEmailCsrfToken} />
+          <div className="account-section">
+            <h2 className="account-section-heading">Test Email</h2>
+            <p className="account-section-description">
+              Send a test digest email to{" "}
+              {user.email_override || user.github_email} using 3 randomly
+              selected repos from your stars.
+            </p>
+            <button type="submit" className="button-secondary">
+              Send test email
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   </Layout>
 );

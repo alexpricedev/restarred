@@ -14,9 +14,9 @@
 ~~Pick 3 repos the user hasn't seen recently. Track selections in a `digest_history` table (`user_id`, `star_id`, `sent_at`). Selection criteria: exclude repos sent in the last 90 days, prefer repos with recent activity (commits in last 6 months), randomize within that pool. If fewer than 3 eligible repos remain, reset the history window. Pure service function — no UI, consumed by the digest job.~~
 **Status:** Done.
 
-### Digest email template
-HTML email with 3 repo cards. Each card: repo name (linked), description, primary language badge, star count, last commit date, and an activity indicator (active/stale/archived). Inline CSS only (email client compatibility). Includes unsubscribe link in footer. Matches the Editorial Precision design system — light background, Space Grotesk headings, clean layout. Rendered server-side with JSX, sent via transactional email service.
-**Depends on:** Digest selection algorithm (needs selected repos as input). Design system for email layout.
+### ~~Digest email template~~
+~~HTML email with 3 repo cards. Each card: repo name (linked), description, primary language badge, star count, last commit date, and an activity indicator (active/stale/archived). Inline CSS only (email client compatibility). Includes unsubscribe link in footer. Matches the Editorial Precision design system — light background, Space Grotesk headings, clean layout. Rendered server-side with JSX, sent via transactional email service.~~
+**Status:** Done. Includes admin-only "Send test email" button on account page.
 
 ### ~~Account page~~
 ~~Authenticated page at `/account` showing: GitHub username, star count, digest schedule (day-of-week + hour picker), timezone selector, pause/resume toggle, and sign-out button. All preferences saved to `users` table columns (`digest_day`, `digest_hour`, `timezone`, `is_active`). Form submissions via POST with CSRF protection. No client-side JS required — server-rendered form with flash messages on save.~~

@@ -2,6 +2,9 @@ import type { BunRequest } from "bun";
 import { getSessionContext } from "../../middleware/auth";
 import { csrfProtection } from "../../middleware/csrf";
 import { createCsrfToken } from "../../services/csrf";
+import { selectReposForDigest } from "../../services/digest";
+import { renderDigestEmail } from "../../services/digest-email";
+import { getEmailService } from "../../services/email";
 import { log } from "../../services/logger";
 import { setSessionCookie } from "../../services/sessions";
 import { getStarCount } from "../../services/stars";
@@ -25,6 +28,10 @@ async function renderAccountPage(
     "POST",
     "/auth/logout",
   );
+  const testEmailCsrfToken =
+    user.role === "admin"
+      ? await createCsrfToken(sessionId, "POST", "/account/test-email")
+      : undefined;
 
   return render(
     <Account
@@ -32,6 +39,7 @@ async function renderAccountPage(
       starCount={starCount}
       csrfToken={csrfToken}
       logoutCsrfToken={logoutCsrfToken}
+      testEmailCsrfToken={testEmailCsrfToken}
       flash={flash}
     />,
   );
@@ -144,7 +152,58 @@ async function handlePost(req: BunRequest): Promise<Response> {
   }
 }
 
+async function handleTestEmail(req: BunRequest): Promise<Response> {
+  const csrfError = await csrfProtection(req, {
+    path: "/account/test-email",
+  });
+  if (csrfError) return csrfError;
+
+  const ctx = await getSessionContext(req);
+
+  if (!ctx.isAuthenticated || !ctx.user || !ctx.sessionId) {
+    return redirect("/");
+  }
+
+  if (ctx.user.role !== "admin") {
+    return redirect("/account");
+  }
+
+  try {
+    const repos = await selectReposForDigest(ctx.user.id);
+    const email = renderDigestEmail(ctx.user, repos, "test");
+    const recipientEmail = ctx.user.email_override || ctx.user.github_email;
+
+    await getEmailService().send({
+      to: { email: recipientEmail, name: ctx.user.github_username },
+      from: { email: "digest@restarred.app", name: "re:starred" },
+      subject: email.subject,
+      html: email.html,
+      text: email.text,
+    });
+
+    log.info("account", `Test email sent to ${recipientEmail}`);
+
+    setFlashCookie(req, "account", {
+      type: "success",
+      message: `Test email sent to ${recipientEmail}.`,
+    });
+  } catch (error) {
+    log.error(
+      "account",
+      `Failed to send test email: ${error instanceof Error ? error.message : "Unknown error"}`,
+    );
+
+    setFlashCookie(req, "account", {
+      type: "error",
+      message: "Failed to send test email. Please try again.",
+    });
+  }
+
+  return redirect("/account");
+}
+
 export const account = {
   index: handleGet,
   update: handlePost,
+  testEmail: handleTestEmail,
 };
