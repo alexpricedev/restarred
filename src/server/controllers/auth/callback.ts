@@ -12,7 +12,7 @@ import {
   deleteSession,
   setSessionCookie,
 } from "../../services/sessions";
-import { getStarCount, syncUserStars } from "../../services/stars";
+import { syncUserStars } from "../../services/stars";
 import { redirect } from "../../utils/response";
 
 function getStateCookie(req: BunRequest): string | null {
@@ -61,8 +61,7 @@ export const callback = {
 
       const sessionId = await createAuthenticatedSession(user.id);
 
-      const starCount = await getStarCount(user.id);
-      const isNewUser = starCount === 0;
+      const isNewUser = user.sync_status === "idle";
 
       if (isNewUser) {
         syncUserStars(user.id, accessToken).catch((err) => {

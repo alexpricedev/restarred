@@ -78,4 +78,27 @@ describe("welcome page", () => {
       "Something went wrong. Please try signing in again.",
     );
   });
+
+  test("init starts polling and updates DOM", async () => {
+    const mockFetch = mock(() =>
+      Promise.resolve(
+        new Response(JSON.stringify({ status: "syncing", count: 5 }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      ),
+    );
+    // @ts-expect-error mock global fetch
+    globalThis.fetch = mockFetch;
+
+    const { init } = await import("./welcome");
+    init();
+
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(mockFetch).toHaveBeenCalled();
+    expect(document.getElementById("sync-status")?.textContent).toBe(
+      "Syncing your stars...",
+    );
+  });
 });

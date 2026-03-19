@@ -1,24 +1,26 @@
 import { describe, expect, mock, test } from "bun:test";
 
+const mockUser = {
+  id: "user-123",
+  github_id: 12345,
+  github_username: "testuser",
+  github_email: "test@example.com",
+  email_override: null,
+  github_token: "encrypted-token",
+  digest_day: 1,
+  digest_hour: 9,
+  timezone: "UTC",
+  is_active: true,
+  sync_status: "idle",
+  role: "user",
+  created_at: new Date(),
+  updated_at: new Date(),
+};
+
+const mockFindOrCreateGitHubUser = mock(() => Promise.resolve({ ...mockUser }));
+
 mock.module("../../services/auth", () => ({
-  findOrCreateGitHubUser: mock(() =>
-    Promise.resolve({
-      id: "user-123",
-      github_id: 12345,
-      github_username: "testuser",
-      github_email: "test@example.com",
-      email_override: null,
-      github_token: "encrypted-token",
-      digest_day: 1,
-      digest_hour: 9,
-      timezone: "UTC",
-      is_active: true,
-      sync_status: "idle",
-      role: "user",
-      created_at: new Date(),
-      updated_at: new Date(),
-    }),
-  ),
+  findOrCreateGitHubUser: mockFindOrCreateGitHubUser,
 }));
 
 mock.module("../../services/encryption", () => ({
@@ -46,11 +48,9 @@ mock.module("../../middleware/auth", () => ({
 }));
 
 const mockSyncUserStars = mock(() => Promise.resolve());
-const mockGetStarCount = mock(() => Promise.resolve(0));
 
 mock.module("../../services/stars", () => ({
   syncUserStars: mockSyncUserStars,
-  getStarCount: mockGetStarCount,
 }));
 
 const mockExchangeCodeForToken = mock(() => Promise.resolve("gh-token-123"));
@@ -135,7 +135,10 @@ describe("Callback Controller", () => {
 
     test("redirects new user to /welcome and fires sync", async () => {
       mockSyncUserStars.mockClear();
-      mockGetStarCount.mockResolvedValueOnce(0);
+      mockFindOrCreateGitHubUser.mockResolvedValueOnce({
+        ...mockUser,
+        sync_status: "idle",
+      });
 
       const request = createBunRequest(
         "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
@@ -156,7 +159,10 @@ describe("Callback Controller", () => {
 
     test("redirects returning user to / without sync", async () => {
       mockSyncUserStars.mockClear();
-      mockGetStarCount.mockResolvedValueOnce(42);
+      mockFindOrCreateGitHubUser.mockResolvedValueOnce({
+        ...mockUser,
+        sync_status: "done",
+      });
 
       const request = createBunRequest(
         "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
@@ -176,7 +182,10 @@ describe("Callback Controller", () => {
     });
 
     test("successfully authenticates with valid code and state", async () => {
-      mockGetStarCount.mockResolvedValueOnce(100);
+      mockFindOrCreateGitHubUser.mockResolvedValueOnce({
+        ...mockUser,
+        sync_status: "done",
+      });
 
       const request = createBunRequest(
         "http://localhost:3000/auth/callback?code=valid-code&state=matching-state",
