@@ -146,6 +146,8 @@ export const renderDigestPlainText = (
   const lines: string[] = [
     `re:starred — ${repos.length} repos from your stars`,
     "",
+    `Here are ${repos.length} repos from your stars worth revisiting.`,
+    "",
   ];
 
   repos.forEach((repo, i) => {

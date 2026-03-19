@@ -93,7 +93,19 @@ export const DigestEmail = ({
                     </tr>
                   </table>
 
-                  {/* Repo cards */}
+                  <p
+                    style={{
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: "14px",
+                      color: "#5e5e5e",
+                      margin: "0 0 24px",
+                      lineHeight: "20px",
+                    }}
+                  >
+                    Here are {repos.length} repos from your stars worth
+                    revisiting.
+                  </p>
+
                   {repos.map((repo) => (
                     <RepoCard key={repo.starId} repo={repo} />
                   ))}
