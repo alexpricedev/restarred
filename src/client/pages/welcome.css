@@ -12,10 +12,10 @@
 }
 
 [data-page="welcome"] .welcome-label {
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-family: var(--font-main);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   color: var(--color-text-tertiary);
   text-transform: uppercase;
 }
@@ -27,7 +27,7 @@
 }
 
 [data-page="welcome"] .welcome-description {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: var(--color-text-secondary);
   line-height: 1.6;
   margin-bottom: 3rem;
@@ -42,17 +42,20 @@
 }
 
 [data-page="welcome"] .welcome-spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--color-surface-container-high);
-  border-top-color: var(--color-text);
+  width: 8px;
+  height: 8px;
+  background: var(--color-text-tertiary);
   border-radius: 50%;
-  animation: welcome-spin 0.8s linear infinite;
+  animation: welcome-pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes welcome-spin {
-  to {
-    transform: rotate(360deg);
+@keyframes welcome-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
   }
 }
 
