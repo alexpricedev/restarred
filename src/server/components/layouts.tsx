@@ -93,47 +93,30 @@ export function Layout({
       </head>
       <body data-page={name} data-component="layout">
         <header>
-          <a href="/" className="logo">
-            <span>re:starred</span>
-          </a>
-          <Nav page={name} user={user} csrfToken={csrfToken} />
+          <div className="header-inner">
+            <a href="/" className="wordmark">
+              re:starred
+            </a>
+            <Nav page={name} user={user} csrfToken={csrfToken} />
+          </div>
         </header>
         <main>{children}</main>
-        <footer />
-        <script type="module" src={getAssetUrl("/assets/main.js")} />
-      </body>
-    </html>
-  );
-}
-
-interface BaseLayoutProps {
-  title: string;
-  description?: string;
-  name?: string;
-  children: React.ReactNode;
-}
-
-export function BaseLayout({
-  title,
-  description,
-  name,
-  children,
-}: BaseLayoutProps) {
-  return (
-    <html lang="en" style={{ colorScheme: "light" }}>
-      <head>
-        <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover"
-        />
-        <title>{title}</title>
-        <Meta title={title} description={description} />
-        <GoogleFonts />
-        <link rel="stylesheet" href={getAssetUrl("/assets/main.css")} />
-      </head>
-      <body data-page={name}>
-        {children}
+        <footer>
+          <a href="/privacy" target="_blank" rel="noopener noreferrer">
+            Privacy
+          </a>
+          <a href="/terms" target="_blank" rel="noopener noreferrer">
+            Terms
+          </a>
+          <a
+            href="https://github.com/restarred"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+          <span>&copy; {new Date().getFullYear()} INFINITE CHAPTERS LTD</span>
+        </footer>
         <script type="module" src={getAssetUrl("/assets/main.js")} />
       </body>
     </html>
