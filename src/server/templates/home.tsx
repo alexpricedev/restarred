@@ -135,10 +135,6 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
                     before you click.
                   </p>
                 </div>
-                <div className="bento-large-footer">
-                  <div className="bento-line" />
-                  <span className="bento-link-label">SEE HOW IT WORKS</span>
-                </div>
               </div>
               <div className="bento-stack">
                 <div className="bento-dark">
@@ -167,9 +163,6 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
             <div className="cta-buttons">
               <a href="/auth/github" className="cta-primary">
                 CONNECT GITHUB NOW
-              </a>
-              <a href="#how-it-works" className="cta-secondary">
-                LEARN MORE
               </a>
             </div>
           </div>

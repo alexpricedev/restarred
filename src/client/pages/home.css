@@ -524,27 +524,6 @@
     margin: 0;
   }
 
-  .bento-large-footer {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 3rem;
-  }
-
-  .bento-line {
-    height: 2px;
-    width: 3rem;
-    background: var(--color-primary);
-  }
-
-  .bento-link-label {
-    font-family: var(--font-main);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-  }
-
   .bento-stack {
     display: flex;
     flex-direction: column;
@@ -659,31 +638,6 @@
       background: var(--color-surface-container-highest);
       color: var(--color-primary);
       transform: scale(1.05);
-    }
-
-    @media (width >= 640px) {
-      width: auto;
-    }
-  }
-
-  .cta-secondary {
-    display: inline-block;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-    padding: 1.5rem 3rem;
-    border-radius: var(--radius-full);
-    font-family: var(--font-display);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: -0.01em;
-    text-decoration: none;
-    transition: all 200ms ease;
-    width: 100%;
-    text-align: center;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
     }
 
     @media (width >= 640px) {
