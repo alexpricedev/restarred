@@ -33,7 +33,7 @@ export const Nav = ({ page, user, csrfToken }: NavProps) => (
           </button>
         </form>
       ) : (
-        <a href="/login" className="btn-ghost">
+        <a href="/auth/github" className="btn-ghost">
           Login
         </a>
       )}

@@ -157,13 +157,13 @@ describe("Admin Dashboard Controller", () => {
     expect(html).toContain("admin@example.com");
   });
 
-  test("redirects unauthenticated user to /login", async () => {
+  test("redirects unauthenticated user to /auth/github", async () => {
     const request = createBunRequest("http://localhost:3000/admin");
 
     const response = await admin.index(request);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get("location")).toBe("/login");
+    expect(response.headers.get("location")).toBe("/auth/github");
   });
 
   test("redirects non-admin user to /", async () => {
