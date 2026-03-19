@@ -18,9 +18,9 @@
 HTML email with 3 repo cards. Each card: repo name (linked), description, primary language badge, star count, last commit date, and an activity indicator (active/stale/archived). Inline CSS only (email client compatibility). Includes unsubscribe link in footer. Matches the Editorial Precision design system — light background, Space Grotesk headings, clean layout. Rendered server-side with JSX, sent via transactional email service.
 **Depends on:** Digest selection algorithm (needs selected repos as input). Design system for email layout.
 
-### Account page
-Authenticated page at `/account` showing: GitHub username, star count, digest schedule (day-of-week + hour picker), timezone selector, pause/resume toggle, and sign-out button. All preferences saved to `users` table columns (`digest_day`, `digest_hour`, `timezone`, `is_active`). Form submissions via POST with CSRF protection. No client-side JS required — server-rendered form with flash messages on save.
-**Depends on:** GitHub OAuth (done). Star syncing (for star count display).
+### ~~Account page~~
+~~Authenticated page at `/account` showing: GitHub username, star count, digest schedule (day-of-week + hour picker), timezone selector, pause/resume toggle, and sign-out button. All preferences saved to `users` table columns (`digest_day`, `digest_hour`, `timezone`, `is_active`). Form submissions via POST with CSRF protection. No client-side JS required — server-rendered form with flash messages on save.~~
+**Status:** Done.
 
 ### Job queue
 Background job system for scheduled work. Two job types initially: `sync_stars` (re-fetch user's stars before each digest) and `send_digest` (select repos + render + send email). Hourly dispatcher checks which users are due a digest based on their `digest_day`, `digest_hour`, and `timezone`. Jobs table: `id`, `type`, `user_id`, `status` (pending/running/failed/completed), `attempts`, `max_attempts`, `run_at`, `started_at`, `completed_at`, `error`. Simple polling loop — no external queue dependency.
