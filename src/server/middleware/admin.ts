@@ -15,7 +15,7 @@ export const requireAdmin = async (req: BunRequest): Promise<AdminResult> => {
       authorized: false,
       response: new Response("", {
         status: 303,
-        headers: { Location: "/login" },
+        headers: { Location: "/auth/github" },
       }),
     };
   }

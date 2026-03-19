@@ -1,6 +1,5 @@
 /* Page styles */
 @import "./pages/home.css";
-@import "./pages/login.css";
 @import "./pages/admin.css";
 @import "./pages/welcome.css";
 @import "./pages/account.css";

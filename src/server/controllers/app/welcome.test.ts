@@ -81,7 +81,7 @@ describe("Welcome Controller", () => {
     expect(response.headers.get("location")).toBe("/");
   });
 
-  test("redirects unauthenticated user to /login", async () => {
+  test("redirects unauthenticated user to /", async () => {
     const { getSessionContext } = await import("../../middleware/auth");
     (getSessionContext as ReturnType<typeof mock>).mockResolvedValueOnce({
       sessionId: null,

@@ -29,7 +29,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
               </button>
             </form>
           ) : (
-            <a href="/login" className="landing-nav-cta">
+            <a href="/auth/github" className="landing-nav-cta">
               Sign in
             </a>
           )}
@@ -52,7 +52,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
                 </p>
               </div>
               <div className="hero-actions">
-                <a href="/login" className="hero-cta">
+                <a href="/auth/github" className="hero-cta">
                   CONNECT GITHUB
                 </a>
                 <p className="hero-proof">
@@ -154,7 +154,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
           <div className="landing-cta-inner">
             <h2>READY TO REDISCOVER?</h2>
             <div className="cta-buttons">
-              <a href="/login" className="cta-primary">
+              <a href="/auth/github" className="cta-primary">
                 CONNECT GITHUB NOW
               </a>
               <a href="#how-it-works" className="cta-secondary">
