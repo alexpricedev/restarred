@@ -138,6 +138,31 @@ describe("digest service", () => {
     expect(cycle2Count).toBe(1);
   });
 
+  test("getDigestProgress returns seen count and total for current cycle", async () => {
+    const { selectReposForDigest, recordDigestSelections, getDigestProgress } =
+      await import("./digest");
+
+    await seedStars(userId, 10);
+
+    const selected = await selectReposForDigest(userId);
+    await recordDigestSelections(
+      userId,
+      selected.map((r) => ({ starId: r.starId, cycle: r.cycle })),
+    );
+
+    const progress = await getDigestProgress(userId);
+    expect(progress).toEqual({ seen: 3, total: 10, cycle: 1 });
+  });
+
+  test("getDigestProgress returns cycle 1 with 0 seen when no history", async () => {
+    const { getDigestProgress } = await import("./digest");
+
+    await seedStars(userId, 5);
+
+    const progress = await getDigestProgress(userId);
+    expect(progress).toEqual({ seen: 0, total: 5, cycle: 1 });
+  });
+
   test("selectReposForDigest starts new cycle when all stars seen", async () => {
     const { selectReposForDigest, recordDigestSelections } = await import(
       "./digest"

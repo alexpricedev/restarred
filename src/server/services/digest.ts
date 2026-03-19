@@ -129,6 +129,31 @@ export const selectReposForDigest = async (
   return results;
 };
 
+export const getDigestProgress = async (
+  userId: string,
+): Promise<{ seen: number; total: number; cycle: number }> => {
+  const totalResult = await db`
+    SELECT COUNT(*) as count FROM stars WHERE user_id = ${userId}
+  `;
+  const total = Number(totalResult[0].count);
+
+  const cycleResult = await db`
+    SELECT COALESCE(MAX(cycle), 0) as current_cycle
+    FROM digest_history
+    WHERE user_id = ${userId}
+  `;
+  const cycle = Math.max(1, Number(cycleResult[0].current_cycle));
+
+  const seenResult = await db`
+    SELECT COUNT(*) as count
+    FROM digest_history
+    WHERE user_id = ${userId} AND cycle = ${cycle}
+  `;
+  const seen = Number(seenResult[0].count);
+
+  return { seen, total, cycle };
+};
+
 export const recordDigestSelections = async (
   userId: string,
   selections: { starId: string; cycle: number }[],
