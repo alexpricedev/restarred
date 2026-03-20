@@ -47,6 +47,8 @@ describe("Welcome Controller", () => {
     const html = await response.text();
     expect(html).toContain("welcome");
     expect(html).toContain("TESTUSER");
+    expect(html).toContain("step-connect");
+    expect(html).toContain("welcome-steps");
   });
 
   test("redirects to /account when sync is already done", async () => {

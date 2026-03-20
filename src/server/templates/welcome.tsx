@@ -22,13 +22,23 @@ export const Welcome = ({ user }: WelcomeProps) => (
           We're fetching your starred repositories from GitHub. This only
           happens once.
         </p>
-        <div className="welcome-progress">
-          <div className="welcome-spinner" />
-          <span className="welcome-status" id="sync-status">
-            Connecting to GitHub...
-          </span>
-        </div>
-        <p className="welcome-count" id="sync-count" />
+        <ol className="welcome-steps" id="sync-steps">
+          <li className="welcome-step is-active" id="step-connect">
+            <span className="welcome-step-indicator" />
+            <span className="welcome-step-label">Connecting to GitHub...</span>
+          </li>
+          <li className="welcome-step" id="step-fetch">
+            <span className="welcome-step-indicator" />
+            <span className="welcome-step-label">
+              Fetching your starred repos...
+            </span>
+            <span className="welcome-step-count" id="sync-count" />
+          </li>
+          <li className="welcome-step" id="step-done">
+            <span className="welcome-step-indicator" />
+            <span className="welcome-step-label">All set! Redirecting...</span>
+          </li>
+        </ol>
       </div>
     </div>
   </Layout>
