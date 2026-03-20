@@ -1,5 +1,4 @@
 import { runMigrations } from "./database/migrate";
-import { seedIfEmpty } from "./database/seed";
 import { adminRoutes } from "./routes/admin";
 import { apiRoutes } from "./routes/api";
 import { appRoutes } from "./routes/app";
@@ -9,7 +8,6 @@ import { validateEnv } from "./utils/env";
 
 validateEnv();
 await runMigrations();
-await seedIfEmpty();
 await initAssets();
 
 const server = Bun.serve({
