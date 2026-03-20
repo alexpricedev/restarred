@@ -4,8 +4,9 @@ import { getAssetUrl } from "../services/assets";
 import type { User } from "../services/users";
 import { Nav } from "./nav";
 
-const SITE_URL = "http://localhost";
-const SITE_DESCRIPTION =
+const SITE_NAME = "re:starred";
+const SITE_URL = process.env.APP_URL || "http://localhost";
+const DEFAULT_DESCRIPTION =
   "3 of your GitHub stars, resurfaced in your inbox every week.";
 
 const GoogleFonts = () => (
@@ -19,8 +20,52 @@ const GoogleFonts = () => (
   </>
 );
 
+interface MetaProps {
+  title: string;
+  description?: string;
+}
+
+function Meta({ title, description }: MetaProps) {
+  const desc = description || DEFAULT_DESCRIPTION;
+  return (
+    <>
+      <meta name="description" content={desc} />
+      <meta name="robots" content="index, follow" />
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="/favicon-32x32.png"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="/favicon-16x16.png"
+      />
+      <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="/apple-touch-icon.png"
+      />
+      <link rel="manifest" href="/site.webmanifest" />
+      <meta property="og:site_name" content={SITE_NAME} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={desc} />
+      <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
+      <meta property="og:url" content={SITE_URL} />
+      <meta property="og:type" content="website" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={desc} />
+      <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
+    </>
+  );
+}
+
 interface LayoutProps {
   title: string;
+  description?: string;
   name: string;
   children: React.ReactNode;
   user?: User | null;
@@ -29,6 +74,7 @@ interface LayoutProps {
 
 export function Layout({
   title,
+  description,
   name,
   children,
   user,
@@ -43,16 +89,7 @@ export function Layout({
           content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
         <title>{title}</title>
-        <meta name="description" content={SITE_DESCRIPTION} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={SITE_DESCRIPTION} />
-        <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
-        <meta property="og:url" content={SITE_URL} />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={SITE_DESCRIPTION} />
-        <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
+        <Meta title={title} description={description} />
         <GoogleFonts />
         <link rel="stylesheet" href={getAssetUrl("/assets/main.css")} />
         <script
