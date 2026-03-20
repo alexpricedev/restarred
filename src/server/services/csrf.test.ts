@@ -333,9 +333,9 @@ describe("CSRF Service", () => {
       expect(isValid).toBe(false);
     });
 
-    test("uses APP_ORIGIN env var when no expected origin provided", () => {
-      const originalAppOrigin = process.env.APP_ORIGIN;
-      process.env.APP_ORIGIN = "http://test.com";
+    test("uses APP_URL env var when no expected origin provided", () => {
+      const originalAppUrl = process.env.APP_URL;
+      process.env.APP_URL = "http://test.com";
 
       const req = new Request("http://example.com/test", {
         headers: { Origin: "http://test.com" },
@@ -345,7 +345,7 @@ describe("CSRF Service", () => {
 
       expect(isValid).toBe(true);
 
-      process.env.APP_ORIGIN = originalAppOrigin;
+      process.env.APP_URL = originalAppUrl;
     });
   });
 });

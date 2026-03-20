@@ -10,7 +10,6 @@ const REQUIRED = [
   "FROM_NAME",
   "PORT",
   "APP_URL",
-  "APP_ORIGIN",
   "EMAIL_PROVIDER",
 ];
 
