@@ -50,7 +50,7 @@ describe("Home Controller", () => {
       expect(html).toContain("NO NOISE");
       expect(html).toContain("SECURE BY DESIGN");
 
-      expect(html).toContain("READY TO REDISCOVER?");
+      expect(html).toContain("READY TO REDISCOVER YOUR STARS?");
     });
   });
 });

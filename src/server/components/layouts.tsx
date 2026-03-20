@@ -5,7 +5,7 @@ import type { User } from "../services/users";
 import { Nav } from "./nav";
 
 const SITE_NAME = "re:starred";
-const SITE_URL = process.env.APP_URL || "http://localhost";
+const SITE_URL = process.env.APP_URL as string;
 const DEFAULT_DESCRIPTION =
   "3 of your GitHub stars, resurfaced in your inbox every week.";
 
