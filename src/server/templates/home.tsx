@@ -49,7 +49,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
                   CONNECT GITHUB
                 </a>
                 <p className="hero-proof">
-                  JOIN HUNDREDS OF DEVELOPERS REDISCOVERING THEIR STARS
+                  REDISCOVER THE REPOS YOU FORGOT YOU STARRED
                 </p>
               </div>
             )}
