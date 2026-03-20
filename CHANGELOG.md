@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.5] - 2026-03-20
+
+### Added
+- Canvas confetti animation on /first page load with auto-fade and resize cleanup
+- Client-side form submission via fetch with success/error state transitions
+- Fetch error handling: button resets on network failure or server error
+- Success state UI with fade-out/fade-in CSS animations after digest send
+- `getDigestCount` service function for querying digest history
+- Real digest count displayed on account page (replaces static em-dash)
+- `recordDigestSelections` call after sending first digest
+- Client tests for first.ts covering submit, success, and error flows
+
+### Changed
+- /first page restyled with bold editorial design: larger headings, pill label, prominent CTA
+- Account page filter_own_repos labels changed from "Hidden"/"Included" to "Hide my repos"/"Include my repos"
+- Star count on /first page now uses `toLocaleString()` for number formatting
+
+### Fixed
+- CSS variable references in welcome.css (`--color-text-primary` → `--color-text`)
+- Missing `first.css` import in global style.css entry point
+- Resize event listener leak in confetti animation (now cleaned up when canvas removed)
+
 ## [1.0.4] - 2026-03-19
 
 ### Changed
