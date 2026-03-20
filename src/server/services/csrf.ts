@@ -201,11 +201,7 @@ export const validateOrigin = (
     const origin = req.headers.get("Origin");
     const referer = req.headers.get("Referer");
 
-    // Determine expected origin from env or request
-    const expected =
-      expectedOrigin ||
-      process.env.APP_ORIGIN ||
-      `${new URL(req.url).protocol}//${new URL(req.url).host}`;
+    const expected = expectedOrigin || (process.env.APP_ORIGIN as string);
 
     if (origin) {
       return origin === expected;

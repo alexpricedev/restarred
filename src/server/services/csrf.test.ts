@@ -333,17 +333,7 @@ describe("CSRF Service", () => {
       expect(isValid).toBe(false);
     });
 
-    test("uses request host as fallback when no expected origin provided", () => {
-      const req = new Request("http://example.com/test", {
-        headers: { Origin: "http://example.com" },
-      });
-
-      const isValid = validateOrigin(req);
-
-      expect(isValid).toBe(true);
-    });
-
-    test("uses APP_ORIGIN env var as fallback", () => {
+    test("uses APP_ORIGIN env var when no expected origin provided", () => {
       const originalAppOrigin = process.env.APP_ORIGIN;
       process.env.APP_ORIGIN = "http://test.com";
 
@@ -355,7 +345,6 @@ describe("CSRF Service", () => {
 
       expect(isValid).toBe(true);
 
-      // Restore original env
       process.env.APP_ORIGIN = originalAppOrigin;
     });
   });

@@ -1,46 +1,30 @@
 import { log } from "../services/logger";
 
-interface EnvConfig {
-  required: string[];
-  optional: string[];
-}
-
-const config: EnvConfig = {
-  required: [
-    "DATABASE_URL",
-    "CRYPTO_PEPPER",
-    "GITHUB_CLIENT_ID",
-    "GITHUB_CLIENT_SECRET",
-    "ENCRYPTION_KEY",
-  ],
-  optional: [
-    "PORT",
-    "APP_NAME",
-    "APP_URL",
-    "APP_ORIGIN",
-    "FROM_EMAIL",
-    "FROM_NAME",
-  ],
-};
+const REQUIRED = [
+  "DATABASE_URL",
+  "CRYPTO_PEPPER",
+  "GITHUB_CLIENT_ID",
+  "GITHUB_CLIENT_SECRET",
+  "ENCRYPTION_KEY",
+  "FROM_EMAIL",
+  "FROM_NAME",
+  "PORT",
+  "APP_URL",
+  "APP_ORIGIN",
+  "EMAIL_PROVIDER",
+];
 
 export function validateEnv(): void {
   const missing: string[] = [];
-  const warnings: string[] = [];
 
-  for (const key of config.required) {
+  for (const key of REQUIRED) {
     if (!process.env[key]) {
       missing.push(key);
     }
   }
 
-  for (const key of config.optional) {
-    if (!process.env[key]) {
-      warnings.push(key);
-    }
-  }
-
-  if (warnings.length > 0) {
-    log.warn("env", `Optional variables not set: ${warnings.join(", ")}`);
+  if (process.env.EMAIL_PROVIDER === "resend" && !process.env.RESEND_API_KEY) {
+    missing.push("RESEND_API_KEY");
   }
 
   if (missing.length > 0) {

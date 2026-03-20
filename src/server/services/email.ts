@@ -31,6 +31,11 @@ const providerFactories: Record<string, () => EmailProvider> = {
       require("./email-providers/console") as typeof import("./email-providers/console");
     return new ConsoleLogProvider();
   },
+  resend: () => {
+    const { ResendProvider } =
+      require("./email-providers/resend") as typeof import("./email-providers/resend");
+    return new ResendProvider(process.env.RESEND_API_KEY as string);
+  },
 };
 
 export function registerEmailProvider(
@@ -42,7 +47,7 @@ export function registerEmailProvider(
 
 export const getEmailService = (): EmailService => {
   if (!emailServiceInstance) {
-    const providerName = process.env.EMAIL_PROVIDER || "console";
+    const providerName = process.env.EMAIL_PROVIDER as string;
     const factory = providerFactories[providerName];
 
     if (!factory) {

@@ -187,7 +187,10 @@ async function handleTestEmail(req: BunRequest): Promise<Response> {
 
     await getEmailService().send({
       to: { email: recipientEmail, name: ctx.user.github_username },
-      from: { email: "digest@restarred.app", name: "re:starred" },
+      from: {
+        email: process.env.FROM_EMAIL as string,
+        name: process.env.FROM_NAME as string,
+      },
       subject: email.subject,
       html: email.html,
       text: email.text,
