@@ -72,6 +72,7 @@ describe("updateUserPreferences", () => {
       digestHour: 14,
       timezone: "America/New_York",
       isActive: false,
+      filterOwnRepos: true,
     });
 
     expect(result.id).toBe(userId);
@@ -92,6 +93,7 @@ describe("updateUserPreferences", () => {
       digestHour: 9,
       timezone: "UTC",
       isActive: true,
+      filterOwnRepos: true,
     });
 
     expect(result.email_override).toBeNull();
@@ -107,6 +109,7 @@ describe("updateUserPreferences", () => {
         digestHour: 9,
         timezone: "UTC",
         isActive: true,
+        filterOwnRepos: true,
       }),
     ).rejects.toThrow("User not found");
   });

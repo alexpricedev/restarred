@@ -268,6 +268,34 @@ export const Account = ({
         </div>
 
         <div className="account-section">
+          <h2 className="account-section-heading">Own Repos</h2>
+          <p className="account-section-description">
+            Filter out repos you own from your digest — so you only rediscover
+            other people's work.
+          </p>
+          <div className="account-toggle">
+            <label className="account-radio">
+              <input
+                type="radio"
+                name="filter_own_repos"
+                value="true"
+                defaultChecked={user.filter_own_repos}
+              />
+              Hidden
+            </label>
+            <label className="account-radio">
+              <input
+                type="radio"
+                name="filter_own_repos"
+                value="false"
+                defaultChecked={!user.filter_own_repos}
+              />
+              Included
+            </label>
+          </div>
+        </div>
+
+        <div className="account-section">
           <h2 className="account-section-heading">Digest Status</h2>
           <p className="account-section-description">
             When paused, no digests will be sent until you reactivate.

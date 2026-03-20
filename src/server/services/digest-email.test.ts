@@ -233,6 +233,7 @@ const mockUser: User = {
   digest_hour: 9,
   timezone: "America/New_York",
   is_active: true,
+  filter_own_repos: true,
   role: "user",
   sync_status: "done",
   created_at: new Date("2024-01-01"),

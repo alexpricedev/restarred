@@ -22,12 +22,17 @@ mock.module("./database", () => ({
 
 import { db } from "./database";
 
-const seedStars = async (userId: string, count: number) => {
+const seedStars = async (
+  userId: string,
+  count: number,
+  ownerName = "owner",
+) => {
   const stars: string[] = [];
   for (let i = 0; i < count; i++) {
+    const repoId = ownerName === "owner" ? i + 1 : 1000 + i + 1;
     const result = await db`
       INSERT INTO stars (user_id, repo_id, full_name, html_url, stargazers_count)
-      VALUES (${userId}, ${i + 1}, ${`owner/repo-${i + 1}`}, ${`https://github.com/owner/repo-${i + 1}`}, ${10})
+      VALUES (${userId}, ${repoId}, ${`${ownerName}/repo-${i + 1}`}, ${`https://github.com/${ownerName}/repo-${i + 1}`}, ${10})
       RETURNING id
     `;
     stars.push(result[0].id as string);
@@ -69,7 +74,7 @@ describe("digest service", () => {
 
     await seedStars(userId, 10);
 
-    const results = await selectReposForDigest(userId);
+    const results = await selectReposForDigest({ userId });
     expect(results).toHaveLength(3);
     for (const repo of results) {
       expect(repo.cycle).toBe(1);
@@ -81,14 +86,14 @@ describe("digest service", () => {
 
     await seedStars(userId, 2);
 
-    const results = await selectReposForDigest(userId);
+    const results = await selectReposForDigest({ userId });
     expect(results).toHaveLength(2);
   });
 
   test("selectReposForDigest returns empty array when user has no stars", async () => {
     const { selectReposForDigest } = await import("./digest");
 
-    const results = await selectReposForDigest(userId);
+    const results = await selectReposForDigest({ userId });
     expect(results).toEqual([]);
   });
 
@@ -102,7 +107,7 @@ describe("digest service", () => {
     const allIds: string[] = [];
 
     for (let i = 0; i < 3; i++) {
-      const results = await selectReposForDigest(userId);
+      const results = await selectReposForDigest({ userId });
       expect(results).toHaveLength(3);
       await recordDigestSelections(
         userId,
@@ -122,14 +127,14 @@ describe("digest service", () => {
 
     await seedStars(userId, 5);
 
-    const first = await selectReposForDigest(userId);
+    const first = await selectReposForDigest({ userId });
     expect(first).toHaveLength(3);
     await recordDigestSelections(
       userId,
       first.map((r) => ({ starId: r.starId, cycle: r.cycle })),
     );
 
-    const second = await selectReposForDigest(userId);
+    const second = await selectReposForDigest({ userId });
     expect(second).toHaveLength(3);
 
     const cycle1Count = second.filter((r) => r.cycle === 1).length;
@@ -144,7 +149,7 @@ describe("digest service", () => {
 
     await seedStars(userId, 10);
 
-    const selected = await selectReposForDigest(userId);
+    const selected = await selectReposForDigest({ userId });
     await recordDigestSelections(
       userId,
       selected.map((r) => ({ starId: r.starId, cycle: r.cycle })),
@@ -163,6 +168,48 @@ describe("digest service", () => {
     expect(progress).toEqual({ seen: 0, total: 5, cycle: 1 });
   });
 
+  test("selectReposForDigest excludes own repos when excludeOwner is set", async () => {
+    const { selectReposForDigest } = await import("./digest");
+
+    await seedStars(userId, 5);
+    await seedStars(userId, 3, "testuser");
+
+    const results = await selectReposForDigest({
+      userId,
+      excludeOwner: "testuser",
+    });
+    expect(results).toHaveLength(3);
+    for (const repo of results) {
+      expect(repo.fullName).not.toMatch(/^testuser\//);
+    }
+  });
+
+  test("selectReposForDigest includes own repos when excludeOwner is not set", async () => {
+    const { selectReposForDigest } = await import("./digest");
+
+    await seedStars(userId, 0);
+    await seedStars(userId, 3, "testuser");
+
+    const results = await selectReposForDigest({ userId });
+    expect(results).toHaveLength(3);
+    for (const repo of results) {
+      expect(repo.fullName).toMatch(/^testuser\//);
+    }
+  });
+
+  test("selectReposForDigest returns empty when all stars are owned and excludeOwner is set", async () => {
+    const { selectReposForDigest } = await import("./digest");
+
+    await seedStars(userId, 0);
+    await seedStars(userId, 5, "testuser");
+
+    const results = await selectReposForDigest({
+      userId,
+      excludeOwner: "testuser",
+    });
+    expect(results).toEqual([]);
+  });
+
   test("selectReposForDigest starts new cycle when all stars seen", async () => {
     const { selectReposForDigest, recordDigestSelections } = await import(
       "./digest"
@@ -170,14 +217,14 @@ describe("digest service", () => {
 
     await seedStars(userId, 3);
 
-    const first = await selectReposForDigest(userId);
+    const first = await selectReposForDigest({ userId });
     expect(first).toHaveLength(3);
     await recordDigestSelections(
       userId,
       first.map((r) => ({ starId: r.starId, cycle: r.cycle })),
     );
 
-    const second = await selectReposForDigest(userId);
+    const second = await selectReposForDigest({ userId });
     expect(second).toHaveLength(3);
     for (const repo of second) {
       expect(repo.cycle).toBe(2);

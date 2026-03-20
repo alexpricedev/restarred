@@ -28,6 +28,11 @@ interface StarRow {
   is_archived: boolean;
 }
 
+export interface DigestOptions {
+  userId: string;
+  excludeOwner?: string;
+}
+
 const rowToSelectedRepo = (row: StarRow, cycle: number): SelectedRepo => ({
   starId: row.id,
   cycle,
@@ -42,11 +47,17 @@ const rowToSelectedRepo = (row: StarRow, cycle: number): SelectedRepo => ({
   isArchived: Boolean(row.is_archived),
 });
 
+const ownerPrefix = (owner: string) => `${owner}/%`;
+
 export const selectReposForDigest = async (
-  userId: string,
+  options: DigestOptions,
 ): Promise<SelectedRepo[]> => {
-  const countResult =
-    await db`SELECT COUNT(*)::int AS total FROM stars WHERE user_id = ${userId}`;
+  const { userId, excludeOwner } = options;
+  const ownerPattern = excludeOwner ? ownerPrefix(excludeOwner) : null;
+
+  const countResult = ownerPattern
+    ? await db`SELECT COUNT(*)::int AS total FROM stars WHERE user_id = ${userId} AND full_name NOT LIKE ${ownerPattern}`
+    : await db`SELECT COUNT(*)::int AS total FROM stars WHERE user_id = ${userId}`;
   const totalStars = countResult[0].total as number;
 
   if (totalStars === 0) {
@@ -70,30 +81,52 @@ export const selectReposForDigest = async (
 
   let unseen: StarRow[];
   if (sentIdList.length === 0) {
-    unseen = (await db`
-      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
-      FROM stars
-      WHERE user_id = ${userId}
-      ORDER BY random()
-    `) as StarRow[];
+    unseen = ownerPattern
+      ? ((await db`
+          SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
+          FROM stars
+          WHERE user_id = ${userId} AND full_name NOT LIKE ${ownerPattern}
+          ORDER BY random()
+        `) as StarRow[])
+      : ((await db`
+          SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
+          FROM stars
+          WHERE user_id = ${userId}
+          ORDER BY random()
+        `) as StarRow[]);
   } else {
-    unseen = (await db`
-      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
-      FROM stars
-      WHERE user_id = ${userId} AND id NOT IN ${db(sentIdList)}
-      ORDER BY random()
-    `) as StarRow[];
+    unseen = ownerPattern
+      ? ((await db`
+          SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
+          FROM stars
+          WHERE user_id = ${userId} AND id NOT IN ${db(sentIdList)} AND full_name NOT LIKE ${ownerPattern}
+          ORDER BY random()
+        `) as StarRow[])
+      : ((await db`
+          SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
+          FROM stars
+          WHERE user_id = ${userId} AND id NOT IN ${db(sentIdList)}
+          ORDER BY random()
+        `) as StarRow[]);
   }
 
   if (unseen.length === 0) {
     const newCycle = currentCycle + 1;
-    const picks = (await db`
-      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
-      FROM stars
-      WHERE user_id = ${userId}
-      ORDER BY random()
-      LIMIT 3
-    `) as StarRow[];
+    const picks = ownerPattern
+      ? ((await db`
+          SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
+          FROM stars
+          WHERE user_id = ${userId} AND full_name NOT LIKE ${ownerPattern}
+          ORDER BY random()
+          LIMIT 3
+        `) as StarRow[])
+      : ((await db`
+          SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
+          FROM stars
+          WHERE user_id = ${userId}
+          ORDER BY random()
+          LIMIT 3
+        `) as StarRow[]);
     const results = picks.map((row) => rowToSelectedRepo(row, newCycle));
     log.info("digest", `Selected ${results.length} repos for user ${userId}`);
     return results;
@@ -116,21 +149,37 @@ export const selectReposForDigest = async (
 
   let fill: StarRow[];
   if (excludeIds.length === 0) {
-    fill = (await db`
-      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
-      FROM stars
-      WHERE user_id = ${userId}
-      ORDER BY random()
-      LIMIT ${remaining}
-    `) as StarRow[];
+    fill = ownerPattern
+      ? ((await db`
+          SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
+          FROM stars
+          WHERE user_id = ${userId} AND full_name NOT LIKE ${ownerPattern}
+          ORDER BY random()
+          LIMIT ${remaining}
+        `) as StarRow[])
+      : ((await db`
+          SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
+          FROM stars
+          WHERE user_id = ${userId}
+          ORDER BY random()
+          LIMIT ${remaining}
+        `) as StarRow[]);
   } else {
-    fill = (await db`
-      SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
-      FROM stars
-      WHERE user_id = ${userId} AND id NOT IN ${db(excludeIds)}
-      ORDER BY random()
-      LIMIT ${remaining}
-    `) as StarRow[];
+    fill = ownerPattern
+      ? ((await db`
+          SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
+          FROM stars
+          WHERE user_id = ${userId} AND id NOT IN ${db(excludeIds)} AND full_name NOT LIKE ${ownerPattern}
+          ORDER BY random()
+          LIMIT ${remaining}
+        `) as StarRow[])
+      : ((await db`
+          SELECT id, repo_id, full_name, description, language, stargazers_count, html_url, starred_at, last_activity_at, is_archived
+          FROM stars
+          WHERE user_id = ${userId} AND id NOT IN ${db(excludeIds)}
+          ORDER BY random()
+          LIMIT ${remaining}
+        `) as StarRow[]);
   }
 
   results.push(...fill.map((row) => rowToSelectedRepo(row, newCycle)));
