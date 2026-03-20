@@ -92,21 +92,6 @@ export function Layout({
         <Meta title={title} description={description} />
         <GoogleFonts />
         <link rel="stylesheet" href={getAssetUrl("/assets/main.css")} />
-        <script
-          type="importmap"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              imports: {
-                preact: "https://esm.sh/preact@10.28.4",
-                "preact/hooks": "https://esm.sh/preact@10.28.4/hooks",
-                "preact/jsx-dev-runtime":
-                  "https://esm.sh/preact@10.28.4/jsx-dev-runtime",
-                "preact/jsx-runtime":
-                  "https://esm.sh/preact@10.28.4/jsx-runtime",
-              },
-            }),
-          }}
-        />
       </head>
       <body data-page={name} data-component="layout">
         <header>

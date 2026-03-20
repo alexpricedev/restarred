@@ -4,11 +4,11 @@
   "version": "1.0.4",
   "scripts": {
     "build": "bun run build:client && bun run build:css",
-    "build:client": "bun build ./src/client/main.ts --outdir ./dist/assets --external preact --external preact/hooks --external preact/jsx-dev-runtime --external preact/jsx-runtime",
+    "build:client": "bun build ./src/client/main.ts --outdir ./dist/assets",
     "build:css": "bun build ./src/client/style.css --outdir ./dist/assets --entry-naming main.css --minify",
     "start": "bun run src/server/main.ts",
     "dev": "bun run dev:client & bun run dev:server & bun run dev:css",
-    "dev:client": "bun --watch build ./src/client/main.ts --outdir ./dist/assets --external preact --external preact/hooks --external preact/jsx-dev-runtime --external preact/jsx-runtime",
+    "dev:client": "bun --watch build ./src/client/main.ts --outdir ./dist/assets",
     "dev:server": "bun --watch run src/server/main.ts",
     "dev:css": "bun build ./src/client/style.css --outdir ./dist/assets --entry-naming main.css --watch",
     "test": "NODE_ENV=test bun run src/server/database/cli.ts up && NODE_ENV=test bun test src",
@@ -34,7 +34,6 @@
     "happy-dom": "^20.8.3",
     "husky": "9.1.7",
     "react": "^19.1.1",
-    "preact": "^10.28.4",
     "react-dom": "^19.1.1",
     "typescript": "^5.9.3"
   }
