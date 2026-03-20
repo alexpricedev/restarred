@@ -6,6 +6,7 @@ import type { User } from "@server/services/users";
 interface AccountProps {
   user: User;
   starCount: number;
+  digestCount: number;
   csrfToken: string;
   logoutCsrfToken: string;
   testEmailCsrfToken?: string;
@@ -131,6 +132,7 @@ function formatTimezone(tz: string): string {
 export const Account = ({
   user,
   starCount,
+  digestCount,
   csrfToken,
   logoutCsrfToken,
   testEmailCsrfToken,
@@ -185,7 +187,9 @@ export const Account = ({
           <span className="account-stat-label">Stars synced</span>
         </div>
         <div className="account-stat">
-          <span className="account-stat-value">&mdash;</span>
+          <span className="account-stat-value">
+            {digestCount > 0 ? digestCount : "\u2014"}
+          </span>
           <span className="account-stat-label">Digests sent</span>
         </div>
         <div className="account-stat">
@@ -281,7 +285,7 @@ export const Account = ({
                 value="true"
                 defaultChecked={user.filter_own_repos}
               />
-              Hidden
+              Hide my repos
             </label>
             <label className="account-radio">
               <input
@@ -290,7 +294,7 @@ export const Account = ({
                 value="false"
                 defaultChecked={!user.filter_own_repos}
               />
-              Included
+              Include my repos
             </label>
           </div>
         </div>

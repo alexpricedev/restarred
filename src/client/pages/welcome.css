@@ -78,7 +78,7 @@
 
 [data-page="welcome"] .welcome-step.is-active .welcome-icon-loader {
   display: inline-flex;
-  color: var(--color-text-primary);
+  color: var(--color-text);
   animation: welcome-spin 1s linear infinite;
 }
 
@@ -88,7 +88,7 @@
 
 [data-page="welcome"] .welcome-step.is-complete .welcome-icon-check {
   display: inline-flex;
-  color: var(--color-text-primary);
+  color: var(--color-text);
 }
 
 @keyframes welcome-spin {
@@ -106,5 +106,5 @@
 }
 
 [data-page="welcome"] .welcome-step.is-active .welcome-step-label {
-  color: var(--color-text-primary);
+  color: var(--color-text);
 }

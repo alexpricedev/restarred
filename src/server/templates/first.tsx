@@ -20,19 +20,21 @@ export const First = ({
     name="first"
     user={user}
   >
-    <div className="first-container">
-      <div className="first-content">
+    <div className="first-content">
+      <div className="first-initial">
         <span className="first-label">SYNC COMPLETE</span>
-        <h1 className="first-heading">{starCount} REPOS READY</h1>
+        <h1 className="first-heading">
+          {starCount.toLocaleString()} REPOS READY
+        </h1>
         <p className="first-description">
-          Every week, we'll email you 3 forgotten repos from your stars. Want to
-          see what that looks like right now?
+          Each week, we'll email you 3 forgotten starred repos. Want to see what
+          that looks like right now?
         </p>
         <div className="first-actions">
-          <form method="POST" action="/first/send">
+          <form method="POST" action="/first/send" data-send-form>
             <input type="hidden" name="_csrf" value={sendCsrfToken} />
             <button type="submit" className="first-btn first-btn-primary">
-              Send my first digest now
+              SEND MY FIRST DIGEST NOW
             </button>
           </form>
           <form method="POST" action="/first/skip">
@@ -41,6 +43,19 @@ export const First = ({
               I'll wait for my regular digest
             </button>
           </form>
+        </div>
+      </div>
+      <div className="first-success" hidden>
+        <span className="first-label">DIGEST SENT</span>
+        <h1 className="first-heading">CHECK YOUR INBOX</h1>
+        <p className="first-description">
+          Your first digest is on its way. We'll send you a fresh one every week
+          from here.
+        </p>
+        <div className="first-actions">
+          <a href="/account" className="first-btn first-btn-primary">
+            GO TO MY ACCOUNT
+          </a>
         </div>
       </div>
     </div>
