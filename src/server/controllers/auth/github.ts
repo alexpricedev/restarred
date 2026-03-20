@@ -5,8 +5,8 @@ const GITHUB_AUTHORIZE_URL = "https://github.com/login/oauth/authorize";
 export const github = {
   index(): Response {
     const clientId = process.env.GITHUB_CLIENT_ID as string;
-    const origin = process.env.APP_ORIGIN as string;
-    const callbackUrl = `${origin}/auth/callback`;
+    const appUrl = process.env.APP_URL as string;
+    const callbackUrl = `${appUrl}/auth/callback`;
     const state = generateSecureToken(32);
 
     const params = new URLSearchParams({

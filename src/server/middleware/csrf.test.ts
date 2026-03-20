@@ -12,7 +12,7 @@ if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is required for tests");
 }
 
-const ORIGIN = process.env.APP_ORIGIN as string;
+const ORIGIN = new URL(process.env.APP_URL as string).origin;
 const connection = new SQL(process.env.DATABASE_URL);
 
 mock.module("../services/database", () => ({
