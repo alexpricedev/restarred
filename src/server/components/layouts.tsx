@@ -111,7 +111,7 @@ export function Layout({
             Terms
           </a>
           <a
-            href="https://github.com/restarred"
+            href="https://github.com/alexpricedev/restarred"
             target="_blank"
             rel="noopener noreferrer"
           >
