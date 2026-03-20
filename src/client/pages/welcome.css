@@ -33,40 +33,78 @@
   margin-bottom: 3rem;
 }
 
-[data-page="welcome"] .welcome-progress {
+[data-page="welcome"] .welcome-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+[data-page="welcome"] .welcome-step {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.75rem;
-  margin-bottom: 1rem;
+  opacity: 0.35;
+  transition: opacity 200ms ease;
 }
 
-[data-page="welcome"] .welcome-spinner {
-  width: 8px;
-  height: 8px;
-  background: var(--color-text-tertiary);
-  border-radius: 50%;
-  animation: welcome-pulse 1.5s ease-in-out infinite;
+[data-page="welcome"] .welcome-step.is-active {
+  opacity: 1;
 }
 
-@keyframes welcome-pulse {
-  0%,
-  100% {
-    opacity: 0.3;
+[data-page="welcome"] .welcome-step.is-complete {
+  opacity: 0.6;
+}
+
+[data-page="welcome"] .welcome-step-icon {
+  display: none;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  line-height: 0;
+  color: var(--color-text-tertiary);
+}
+
+[data-page="welcome"] .welcome-step .welcome-icon-pending {
+  display: inline-flex;
+}
+
+[data-page="welcome"] .welcome-step.is-active .welcome-icon-pending {
+  display: none;
+}
+
+[data-page="welcome"] .welcome-step.is-active .welcome-icon-loader {
+  display: inline-flex;
+  color: var(--color-text-primary);
+  animation: welcome-spin 1s linear infinite;
+}
+
+[data-page="welcome"] .welcome-step.is-complete .welcome-icon-pending {
+  display: none;
+}
+
+[data-page="welcome"] .welcome-step.is-complete .welcome-icon-check {
+  display: inline-flex;
+  color: var(--color-text-primary);
+}
+
+@keyframes welcome-spin {
+  from {
+    transform: rotate(0deg);
   }
-  50% {
-    opacity: 1;
+  to {
+    transform: rotate(360deg);
   }
 }
 
-[data-page="welcome"] .welcome-status {
+[data-page="welcome"] .welcome-step-label {
   font-size: 0.875rem;
   color: var(--color-text-secondary);
 }
 
-[data-page="welcome"] .welcome-count {
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  color: var(--color-text-tertiary);
-  min-height: 1.5em;
+[data-page="welcome"] .welcome-step.is-active .welcome-step-label {
+  color: var(--color-text-primary);
 }

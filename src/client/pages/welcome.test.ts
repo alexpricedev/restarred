@@ -3,8 +3,26 @@ import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 describe("welcome page", () => {
   beforeEach(() => {
     document.body.innerHTML = `
-      <span id="sync-status">Connecting to GitHub...</span>
-      <p id="sync-count"></p>
+      <ol id="sync-steps">
+        <li class="welcome-step is-active" id="step-connect">
+          <span class="welcome-step-icon welcome-icon-check"></span>
+          <span class="welcome-step-icon welcome-icon-loader"></span>
+          <span class="welcome-step-icon welcome-icon-pending"></span>
+          <span class="welcome-step-label">Connecting to GitHub...</span>
+        </li>
+        <li class="welcome-step" id="step-fetch">
+          <span class="welcome-step-icon welcome-icon-check"></span>
+          <span class="welcome-step-icon welcome-icon-loader"></span>
+          <span class="welcome-step-icon welcome-icon-pending"></span>
+          <span class="welcome-step-label">Fetching your starred repos...</span>
+        </li>
+        <li class="welcome-step" id="step-done">
+          <span class="welcome-step-icon welcome-icon-check"></span>
+          <span class="welcome-step-icon welcome-icon-loader"></span>
+          <span class="welcome-step-icon welcome-icon-pending"></span>
+          <span class="welcome-step-label">All set! Redirecting...</span>
+        </li>
+      </ol>
     `;
   });
 
@@ -13,7 +31,7 @@ describe("welcome page", () => {
     mock.restore();
   });
 
-  test("updates status text when syncing", async () => {
+  test("returns false when syncing", async () => {
     const mockFetch = mock(() =>
       Promise.resolve(
         new Response(JSON.stringify({ status: "syncing", count: 15 }), {
@@ -29,15 +47,9 @@ describe("welcome page", () => {
     const result = await pollOnce();
 
     expect(result).toBe(false);
-    expect(document.getElementById("sync-status")?.textContent).toBe(
-      "Syncing your stars...",
-    );
-    expect(document.getElementById("sync-count")?.textContent).toBe(
-      "15 repos found so far",
-    );
   });
 
-  test("returns true when sync is done", async () => {
+  test("marks step-done as active when status is done", async () => {
     const mockFetch = mock(() =>
       Promise.resolve(
         new Response(JSON.stringify({ status: "done", count: 42 }), {
@@ -53,12 +65,15 @@ describe("welcome page", () => {
     const result = await pollOnce();
 
     expect(result).toBe(true);
-    expect(document.getElementById("sync-status")?.textContent).toBe(
-      "Done! Found 42 repos.",
-    );
+    expect(
+      document.getElementById("step-done")?.classList.contains("is-active"),
+    ).toBe(true);
+    expect(
+      document.getElementById("step-fetch")?.classList.contains("is-complete"),
+    ).toBe(true);
   });
 
-  test("shows error state", async () => {
+  test("shows error message on step-fetch label when status is error", async () => {
     const mockFetch = mock(() =>
       Promise.resolve(
         new Response(JSON.stringify({ status: "error", count: 0 }), {
@@ -74,12 +89,13 @@ describe("welcome page", () => {
     const result = await pollOnce();
 
     expect(result).toBe(true);
-    expect(document.getElementById("sync-status")?.textContent).toBe(
+    const label = document.querySelector("#step-fetch .welcome-step-label");
+    expect(label?.textContent).toBe(
       "Something went wrong. Please try signing in again.",
     );
   });
 
-  test("init starts polling and updates DOM", async () => {
+  test("init starts polling after CONNECT_DELAY", async () => {
     const mockFetch = mock(() =>
       Promise.resolve(
         new Response(JSON.stringify({ status: "syncing", count: 5 }), {
@@ -94,11 +110,16 @@ describe("welcome page", () => {
     const { init } = await import("./welcome");
     init();
 
-    await new Promise((r) => setTimeout(r, 50));
+    await new Promise((r) => setTimeout(r, 2100));
 
     expect(mockFetch).toHaveBeenCalled();
-    expect(document.getElementById("sync-status")?.textContent).toBe(
-      "Syncing your stars...",
-    );
+    expect(
+      document
+        .getElementById("step-connect")
+        ?.classList.contains("is-complete"),
+    ).toBe(true);
+    expect(
+      document.getElementById("step-fetch")?.classList.contains("is-active"),
+    ).toBe(true);
   });
 });

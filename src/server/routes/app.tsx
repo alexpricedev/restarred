@@ -1,10 +1,13 @@
-import { account, home, welcome } from "../controllers/app";
+import { account, first, home, welcome } from "../controllers/app";
 import { callback, github, logout } from "../controllers/auth";
 import { createRouteHandler } from "../utils/route-handler";
 
 export const appRoutes = {
   "/": home.index,
   "/welcome": welcome.index,
+  "/first": first.index,
+  "/first/send": createRouteHandler({ POST: first.send }),
+  "/first/skip": createRouteHandler({ POST: first.skip }),
   "/auth/github": github.index,
   "/auth/callback": callback.index,
   "/account": createRouteHandler({

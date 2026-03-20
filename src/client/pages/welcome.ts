@@ -1,47 +1,57 @@
 const POLL_INTERVAL = 2000;
+const CONNECT_DELAY = 2000;
+
+function setStepState(
+  stepId: string,
+  state: "pending" | "active" | "complete",
+): void {
+  const step = document.getElementById(stepId);
+  if (!step) return;
+  step.classList.remove("is-active", "is-complete");
+  if (state === "active") step.classList.add("is-active");
+  if (state === "complete") step.classList.add("is-complete");
+}
 
 export async function pollOnce(): Promise<boolean> {
-  const statusEl = document.getElementById("sync-status");
-  const countEl = document.getElementById("sync-count");
-  if (!statusEl) return true;
-
   const response = await fetch("/api/stars/status");
   const data = (await response.json()) as { status: string; count: number };
 
   if (data.status === "done") {
-    statusEl.textContent = `Done! Found ${data.count} repos.`;
-    if (countEl) countEl.textContent = "";
+    setStepState("step-fetch", "complete");
+    setStepState("step-done", "active");
     return true;
   }
 
   if (data.status === "error") {
-    statusEl.textContent = "Something went wrong. Please try signing in again.";
-    if (countEl) countEl.textContent = "";
+    const label = document.querySelector("#step-fetch .welcome-step-label");
+    if (label) {
+      label.textContent = "Something went wrong. Please try signing in again.";
+    }
     return true;
-  }
-
-  statusEl.textContent = "Syncing your stars...";
-  if (countEl && data.count > 0) {
-    countEl.textContent = `${data.count} repos found so far`;
   }
 
   return false;
 }
 
 export function init() {
-  const poll = async () => {
-    const done = await pollOnce();
-    if (done) {
-      const statusEl = document.getElementById("sync-status");
-      if (statusEl?.textContent?.startsWith("Done")) {
-        setTimeout(() => {
-          window.location.href = "/account";
-        }, 1500);
-      }
-      return;
-    }
-    setTimeout(poll, POLL_INTERVAL);
-  };
+  setTimeout(() => {
+    setStepState("step-connect", "complete");
+    setStepState("step-fetch", "active");
 
-  poll();
+    const poll = async () => {
+      const done = await pollOnce();
+      if (done) {
+        const doneStep = document.getElementById("step-done");
+        if (doneStep?.classList.contains("is-active")) {
+          setTimeout(() => {
+            window.location.href = "/first";
+          }, 1500);
+        }
+        return;
+      }
+      setTimeout(poll, POLL_INTERVAL);
+    };
+
+    poll();
+  }, CONNECT_DELAY);
 }

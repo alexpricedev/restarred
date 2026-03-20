@@ -18,6 +18,8 @@ mock.module("../../middleware/auth", () => ({
         timezone: "UTC",
         is_active: true,
         role: "user",
+        filter_own_repos: true,
+        has_viewed_first: false,
         sync_status: "syncing",
         created_at: new Date(),
         updated_at: new Date(),
@@ -45,9 +47,11 @@ describe("Welcome Controller", () => {
     const html = await response.text();
     expect(html).toContain("welcome");
     expect(html).toContain("TESTUSER");
+    expect(html).toContain("step-connect");
+    expect(html).toContain("welcome-steps");
   });
 
-  test("redirects to /account when sync is already done", async () => {
+  test("redirects to /first when sync is already done", async () => {
     const { getSessionContext } = await import("../../middleware/auth");
     (getSessionContext as ReturnType<typeof mock>).mockResolvedValueOnce({
       sessionId: "session-123",
@@ -65,6 +69,8 @@ describe("Welcome Controller", () => {
         timezone: "UTC",
         is_active: true,
         role: "user",
+        filter_own_repos: true,
+        has_viewed_first: false,
         sync_status: "done",
         created_at: new Date(),
         updated_at: new Date(),
@@ -78,7 +84,7 @@ describe("Welcome Controller", () => {
     const response = await welcome.index(request);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get("location")).toBe("/account");
+    expect(response.headers.get("location")).toBe("/first");
   });
 
   test("redirects unauthenticated user to /", async () => {

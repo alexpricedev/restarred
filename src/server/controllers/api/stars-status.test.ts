@@ -19,6 +19,7 @@ const mockGetSessionContext = mock(
         timezone: "UTC",
         is_active: true,
         filter_own_repos: true,
+        has_viewed_first: false,
         role: "user",
         sync_status: "done",
         created_at: new Date(),

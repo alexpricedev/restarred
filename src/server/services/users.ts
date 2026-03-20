@@ -45,3 +45,10 @@ export const updateUserPreferences = async (
 
   return result[0] as User;
 };
+
+export const markFirstViewed = async (userId: string): Promise<void> => {
+  await db`
+    UPDATE users SET has_viewed_first = true, updated_at = CURRENT_TIMESTAMP
+    WHERE id = ${userId}
+  `;
+};
