@@ -5,16 +5,21 @@ describe("welcome page", () => {
     document.body.innerHTML = `
       <ol id="sync-steps">
         <li class="welcome-step is-active" id="step-connect">
-          <span class="welcome-step-indicator"></span>
+          <span class="welcome-step-icon welcome-icon-check"></span>
+          <span class="welcome-step-icon welcome-icon-loader"></span>
+          <span class="welcome-step-icon welcome-icon-pending"></span>
           <span class="welcome-step-label">Connecting to GitHub...</span>
         </li>
         <li class="welcome-step" id="step-fetch">
-          <span class="welcome-step-indicator"></span>
+          <span class="welcome-step-icon welcome-icon-check"></span>
+          <span class="welcome-step-icon welcome-icon-loader"></span>
+          <span class="welcome-step-icon welcome-icon-pending"></span>
           <span class="welcome-step-label">Fetching your starred repos...</span>
-          <span class="welcome-step-count" id="sync-count"></span>
         </li>
         <li class="welcome-step" id="step-done">
-          <span class="welcome-step-indicator"></span>
+          <span class="welcome-step-icon welcome-icon-check"></span>
+          <span class="welcome-step-icon welcome-icon-loader"></span>
+          <span class="welcome-step-icon welcome-icon-pending"></span>
           <span class="welcome-step-label">All set! Redirecting...</span>
         </li>
       </ol>
@@ -26,7 +31,7 @@ describe("welcome page", () => {
     mock.restore();
   });
 
-  test("updates sync-count when syncing with count > 0", async () => {
+  test("returns false when syncing", async () => {
     const mockFetch = mock(() =>
       Promise.resolve(
         new Response(JSON.stringify({ status: "syncing", count: 15 }), {
@@ -42,9 +47,6 @@ describe("welcome page", () => {
     const result = await pollOnce();
 
     expect(result).toBe(false);
-    expect(document.getElementById("sync-count")?.textContent).toBe(
-      "15 repos found",
-    );
   });
 
   test("marks step-done as active when status is done", async () => {
@@ -69,7 +71,6 @@ describe("welcome page", () => {
     expect(
       document.getElementById("step-fetch")?.classList.contains("is-complete"),
     ).toBe(true);
-    expect(document.getElementById("sync-count")?.textContent).toBe("42 repos");
   });
 
   test("shows error message on step-fetch label when status is error", async () => {

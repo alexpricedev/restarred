@@ -40,8 +40,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  text-align: left;
-  max-width: 320px;
+  align-items: center;
 }
 
 [data-page="welcome"] .welcome-step {
@@ -60,42 +59,44 @@
   opacity: 0.6;
 }
 
-[data-page="welcome"] .welcome-step-indicator {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--color-text-tertiary);
+[data-page="welcome"] .welcome-step-icon {
+  display: none;
   flex-shrink: 0;
-  position: relative;
+  width: 18px;
+  height: 18px;
+  line-height: 0;
+  color: var(--color-text-tertiary);
 }
 
-[data-page="welcome"] .welcome-step.is-active .welcome-step-indicator {
-  background: var(--color-text-primary);
-  animation: welcome-pulse 1.5s ease-in-out infinite;
+[data-page="welcome"] .welcome-step .welcome-icon-pending {
+  display: inline-flex;
 }
 
-[data-page="welcome"] .welcome-step.is-complete .welcome-step-indicator {
-  background: transparent;
+[data-page="welcome"] .welcome-step.is-active .welcome-icon-pending {
+  display: none;
 }
 
-[data-page="welcome"] .welcome-step.is-complete .welcome-step-indicator::after {
-  content: "\2713";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.75rem;
-  font-weight: 700;
+[data-page="welcome"] .welcome-step.is-active .welcome-icon-loader {
+  display: inline-flex;
+  color: var(--color-text-primary);
+  animation: welcome-spin 1s linear infinite;
+}
+
+[data-page="welcome"] .welcome-step.is-complete .welcome-icon-pending {
+  display: none;
+}
+
+[data-page="welcome"] .welcome-step.is-complete .welcome-icon-check {
+  display: inline-flex;
   color: var(--color-text-primary);
 }
 
-@keyframes welcome-pulse {
-  0%,
-  100% {
-    opacity: 0.3;
+@keyframes welcome-spin {
+  from {
+    transform: rotate(0deg);
   }
-  50% {
-    opacity: 1;
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -106,11 +107,4 @@
 
 [data-page="welcome"] .welcome-step.is-active .welcome-step-label {
   color: var(--color-text-primary);
-}
-
-[data-page="welcome"] .welcome-step-count {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--color-text-tertiary);
-  margin-left: 0.25rem;
 }

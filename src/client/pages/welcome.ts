@@ -19,8 +19,6 @@ export async function pollOnce(): Promise<boolean> {
   if (data.status === "done") {
     setStepState("step-fetch", "complete");
     setStepState("step-done", "active");
-    const countEl = document.getElementById("sync-count");
-    if (countEl) countEl.textContent = `${data.count} repos`;
     return true;
   }
 
@@ -30,11 +28,6 @@ export async function pollOnce(): Promise<boolean> {
       label.textContent = "Something went wrong. Please try signing in again.";
     }
     return true;
-  }
-
-  const countEl = document.getElementById("sync-count");
-  if (countEl && data.count > 0) {
-    countEl.textContent = `${data.count} repos found`;
   }
 
   return false;
