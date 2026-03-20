@@ -31,6 +31,11 @@ const providerFactories: Record<string, () => EmailProvider> = {
       require("./email-providers/console") as typeof import("./email-providers/console");
     return new ConsoleLogProvider();
   },
+  resend: () => {
+    const { ResendProvider } =
+      require("./email-providers/resend") as typeof import("./email-providers/resend");
+    return new ResendProvider(process.env.RESEND_API_KEY || "");
+  },
 };
 
 export function registerEmailProvider(

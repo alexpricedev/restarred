@@ -12,14 +12,16 @@ const config: EnvConfig = {
     "GITHUB_CLIENT_ID",
     "GITHUB_CLIENT_SECRET",
     "ENCRYPTION_KEY",
+    "FROM_EMAIL",
+    "FROM_NAME",
   ],
   optional: [
     "PORT",
     "APP_NAME",
     "APP_URL",
     "APP_ORIGIN",
-    "FROM_EMAIL",
-    "FROM_NAME",
+    "EMAIL_PROVIDER",
+    "RESEND_API_KEY",
   ],
 };
 
