@@ -69,7 +69,7 @@ describe("digest service", () => {
 
     await seedStars(userId, 10);
 
-    const results = await selectReposForDigest(userId);
+    const results = await selectReposForDigest({ userId });
     expect(results).toHaveLength(3);
     for (const repo of results) {
       expect(repo.cycle).toBe(1);
@@ -81,14 +81,14 @@ describe("digest service", () => {
 
     await seedStars(userId, 2);
 
-    const results = await selectReposForDigest(userId);
+    const results = await selectReposForDigest({ userId });
     expect(results).toHaveLength(2);
   });
 
   test("selectReposForDigest returns empty array when user has no stars", async () => {
     const { selectReposForDigest } = await import("./digest");
 
-    const results = await selectReposForDigest(userId);
+    const results = await selectReposForDigest({ userId });
     expect(results).toEqual([]);
   });
 
@@ -102,7 +102,7 @@ describe("digest service", () => {
     const allIds: string[] = [];
 
     for (let i = 0; i < 3; i++) {
-      const results = await selectReposForDigest(userId);
+      const results = await selectReposForDigest({ userId });
       expect(results).toHaveLength(3);
       await recordDigestSelections(
         userId,
@@ -122,14 +122,14 @@ describe("digest service", () => {
 
     await seedStars(userId, 5);
 
-    const first = await selectReposForDigest(userId);
+    const first = await selectReposForDigest({ userId });
     expect(first).toHaveLength(3);
     await recordDigestSelections(
       userId,
       first.map((r) => ({ starId: r.starId, cycle: r.cycle })),
     );
 
-    const second = await selectReposForDigest(userId);
+    const second = await selectReposForDigest({ userId });
     expect(second).toHaveLength(3);
 
     const cycle1Count = second.filter((r) => r.cycle === 1).length;
@@ -144,7 +144,7 @@ describe("digest service", () => {
 
     await seedStars(userId, 10);
 
-    const selected = await selectReposForDigest(userId);
+    const selected = await selectReposForDigest({ userId });
     await recordDigestSelections(
       userId,
       selected.map((r) => ({ starId: r.starId, cycle: r.cycle })),
@@ -170,14 +170,14 @@ describe("digest service", () => {
 
     await seedStars(userId, 3);
 
-    const first = await selectReposForDigest(userId);
+    const first = await selectReposForDigest({ userId });
     expect(first).toHaveLength(3);
     await recordDigestSelections(
       userId,
       first.map((r) => ({ starId: r.starId, cycle: r.cycle })),
     );
 
-    const second = await selectReposForDigest(userId);
+    const second = await selectReposForDigest({ userId });
     expect(second).toHaveLength(3);
     for (const repo of second) {
       expect(repo.cycle).toBe(2);

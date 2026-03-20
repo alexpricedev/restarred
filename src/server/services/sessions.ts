@@ -87,8 +87,8 @@ export const getSessionContextFromDB = async (
         s.expires_at, s.last_activity_at, s.created_at,
         u.id as user_id_result, u.github_id, u.github_username,
         u.github_email, u.email_override, u.github_token,
-        u.digest_day, u.digest_hour, u.timezone, u.is_active,
-        u.role, u.created_at as user_created_at, u.updated_at as user_updated_at
+        u.digest_day, u.digest_hour, u.timezone, u.is_active, u.filter_own_repos,
+        u.role, u.sync_status, u.created_at as user_created_at, u.updated_at as user_updated_at
       FROM sessions s
       LEFT JOIN users u ON s.user_id = u.id
       WHERE s.id_hash = ${sessionIdHash}
@@ -114,6 +114,7 @@ export const getSessionContextFromDB = async (
       digest_hour: number | null;
       timezone: string | null;
       is_active: boolean | null;
+      filter_own_repos: boolean | null;
       role: "user" | "admin" | null;
       sync_status: "idle" | "syncing" | "done" | "error" | null;
       user_created_at: string | null;
@@ -134,6 +135,7 @@ export const getSessionContextFromDB = async (
           digest_hour: data.digest_hour as number,
           timezone: data.timezone as string,
           is_active: data.is_active as boolean,
+          filter_own_repos: (data.filter_own_repos as boolean) ?? true,
           role: (data.role as "user" | "admin") ?? "user",
           sync_status:
             (data.sync_status as "idle" | "syncing" | "done" | "error") ??

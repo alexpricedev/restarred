@@ -17,6 +17,7 @@ mock.module("../../middleware/auth", () => ({
         digest_hour: 9,
         timezone: "UTC",
         is_active: true,
+        filter_own_repos: true,
         role: "user",
         sync_status: "done",
         created_at: new Date(),
@@ -58,6 +59,7 @@ mock.module("../../services/users", () => ({
       digest_hour: 14,
       timezone: "America/New_York",
       is_active: true,
+      filter_own_repos: true,
       role: "user",
       sync_status: "done",
       created_at: new Date(),
@@ -112,6 +114,7 @@ describe("Account Controller", () => {
       digest_hour: "14",
       timezone: "America/New_York",
       is_active: "true",
+      filter_own_repos: "true",
     }).toString();
 
     const request = createBunRequest("http://localhost:3000/account", {
@@ -133,6 +136,7 @@ describe("Account Controller", () => {
       digest_hour: "8",
       timezone: "UTC",
       is_active: "true",
+      filter_own_repos: "true",
     }).toString();
 
     const request = createBunRequest("http://localhost:3000/account", {
@@ -166,6 +170,7 @@ describe("Account Controller", () => {
       digest_hour: "9",
       timezone: "UTC",
       is_active: "true",
+      filter_own_repos: "true",
     }).toString();
 
     const request = createBunRequest("http://localhost:3000/account", {

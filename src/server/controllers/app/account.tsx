@@ -83,6 +83,7 @@ async function handlePost(req: BunRequest): Promise<Response> {
     const digestHourRaw = formData.get("digest_hour") as string;
     const timezone = (formData.get("timezone") as string) ?? "";
     const isActiveRaw = formData.get("is_active") as string;
+    const filterOwnReposRaw = formData.get("filter_own_repos") as string;
 
     if (emailOverride && !EMAIL_REGEX.test(emailOverride)) {
       return renderAccountPage(ctx.user, ctx.sessionId, {
@@ -122,6 +123,7 @@ async function handlePost(req: BunRequest): Promise<Response> {
     }
 
     const isActive = isActiveRaw === "true";
+    const filterOwnRepos = filterOwnReposRaw !== "false";
 
     await updateUserPreferences(ctx.user.id, {
       emailOverride,
@@ -129,6 +131,7 @@ async function handlePost(req: BunRequest): Promise<Response> {
       digestHour,
       timezone,
       isActive,
+      filterOwnRepos,
     });
 
     log.info("account", `Preferences updated for user ${ctx.user.id}`);
@@ -169,7 +172,12 @@ async function handleTestEmail(req: BunRequest): Promise<Response> {
   }
 
   try {
-    const repos = await selectReposForDigest(ctx.user.id);
+    const repos = await selectReposForDigest({
+      userId: ctx.user.id,
+      excludeOwner: ctx.user.filter_own_repos
+        ? ctx.user.github_username
+        : undefined,
+    });
     const email = renderDigestEmail(ctx.user, repos, "test");
     const recipientEmail = ctx.user.email_override || ctx.user.github_email;
 

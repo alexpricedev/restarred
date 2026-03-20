@@ -9,6 +9,7 @@ export interface UserPreferences {
   digestHour: number;
   timezone: string;
   isActive: boolean;
+  filterOwnRepos: boolean;
 }
 
 export const getUsers = async (): Promise<User[]> => {
@@ -32,6 +33,7 @@ export const updateUserPreferences = async (
       digest_hour = ${prefs.digestHour},
       timezone = ${prefs.timezone},
       is_active = ${prefs.isActive},
+      filter_own_repos = ${prefs.filterOwnRepos},
       updated_at = CURRENT_TIMESTAMP
     WHERE id = ${userId}
     RETURNING *
