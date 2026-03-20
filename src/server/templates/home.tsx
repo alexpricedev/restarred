@@ -9,7 +9,7 @@ interface HomeProps {
 
 export const Home = ({ user, csrfToken }: HomeProps) => (
   <Layout
-    title="re:starred — Your Starred Repos, Resurfaced"
+    title="re:starred — A free weekly email for your forgotten GitHub stars"
     name="home"
     user={user}
     csrfToken={csrfToken}
