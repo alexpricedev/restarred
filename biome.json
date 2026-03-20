@@ -60,7 +60,7 @@
       }
     },
     {
-      "includes": ["src/server/database/cli.ts", "src/server/database/seed.ts", "src/server/test-utils/bootstrap.ts"],
+      "includes": ["src/server/database/cli.ts", "src/server/test-utils/bootstrap.ts"],
       "linter": {
         "rules": {
           "suspicious": {
