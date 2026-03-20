@@ -83,6 +83,7 @@
   .hero-actions {
     display: flex;
     flex-direction: column;
+    text-align: center;
     gap: 1.5rem;
 
     @media (width >= 768px) {
@@ -94,6 +95,7 @@
   .hero-cta {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
     background: var(--color-primary);
     color: var(--color-on-primary);
@@ -124,6 +126,11 @@
     letter-spacing: 0.15em;
     color: var(--color-text-tertiary);
     margin: 0;
+    text-align: left;
+
+    @media (width >= 768px) {
+      text-align: right;
+    }
   }
 
   /* ── Digest Preview ──────────────────────────────────── */
@@ -514,7 +521,7 @@
 
   .landing-cta h2 {
     font-family: var(--font-display);
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: -0.03em;

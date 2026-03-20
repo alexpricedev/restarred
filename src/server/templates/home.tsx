@@ -148,7 +148,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
             </>
           ) : (
             <>
-              <h2>READY TO REDISCOVER?</h2>
+              <h2>READY TO REDISCOVER YOUR STARS?</h2>
               <div className="cta-buttons">
                 <a href="/auth/github" className="cta-primary">
                   CONNECT GITHUB NOW
