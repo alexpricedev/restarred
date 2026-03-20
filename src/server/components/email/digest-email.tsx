@@ -68,17 +68,19 @@ export const DigestEmail = ({
                   >
                     <tr>
                       <td>
-                        <span
+                        <a
+                          href="https://restarred.dev"
                           style={{
                             fontFamily: "'Space Grotesk', sans-serif",
                             fontWeight: 700,
                             fontSize: "20px",
                             color: "#000000",
                             letterSpacing: "-0.02em",
+                            textDecoration: "none",
                           }}
                         >
                           re:starred
-                        </span>
+                        </a>
                       </td>
                       <td
                         style={{
