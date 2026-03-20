@@ -212,6 +212,15 @@ export const getDigestProgress = async (
   return { seen, total, cycle };
 };
 
+export const getDigestCount = async (userId: string): Promise<number> => {
+  const result = await db`
+    SELECT COUNT(DISTINCT cycle) AS count
+    FROM digest_history
+    WHERE user_id = ${userId}
+  `;
+  return Number(result[0].count);
+};
+
 export const recordDigestSelections = async (
   userId: string,
   selections: { starId: string; cycle: number }[],

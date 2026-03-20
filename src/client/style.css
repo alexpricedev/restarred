@@ -3,6 +3,7 @@
 @import "./pages/admin.css";
 @import "./pages/welcome.css";
 @import "./pages/account.css";
+@import "./pages/first.css";
 
 /* Component styles */
 @import "./components/layout.css";

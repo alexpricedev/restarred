@@ -55,6 +55,7 @@ mock.module("../../services/users", () => ({
 
 mock.module("../../services/digest", () => ({
   selectReposForDigest: mock(() => Promise.resolve([])),
+  recordDigestSelections: mock(() => Promise.resolve()),
 }));
 
 mock.module("../../services/digest-email", () => ({
@@ -84,7 +85,7 @@ describe("First Controller", () => {
     expect(html).toContain("SYNC COMPLETE");
     expect(html).toContain("42");
     expect(html).toContain("REPOS READY");
-    expect(html).toContain("Send my first digest now");
+    expect(html).toContain("SEND MY FIRST DIGEST NOW");
     expect(html).toContain("wait for my regular digest");
   });
 

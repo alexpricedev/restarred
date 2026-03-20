@@ -47,6 +47,11 @@ mock.module("../../services/stars", () => ({
   getStarCount: mock(() => Promise.resolve(42)),
 }));
 
+mock.module("../../services/digest", () => ({
+  getDigestCount: mock(() => Promise.resolve(1)),
+  selectReposForDigest: mock(() => Promise.resolve([])),
+}));
+
 mock.module("../../services/users", () => ({
   updateUserPreferences: mock(() =>
     Promise.resolve({

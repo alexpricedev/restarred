@@ -2,7 +2,7 @@ import type { BunRequest } from "bun";
 import { getSessionContext } from "../../middleware/auth";
 import { csrfProtection } from "../../middleware/csrf";
 import { createCsrfToken } from "../../services/csrf";
-import { selectReposForDigest } from "../../services/digest";
+import { getDigestCount, selectReposForDigest } from "../../services/digest";
 import { renderDigestEmail } from "../../services/digest-email";
 import { getEmailService } from "../../services/email";
 import { log } from "../../services/logger";
@@ -21,7 +21,10 @@ async function renderAccountPage(
   sessionId: string,
   flash?: { type: "success" | "error"; message: string },
 ): Promise<Response> {
-  const starCount = await getStarCount(user.id);
+  const [starCount, digestCount] = await Promise.all([
+    getStarCount(user.id),
+    getDigestCount(user.id),
+  ]);
   const csrfToken = await createCsrfToken(sessionId, "POST", "/account");
   const logoutCsrfToken = await createCsrfToken(
     sessionId,
@@ -37,6 +40,7 @@ async function renderAccountPage(
     <Account
       user={user}
       starCount={starCount}
+      digestCount={digestCount}
       csrfToken={csrfToken}
       logoutCsrfToken={logoutCsrfToken}
       testEmailCsrfToken={testEmailCsrfToken}

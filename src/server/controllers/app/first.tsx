@@ -2,7 +2,10 @@ import type { BunRequest } from "bun";
 import { getSessionContext } from "../../middleware/auth";
 import { csrfProtection } from "../../middleware/csrf";
 import { createCsrfToken } from "../../services/csrf";
-import { selectReposForDigest } from "../../services/digest";
+import {
+  recordDigestSelections,
+  selectReposForDigest,
+} from "../../services/digest";
 import { renderDigestEmail } from "../../services/digest-email";
 import { getEmailService } from "../../services/email";
 import { log } from "../../services/logger";
@@ -83,6 +86,11 @@ async function handleSend(req: BunRequest): Promise<Response> {
       html: email.html,
       text: email.text,
     });
+
+    await recordDigestSelections(
+      ctx.user.id,
+      repos.map((r) => ({ starId: r.starId, cycle: r.cycle })),
+    );
 
     log.info("first", `First digest sent to ${recipientEmail}`);
   } catch (error) {
