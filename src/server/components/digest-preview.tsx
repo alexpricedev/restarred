@@ -53,7 +53,12 @@ export const DigestPreview = () => (
       <div className="digest-header">
         <span className="digest-wordmark">re:starred</span>
         <span className="digest-date">
-          Your weekly digest &middot; March 19, 2026
+          Your weekly digest &middot;{" "}
+          {new Date().toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
         </span>
       </div>
       <div className="digest-body">
