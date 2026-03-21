@@ -20,13 +20,15 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
         <div className="landing-container">
           <span className="hero-badge">FREE FOREVER</span>
           <h1 className="hero-heading">
-            YOUR STARRED REPOS,
+            RESURFACE YOUR
             <br />
-            RESURFACED
+            FORGOTTEN STARS
           </h1>
           <div className="hero-grid">
             <div className="hero-description">
-              <p>3 of your GitHub stars, delivered to your inbox every week.</p>
+              <p>
+                A weekly email with 3 GitHub repos you starred and forgot about.
+              </p>
             </div>
             {!user && (
               <div className="hero-actions">
@@ -49,7 +51,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
                   CONNECT GITHUB
                 </a>
                 <p className="hero-proof">
-                  REDISCOVER THE REPOS YOU FORGOT YOU STARRED
+                  NO SIGNUP FORM. NO ADS. ONE EMAIL A WEEK.
                 </p>
               </div>
             )}
@@ -68,21 +70,20 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
       <section className="landing-protocol" id="how-it-works">
         <div className="landing-container">
           <div className="protocol-header">
-            <span className="protocol-label">THE PROTOCOL</span>
             <h2>HOW IT WORKS</h2>
           </div>
           <div className="protocol-grid">
             <div className="protocol-step">
               <div className="step-number">01</div>
-              <h3>CONNECT YOUR STARS</h3>
+              <h3>CONNECT YOUR GITHUB</h3>
               <p>
-                Sign in with GitHub. We pull in every repo you've ever starred
-                and start cycling through them.
+                We pull in every repo you've ever starred. No duplicates until
+                you've seen them all.
               </p>
             </div>
             <div className="protocol-step">
               <div className="step-number">02</div>
-              <h3>WEEKLY DIGEST</h3>
+              <h3>GET 3 REPOS, WEEKLY</h3>
               <p>
                 Each week, you get 3 of your starred repos in a single email. No
                 repeats until you've seen them all.
@@ -90,7 +91,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
             </div>
             <div className="protocol-step">
               <div className="step-number">03</div>
-              <h3>REDISCOVER</h3>
+              <h3>REVISIT WHAT'S WORTH KEEPING</h3>
               <p>
                 See what's changed — activity status, latest commits, star
                 count. Revisit the ones worth keeping.
@@ -117,13 +118,10 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
             <div className="bento-stack">
               <div className="bento-dark">
                 <h4>NO NOISE.</h4>
-                <p>
-                  One email. Three repos. That's it. No advertisements, no
-                  tracking, no social features.
-                </p>
+                <p>One email. Three repos. No ads, no tracking, no noise.</p>
               </div>
               <div className="bento-grey">
-                <h4>SECURE BY DESIGN</h4>
+                <h4>SECURE BY DESIGN.</h4>
                 <p>
                   Read-only access to public stars. Your data is never sold or
                   used for training.
@@ -148,7 +146,7 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
             </>
           ) : (
             <>
-              <h2>READY TO REDISCOVER YOUR STARS?</h2>
+              <h2>YOUR STARS ARE WAITING</h2>
               <div className="cta-buttons">
                 <a href="/auth/github" className="cta-primary">
                   CONNECT GITHUB NOW
