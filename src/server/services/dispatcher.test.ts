@@ -49,10 +49,12 @@ describe("dispatcher service", () => {
     mockHasPendingJob.mockClear();
     mockHasPendingJob.mockImplementation(() => Promise.resolve(false));
 
-    const currentDow = Number(
-      (await db`SELECT EXTRACT(DOW FROM now() AT TIME ZONE 'UTC') AS dow`)[0]
-        .dow,
-    );
+    const currentDow =
+      Number(
+        (
+          await db`SELECT EXTRACT(ISODOW FROM now() AT TIME ZONE 'UTC') AS dow`
+        )[0].dow,
+      ) - 1;
     const currentHour = Number(
       (await db`SELECT EXTRACT(HOUR FROM now() AT TIME ZONE 'UTC') AS hour`)[0]
         .hour,
@@ -99,11 +101,12 @@ describe("dispatcher service", () => {
   });
 
   test("getUsersDueForSync returns users whose digest is due in 30 minutes", async () => {
-    const thirtyMinDow = Number(
-      (
-        await db`SELECT EXTRACT(DOW FROM (now() + interval '30 minutes') AT TIME ZONE 'UTC') AS dow`
-      )[0].dow,
-    );
+    const thirtyMinDow =
+      Number(
+        (
+          await db`SELECT EXTRACT(ISODOW FROM (now() + interval '30 minutes') AT TIME ZONE 'UTC') AS dow`
+        )[0].dow,
+      ) - 1;
     const thirtyMinHour = Number(
       (
         await db`SELECT EXTRACT(HOUR FROM (now() + interval '30 minutes') AT TIME ZONE 'UTC') AS hour`
