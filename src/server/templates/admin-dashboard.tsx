@@ -26,6 +26,7 @@ const StatSection = (props: { title: string; children: React.ReactNode }) => (
 const ROLE_OPTIONS: { value: RoleFilter; label: string }[] = [
   { value: "user", label: "Users" },
   { value: "admin", label: "Admins" },
+  { value: "guest", label: "Guests" },
   { value: "all", label: "All" },
 ];
 
@@ -93,6 +94,11 @@ export const AdminDashboard = (props: {
         <StatCard
           label="Settings changes"
           value={props.stats.settingsChanges}
+        />
+        <StatCard label="Homepage views" value={props.stats.homepageViews} />
+        <StatCard
+          label="Homepage this week"
+          value={props.stats.homepageViewsThisWeek}
         />
       </StatSection>
 
