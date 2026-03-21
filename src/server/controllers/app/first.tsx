@@ -85,6 +85,7 @@ async function handleSend(req: BunRequest): Promise<Response> {
       subject: email.subject,
       html: email.html,
       text: email.text,
+      headers: email.headers,
     });
 
     await recordDigestSelections(

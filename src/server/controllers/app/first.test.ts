@@ -63,6 +63,10 @@ mock.module("../../services/digest-email", () => ({
     subject: "Test Subject",
     html: "<p>Test</p>",
     text: "Test",
+    headers: {
+      "List-Unsubscribe": "<http://localhost:3000/unsubscribe?token=first>",
+      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+    },
   })),
 }));
 

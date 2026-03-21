@@ -194,6 +194,7 @@ async function handleTestEmail(req: BunRequest): Promise<Response> {
       subject: email.subject,
       html: email.html,
       text: email.text,
+      headers: email.headers,
     });
 
     log.info("account", `Test email sent to ${recipientEmail}`);

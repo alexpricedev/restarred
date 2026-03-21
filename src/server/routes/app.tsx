@@ -1,4 +1,4 @@
-import { account, first, home, welcome } from "../controllers/app";
+import { account, first, home, unsubscribe, welcome } from "../controllers/app";
 import { callback, github, logout } from "../controllers/auth";
 import { createRouteHandler } from "../utils/route-handler";
 
@@ -19,5 +19,9 @@ export const appRoutes = {
   }),
   "/auth/logout": createRouteHandler({
     POST: logout.create,
+  }),
+  "/unsubscribe": createRouteHandler({
+    GET: unsubscribe.index,
+    POST: unsubscribe.confirm,
   }),
 };
