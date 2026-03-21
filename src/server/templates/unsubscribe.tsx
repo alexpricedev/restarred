@@ -5,9 +5,14 @@ type UnsubscribeState = "confirm" | "success" | "error";
 interface UnsubscribeProps {
   state: UnsubscribeState;
   token?: string;
+  isAuthenticated?: boolean;
 }
 
-export const Unsubscribe = ({ state, token }: UnsubscribeProps) => (
+export const Unsubscribe = ({
+  state,
+  token,
+  isAuthenticated,
+}: UnsubscribeProps) => (
   <Layout
     title="re:starred — Unsubscribe"
     description="Unsubscribe from re:starred digest emails."
@@ -39,10 +44,15 @@ export const Unsubscribe = ({ state, token }: UnsubscribeProps) => (
               CHANGED YOUR MIND?
             </span>
             <p className="unsubscribe-reactivate-text">
-              Sign in to re-enable your weekly digest at any time.
+              {isAuthenticated
+                ? "You can re-enable your weekly digest at any time."
+                : "Sign in to re-enable your weekly digest at any time."}
             </p>
-            <a href="/" className="unsubscribe-reactivate-link">
-              Go to re:starred
+            <a
+              href={isAuthenticated ? "/account" : "/"}
+              className="unsubscribe-reactivate-link"
+            >
+              {isAuthenticated ? "Go to account settings" : "Go to re:starred"}
               <svg
                 width="14"
                 height="14"
@@ -69,10 +79,15 @@ export const Unsubscribe = ({ state, token }: UnsubscribeProps) => (
           </p>
           <div className="unsubscribe-reactivate">
             <p className="unsubscribe-reactivate-text">
-              Sign in to manage your digest preferences.
+              {isAuthenticated
+                ? "You can manage your digest preferences from your account."
+                : "Sign in to manage your digest preferences."}
             </p>
-            <a href="/" className="unsubscribe-reactivate-link">
-              Go to re:starred
+            <a
+              href={isAuthenticated ? "/account" : "/"}
+              className="unsubscribe-reactivate-link"
+            >
+              {isAuthenticated ? "Go to account settings" : "Go to re:starred"}
               <svg
                 width="14"
                 height="14"

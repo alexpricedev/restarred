@@ -13,6 +13,14 @@ mock.module("../../services/unsubscribe", () => ({
   }),
 }));
 
+mock.module("../../middleware/auth", () => ({
+  getSessionContext: mock(() =>
+    Promise.resolve({
+      isAuthenticated: false,
+    }),
+  ),
+}));
+
 mock.module("../../services/logger", () => ({
   log: { info: mock(() => {}), warn: mock(() => {}), error: mock(() => {}) },
 }));
