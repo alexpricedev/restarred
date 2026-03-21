@@ -35,13 +35,28 @@ export const Unsubscribe = ({ state, token }: UnsubscribeProps) => (
             You won't receive any more digest emails.
           </p>
           <div className="unsubscribe-reactivate">
-            <span className="unsubscribe-reactivate-label">CHANGED YOUR MIND?</span>
+            <span className="unsubscribe-reactivate-label">
+              CHANGED YOUR MIND?
+            </span>
             <p className="unsubscribe-reactivate-text">
-              You can re-enable your weekly digest at any time.
+              Sign in to re-enable your weekly digest at any time.
             </p>
-            <a href="/account" className="unsubscribe-reactivate-link">
-              Go to account settings
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+            <a href="/" className="unsubscribe-reactivate-link">
+              Go to re:starred
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
             </a>
           </div>
         </div>
@@ -54,11 +69,24 @@ export const Unsubscribe = ({ state, token }: UnsubscribeProps) => (
           </p>
           <div className="unsubscribe-reactivate">
             <p className="unsubscribe-reactivate-text">
-              You can manage your digest preferences from your account.
+              Sign in to manage your digest preferences.
             </p>
-            <a href="/account" className="unsubscribe-reactivate-link">
-              Go to account settings
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+            <a href="/" className="unsubscribe-reactivate-link">
+              Go to re:starred
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
             </a>
           </div>
         </div>
