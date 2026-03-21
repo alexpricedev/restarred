@@ -1,5 +1,7 @@
 import type { User } from "./auth";
 import { db } from "./database";
+import type { UserRole } from "./events";
+import { trackEvent } from "./events";
 import {
   claimNextJob,
   completeJob,
@@ -94,6 +96,15 @@ export function startDispatcher(): () => void {
       const job = await claimNextJob();
       if (!job) return;
 
+      let jobRole: UserRole | undefined;
+      try {
+        const userRows =
+          await db`SELECT role FROM users WHERE id = ${job.user_id}`;
+        jobRole = userRows[0]?.role as UserRole | undefined;
+      } catch {
+        /* role lookup is best-effort */
+      }
+
       try {
         await executeJob(job);
         await completeJob(job.id);
@@ -102,6 +113,14 @@ export function startDispatcher(): () => void {
           job.id,
           error instanceof Error ? error.message : String(error),
         );
+        if (job.type === "send_digest") {
+          trackEvent("digest_failed", { role: jobRole }).catch((err) => {
+            log.warn(
+              "dispatcher",
+              `Failed to track digest_failed event: ${err}`,
+            );
+          });
+        }
       }
     } catch (error) {
       log.error(

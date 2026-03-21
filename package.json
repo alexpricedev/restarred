@@ -32,6 +32,7 @@
     "generate:pepper": "bun -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"",
     "migrate:up": "bun run src/server/database/cli.ts up",
     "migrate:status": "bun run src/server/database/cli.ts status",
+    "migrate:down": "bun run src/server/database/cli.ts down",
     "migrate:create": "bun run src/server/database/cli.ts create",
     "prepare": "husky"
   },

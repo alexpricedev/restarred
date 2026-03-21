@@ -154,16 +154,15 @@ describe("Admin Dashboard Controller", () => {
     expect(response.status).toBe(200);
     const html = await response.text();
     expect(html).toContain("Admin");
-    expect(html).toContain("admin@example.com");
   });
 
-  test("redirects unauthenticated user to /auth/github", async () => {
+  test("redirects unauthenticated user to /", async () => {
     const request = createBunRequest("http://localhost:3000/admin");
 
     const response = await admin.index(request);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get("location")).toBe("/auth/github");
+    expect(response.headers.get("location")).toBe("/");
   });
 
   test("redirects non-admin user to /", async () => {
@@ -182,12 +181,12 @@ describe("Admin Dashboard Controller", () => {
     expect(response.headers.get("location")).toBe("/");
   });
 
-  test("renders users table with user data", async () => {
+  test("renders stat cards with counts", async () => {
     const adminUser = await createTestUser(db, {
       githubEmail: "admin@example.com",
       role: "admin",
     });
-    await createTestUser(db, { githubEmail: "regular@example.com" });
+    await createTestUser(db, { githubEmail: "user1@example.com" });
     const sessionId = await createAuthenticatedSession(adminUser.id);
 
     const request = createBunRequest("http://localhost:3000/admin", {
@@ -197,9 +196,53 @@ describe("Admin Dashboard Controller", () => {
     const response = await admin.index(request);
     const html = await response.text();
 
-    expect(html).toContain("admin@example.com");
-    expect(html).toContain("regular@example.com");
-    expect(html).toContain("admin");
-    expect(html).toContain("user");
+    expect(html).toContain("Lifetime signups");
+    expect(html).toContain("Current users");
+    expect(html).toContain("Active users");
+    expect(html).toContain("Total logins");
+    expect(html).toContain("Account views");
+    expect(html).toContain("Settings changes");
+    expect(html).toContain("Digests sent");
+    expect(html).toContain("Digest failures");
+    expect(html).toContain("Stars synced");
+    expect(html).toContain("Sync failures");
+    expect(html).toContain("Unsubscribes");
+    expect(html).toContain("Resubscribes");
+  });
+
+  test("renders role filter with user selected by default", async () => {
+    const adminUser = await createTestUser(db, {
+      githubEmail: "admin@example.com",
+      role: "admin",
+    });
+    const sessionId = await createAuthenticatedSession(adminUser.id);
+
+    const request = createBunRequest("http://localhost:3000/admin", {
+      headers: { cookie: `session_id=${sessionId}` },
+    });
+
+    const response = await admin.index(request);
+    const html = await response.text();
+
+    expect(html).toContain("role-filter");
+    expect(html).toContain('class="role-filter-link active"');
+    expect(html).toContain("Users");
+    expect(html).toContain("Admins");
+    expect(html).toContain("All");
+  });
+
+  test("accepts role query parameter", async () => {
+    const adminUser = await createTestUser(db, {
+      githubEmail: "admin@example.com",
+      role: "admin",
+    });
+    const sessionId = await createAuthenticatedSession(adminUser.id);
+
+    const request = createBunRequest("http://localhost:3000/admin?role=all", {
+      headers: { cookie: `session_id=${sessionId}` },
+    });
+
+    const response = await admin.index(request);
+    expect(response.status).toBe(200);
   });
 });

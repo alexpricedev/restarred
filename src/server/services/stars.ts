@@ -1,10 +1,13 @@
 import { db } from "./database";
+import type { UserRole } from "./events";
+import { trackEvent } from "./events";
 import { fetchAllStarredRepos } from "./github-api";
 import { log } from "./logger";
 
 export const syncUserStars = async (
   userId: string,
   accessToken: string,
+  role?: UserRole,
 ): Promise<void> => {
   await db`UPDATE users SET sync_status = 'syncing' WHERE id = ${userId}`;
 
@@ -55,8 +58,17 @@ export const syncUserStars = async (
     `;
 
     await db`UPDATE users SET sync_status = 'done' WHERE id = ${userId}`;
+
+    trackEvent("stars_synced", { count: repos.length }, { role }).catch(
+      (err) => {
+        log.warn("events", `Failed to track stars_synced: ${err}`);
+      },
+    );
   } catch (error) {
     await db`UPDATE users SET sync_status = 'error' WHERE id = ${userId}`;
+    trackEvent("star_sync_failed", { role }).catch((err) => {
+      log.warn("events", `Failed to track star_sync_failed: ${err}`);
+    });
     throw error;
   }
 };

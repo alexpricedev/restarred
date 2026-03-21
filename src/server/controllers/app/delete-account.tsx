@@ -3,6 +3,7 @@ import { getSessionContext } from "../../middleware/auth";
 import { csrfProtection } from "../../middleware/csrf";
 import { createCsrfToken } from "../../services/csrf";
 import { decrypt } from "../../services/encryption";
+import { trackEvent } from "../../services/events";
 import { revokeGitHubGrant } from "../../services/github-api";
 import { log } from "../../services/logger";
 import { clearSessionCookie, setSessionCookie } from "../../services/sessions";
@@ -65,6 +66,9 @@ async function handlePost(req: BunRequest): Promise<Response> {
 
     await deleteUser(ctx.user.id);
     clearSessionCookie(req);
+    trackEvent("account_deletion", { role: ctx.user.role }).catch((err) => {
+      log.warn("events", `Failed to track account_deletion: ${err}`);
+    });
 
     log.info("account", `Account deleted for user ${ctx.user.github_username}`);
 
