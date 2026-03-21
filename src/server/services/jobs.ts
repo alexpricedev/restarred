@@ -1,4 +1,3 @@
-import { computeHMAC } from "../utils/crypto";
 import type { User } from "./auth";
 import { db } from "./database";
 import { recordDigestSelections, selectReposForDigest } from "./digest";
@@ -8,6 +7,7 @@ import { decrypt } from "./encryption";
 import { trackEvent } from "./events";
 import { log } from "./logger";
 import { syncUserStars } from "./stars";
+import { generateUnsubscribeToken } from "./unsubscribe";
 
 export interface Job {
   id: string;
@@ -188,12 +188,8 @@ export async function executeSendDigest(job: Job): Promise<void> {
     repos.map((r) => ({ starId: r.starId, cycle: r.cycle })),
   );
 
-  const unsubscribeToken = `${job.user_id}:${computeHMAC(job.user_id)}`;
-  const { subject, html, text } = renderDigestEmail(
-    user,
-    repos,
-    unsubscribeToken,
-  );
+  const unsubscribeToken = generateUnsubscribeToken(job.user_id);
+  const email = renderDigestEmail(user, repos, unsubscribeToken);
 
   const emailService = getEmailService();
   await emailService.send({
@@ -205,9 +201,10 @@ export async function executeSendDigest(job: Job): Promise<void> {
       email: process.env.FROM_EMAIL as string,
       name: process.env.FROM_NAME as string,
     },
-    subject,
-    html,
-    text,
+    subject: email.subject,
+    html: email.html,
+    text: email.text,
+    headers: email.headers,
   });
 
   trackEvent("digest_sent", { role: user.role }).catch((err) => {

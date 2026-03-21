@@ -44,6 +44,11 @@ const mockRenderDigestEmail = mock(() => ({
   subject: "Your weekly digest",
   html: "<h1>Digest</h1>",
   text: "Digest",
+  headers: {
+    "List-Unsubscribe":
+      "<https://app.restarred.dev/unsubscribe?token=mock-token>",
+    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+  },
 }));
 mock.module("./digest-email", () => ({
   renderDigestEmail: mockRenderDigestEmail,
@@ -55,9 +60,11 @@ mock.module("./email", () => ({
   getEmailService: mockGetEmailService,
 }));
 
-const mockComputeHMAC = mock((value: string) => `hmac-${value}`);
-mock.module("../utils/crypto", () => ({
-  computeHMAC: mockComputeHMAC,
+const mockGenerateUnsubscribeToken = mock(
+  (userId: string) => `mock-unsub-token-${userId}`,
+);
+mock.module("./unsubscribe", () => ({
+  generateUnsubscribeToken: mockGenerateUnsubscribeToken,
 }));
 
 import { db } from "./database";
@@ -270,7 +277,7 @@ describe("jobs service", () => {
     mockRecordDigestSelections.mockClear();
     mockRenderDigestEmail.mockClear();
     mockEmailSend.mockClear();
-    mockComputeHMAC.mockClear();
+    mockGenerateUnsubscribeToken.mockClear();
     mockGetEmailService.mockClear();
 
     mockSelectReposForDigest.mockImplementation(() =>
@@ -291,7 +298,7 @@ describe("jobs service", () => {
     expect(mockRecordDigestSelections).toHaveBeenCalledWith(userId, [
       { starId: "star-1", cycle: 1 },
     ]);
-    expect(mockComputeHMAC).toHaveBeenCalledWith(userId);
+    expect(mockGenerateUnsubscribeToken).toHaveBeenCalledWith(userId);
     expect(mockRenderDigestEmail).toHaveBeenCalledTimes(1);
     expect(mockEmailSend).toHaveBeenCalledTimes(1);
     expect(mockEmailSend).toHaveBeenCalledWith({
@@ -300,6 +307,11 @@ describe("jobs service", () => {
       subject: "Your weekly digest",
       html: "<h1>Digest</h1>",
       text: "Digest",
+      headers: {
+        "List-Unsubscribe":
+          "<https://app.restarred.dev/unsubscribe?token=mock-token>",
+        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+      },
     });
   });
 
