@@ -77,6 +77,36 @@
   text-transform: uppercase;
 }
 
+[data-page="account"] .account-paused-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+[data-page="account"] .account-paused-banner p {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+[data-page="account"] .account-paused-banner button {
+  background: var(--color-success);
+  color: #fff;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+[data-page="account"] .account-paused-banner button:hover,
+[data-page="account"] .account-paused-banner button:focus {
+  background: #1b5e3b;
+}
+
 [data-page="account"] .account-form {
   display: flex;
   flex-direction: column;
