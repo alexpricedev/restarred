@@ -4,6 +4,8 @@
 
 Most developers star GitHub repos and never look at them again. re:starred resurfaces those forgotten stars as a weekly email digest — 3 of your starred repos per week, cycling through your entire list before repeating. No repo is shown twice until you've seen them all.
 
+https://restarred.dev
+
 ---
 
 ## How It Works
@@ -11,6 +13,14 @@ Most developers star GitHub repos and never look at them again. re:starred resur
 1. **Connect GitHub** — sign in with GitHub OAuth, we index your starred repos
 2. **Weekly digest** — every week, our algorithm picks 3 repos you starred and forgot about
 3. **Re-engage** — read the summary, check recent activity, decide if it stays or gets archived
+
+---
+
+## Support the development
+
+I build re:starred to help developers rediscover the GitHub repos they once thought were worth remembering. It’s free forever, open source, and has no ads. If you’ve found a gem in your inbox, consider buying me a coffee.
+
+[![BuyMeACoffee](https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-yellow.svg)](https://www.buymeacoffee.com/alexpricedev)
 
 ---
 
