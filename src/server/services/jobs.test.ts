@@ -45,8 +45,7 @@ const mockRenderDigestEmail = mock(() => ({
   html: "<h1>Digest</h1>",
   text: "Digest",
   headers: {
-    "List-Unsubscribe":
-      "<https://app.restarred.dev/unsubscribe?token=mock-token>",
+    "List-Unsubscribe": "<http://localhost:3000/unsubscribe?token=mock-token>",
     "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
   },
 }));
@@ -309,7 +308,7 @@ describe("jobs service", () => {
       text: "Digest",
       headers: {
         "List-Unsubscribe":
-          "<https://app.restarred.dev/unsubscribe?token=mock-token>",
+          "<http://localhost:3000/unsubscribe?token=mock-token>",
         "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
       },
     });
