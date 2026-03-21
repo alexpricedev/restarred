@@ -3,6 +3,7 @@ import { adminRoutes } from "./routes/admin";
 import { apiRoutes } from "./routes/api";
 import { appRoutes } from "./routes/app";
 import { handleAssetRequest, initAssets } from "./services/assets";
+import { startDispatcher } from "./services/dispatcher";
 import { log } from "./services/logger";
 import { validateEnv } from "./utils/env";
 
@@ -40,3 +41,5 @@ const server = Bun.serve({
 });
 
 log.info("server", `Listening on port ${server.port}`);
+
+startDispatcher();
