@@ -11,6 +11,7 @@ import { getEmailService } from "../../services/email";
 import { log } from "../../services/logger";
 import { setSessionCookie } from "../../services/sessions";
 import { getStarCount } from "../../services/stars";
+import { generateUnsubscribeToken } from "../../services/unsubscribe";
 import { markFirstViewed } from "../../services/users";
 import { First } from "../../templates/first";
 import { redirect, render } from "../../utils/response";
@@ -73,7 +74,8 @@ async function handleSend(req: BunRequest): Promise<Response> {
         ? ctx.user.github_username
         : undefined,
     });
-    const email = renderDigestEmail(ctx.user, repos, "first");
+    const unsubscribeToken = generateUnsubscribeToken(ctx.user.id);
+    const email = renderDigestEmail(ctx.user, repos, unsubscribeToken);
     const recipientEmail = ctx.user.email_override || ctx.user.github_email;
 
     await getEmailService().send({

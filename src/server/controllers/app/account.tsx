@@ -8,6 +8,7 @@ import { getEmailService } from "../../services/email";
 import { log } from "../../services/logger";
 import { setSessionCookie } from "../../services/sessions";
 import { getStarCount } from "../../services/stars";
+import { generateUnsubscribeToken } from "../../services/unsubscribe";
 import type { User } from "../../services/users";
 import { updateUserPreferences } from "../../services/users";
 import { Account } from "../../templates/account";
@@ -182,7 +183,8 @@ async function handleTestEmail(req: BunRequest): Promise<Response> {
         ? ctx.user.github_username
         : undefined,
     });
-    const email = renderDigestEmail(ctx.user, repos, "test");
+    const unsubscribeToken = generateUnsubscribeToken(ctx.user.id);
+    const email = renderDigestEmail(ctx.user, repos, unsubscribeToken);
     const recipientEmail = ctx.user.email_override || ctx.user.github_email;
 
     await getEmailService().send({

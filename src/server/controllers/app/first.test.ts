@@ -53,6 +53,10 @@ mock.module("../../services/users", () => ({
   markFirstViewed: mock(() => Promise.resolve()),
 }));
 
+mock.module("../../services/unsubscribe", () => ({
+  generateUnsubscribeToken: mock(() => "mock-unsubscribe-token"),
+}));
+
 mock.module("../../services/digest", () => ({
   selectReposForDigest: mock(() => Promise.resolve([])),
   recordDigestSelections: mock(() => Promise.resolve()),
