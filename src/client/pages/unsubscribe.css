@@ -72,23 +72,22 @@
   opacity: 0.6;
 }
 
-[data-page="unsubscribe"] .unsubscribe-delete {
-  margin-top: 1.5rem;
-  text-align: center;
+[data-page="unsubscribe"] .unsubscribe-divider {
+  border: none;
+  border-top: 1px solid var(--color-surface-container-highest);
+  margin: 1.25rem 0;
 }
 
 [data-page="unsubscribe"] .unsubscribe-delete-text {
   font-size: 0.8125rem;
   color: var(--color-text-tertiary);
-  margin: 0 0 0.75rem;
+  margin: 0;
 }
 
 [data-page="unsubscribe"] .unsubscribe-delete-link {
-  font-family: var(--font-main);
-  font-size: 0.8125rem;
-  font-weight: 600;
   color: var(--color-danger);
   text-decoration: none;
+  font-weight: 600;
   transition: opacity 150ms ease-out;
 }
 
