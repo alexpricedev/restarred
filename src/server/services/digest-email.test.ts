@@ -178,15 +178,17 @@ describe("formatStarCount", () => {
 });
 
 describe("generateSubjectLine", () => {
-  test("empty repos returns fallback", () => {
-    expect(generateSubjectLine([])).toBe("re:starred — your weekly digest");
+  test("empty repos throws", () => {
+    expect(() => generateSubjectLine([])).toThrow(
+      "Cannot generate subject for empty repos",
+    );
   });
 
-  test("single repo uses just the name", () => {
+  test("single repo shows name and star count", () => {
     const repos = [
       makeRepo({ fullName: "facebook/react", stargazersCount: 200000 }),
     ];
-    expect(generateSubjectLine(repos)).toBe("re:starred — facebook/react");
+    expect(generateSubjectLine(repos)).toBe("facebook/react — ★ 200k");
   });
 
   test("two repos uses singular other", () => {
@@ -195,7 +197,7 @@ describe("generateSubjectLine", () => {
       makeRepo({ fullName: "vuejs/vue", stargazersCount: 190000 }),
     ];
     expect(generateSubjectLine(repos)).toBe(
-      "re:starred — facebook/react and 1 other",
+      "facebook/react and 1 other — from your stars",
     );
   });
 
@@ -206,7 +208,7 @@ describe("generateSubjectLine", () => {
       makeRepo({ fullName: "angular/angular", stargazersCount: 80000 }),
     ];
     expect(generateSubjectLine(repos)).toBe(
-      "re:starred — facebook/react and 2 others",
+      "facebook/react and 2 others — from your stars",
     );
   });
 
@@ -217,7 +219,7 @@ describe("generateSubjectLine", () => {
       makeRepo({ fullName: "medium/tool", stargazersCount: 5000 }),
     ];
     expect(generateSubjectLine(repos)).toBe(
-      "re:starred — big/framework and 2 others",
+      "big/framework and 2 others — from your stars",
     );
   });
 });
@@ -325,10 +327,10 @@ describe("renderDigestEmail", () => {
     expect(result.text).toBeDefined();
   });
 
-  test("subject contains re:starred and top repo name", () => {
+  test("subject contains top repo name", () => {
     const result = renderDigestEmail(mockUser, repos, "token-123");
-    expect(result.subject).toContain("re:starred");
     expect(result.subject).toContain("another-repo");
+    expect(result.subject).toContain("from your stars");
   });
 
   test("html contains DOCTYPE and key content", () => {

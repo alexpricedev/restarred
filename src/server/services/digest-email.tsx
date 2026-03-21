@@ -126,15 +126,19 @@ export const formatStarCount = (count: number): string => {
 };
 
 export const generateSubjectLine = (repos: SelectedRepo[]): string => {
-  if (repos.length === 0) return "re:starred — your weekly digest";
+  if (repos.length === 0)
+    throw new Error("Cannot generate subject for empty repos");
 
   const top = repos.reduce((best, repo) =>
     repo.stargazersCount > best.stargazersCount ? repo : best,
   );
 
-  if (repos.length === 1) return `re:starred — ${top.fullName}`;
-  if (repos.length === 2) return `re:starred — ${top.fullName} and 1 other`;
-  return `re:starred — ${top.fullName} and ${repos.length - 1} others`;
+  const stars = `★ ${formatStarCount(top.stargazersCount)}`;
+
+  if (repos.length === 1) return `${top.fullName} — ${stars}`;
+  if (repos.length === 2)
+    return `${top.fullName} and 1 other — from your stars`;
+  return `${top.fullName} and ${repos.length - 1} others — from your stars`;
 };
 
 export const renderDigestPlainText = (
@@ -143,7 +147,7 @@ export const renderDigestPlainText = (
   unsubscribeUrl: string,
 ): string => {
   const lines: string[] = [
-    `re:starred — ${repos.length} repos from your stars`,
+    `${repos.length} repos from your stars`,
     "",
     `Here are ${repos.length} repos from your stars worth revisiting.`,
     "",
