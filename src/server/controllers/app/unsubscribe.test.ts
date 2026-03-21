@@ -79,11 +79,27 @@ describe("Unsubscribe Controller", () => {
     });
 
     test("handles RFC 8058 one-click unsubscribe (List-Unsubscribe=One-Click)", async () => {
+      mockDeactivateUser.mockClear();
       const request = createBunRequest(
         "http://localhost:3000/unsubscribe?token=valid-token",
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "List-Unsubscribe=One-Click",
+        },
+      );
+      const response = await unsubscribe.confirm(request);
+
+      expect(response.status).toBe(200);
+      expect(mockDeactivateUser).toHaveBeenCalledWith("user-123");
+    });
+
+    test("handles RFC 8058 one-click unsubscribe without Content-Type header", async () => {
+      mockDeactivateUser.mockClear();
+      const request = createBunRequest(
+        "http://localhost:3000/unsubscribe?token=valid-token",
+        {
+          method: "POST",
           body: "List-Unsubscribe=One-Click",
         },
       );

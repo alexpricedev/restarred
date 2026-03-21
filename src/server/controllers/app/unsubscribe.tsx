@@ -24,14 +24,33 @@ const handleGet = async (req: BunRequest): Promise<Response> => {
 
 const handlePost = async (req: BunRequest): Promise<Response> => {
   const url = new URL(req.url);
-  const formData = await req.formData();
 
-  const token =
-    (formData.get("token") as string) || url.searchParams.get("token") || "";
+  let token = url.searchParams.get("token") || "";
+  let tokenSource = token ? "query" : "none";
+
+  if (!token) {
+    try {
+      const formData = await req.formData();
+      token = (formData.get("token") as string) || "";
+      if (token) tokenSource = "form";
+    } catch {
+      log.warn(
+        "unsubscribe",
+        `formData() failed — Content-Type: ${req.headers.get("content-type") ?? "missing"}`,
+      );
+    }
+  }
+
+  log.info(
+    "unsubscribe",
+    `POST /unsubscribe — token source: ${tokenSource}, has token: ${!!token}`,
+  );
+
   const userId = verifyUnsubscribeToken(token);
   const ctx = await getSessionContext(req);
 
   if (!userId) {
+    log.warn("unsubscribe", `invalid token — token source: ${tokenSource}`);
     return render(
       <Unsubscribe state="error" isAuthenticated={ctx.isAuthenticated} />,
     );
