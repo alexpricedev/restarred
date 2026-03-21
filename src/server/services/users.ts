@@ -1,3 +1,7 @@
+import {
+  type DatabaseMutationResult,
+  hasAffectedRows,
+} from "../utils/database";
 import type { User } from "./auth";
 import { db } from "./database";
 
@@ -58,4 +62,9 @@ export const deactivateUser = async (userId: string): Promise<void> => {
     UPDATE users SET is_active = false, updated_at = CURRENT_TIMESTAMP
     WHERE id = ${userId}
   `;
+};
+
+export const deleteUser = async (userId: string): Promise<boolean> => {
+  const result = await db`DELETE FROM users WHERE id = ${userId}`;
+  return hasAffectedRows(result as DatabaseMutationResult);
 };
