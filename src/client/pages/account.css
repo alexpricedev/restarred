@@ -242,8 +242,9 @@
 
 [data-page="account"] .account-danger-zone {
   margin-top: 5rem;
-  padding-top: 3rem;
-  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
 }
 
 [data-page="account"] .danger-zone-label {
