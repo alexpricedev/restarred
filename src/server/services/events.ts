@@ -2,6 +2,8 @@ import { db } from "./database";
 
 export type UserRole = "user" | "admin";
 
+export type EventRole = "user" | "admin" | "guest";
+
 export type EventType =
   | "signup"
   | "login"
@@ -13,7 +15,8 @@ export type EventType =
   | "unsubscribe"
   | "resubscribe"
   | "stars_synced"
-  | "star_sync_failed";
+  | "star_sync_failed"
+  | "homepage_view";
 
 export interface EventMetadata {
   signup: never;
@@ -27,6 +30,7 @@ export interface EventMetadata {
   resubscribe: never;
   stars_synced: { count: number };
   star_sync_failed: never;
+  homepage_view: never;
 }
 
 type HasMetadata<T extends EventType> = EventMetadata[T] extends never
@@ -34,22 +38,22 @@ type HasMetadata<T extends EventType> = EventMetadata[T] extends never
   : EventMetadata[T];
 
 type TrackEventArgs<T extends EventType> = HasMetadata<T> extends never
-  ? [options?: { role?: UserRole }]
-  : [metadata: HasMetadata<T>, options?: { role?: UserRole }];
+  ? [options?: { role?: EventRole }]
+  : [metadata: HasMetadata<T>, options?: { role?: EventRole }];
 
 export async function trackEvent<T extends EventType>(
   type: T,
   ...args: TrackEventArgs<T>
 ): Promise<void> {
   let metadata: unknown = null;
-  let role: UserRole | null = null;
+  let role: EventRole | null = null;
 
   const firstArg = args[0];
   if (firstArg && typeof firstArg === "object" && "role" in firstArg) {
-    role = (firstArg as { role?: UserRole }).role ?? null;
+    role = (firstArg as { role?: EventRole }).role ?? null;
   } else if (firstArg != null) {
     metadata = firstArg;
-    const secondArg = args[1] as { role?: UserRole } | undefined;
+    const secondArg = args[1] as { role?: EventRole } | undefined;
     role = secondArg?.role ?? null;
   }
 
@@ -59,7 +63,7 @@ export async function trackEvent<T extends EventType>(
   `;
 }
 
-export type RoleFilter = "user" | "admin" | "all";
+export type RoleFilter = "user" | "admin" | "guest" | "all";
 
 export async function countEvents(
   type: EventType,
