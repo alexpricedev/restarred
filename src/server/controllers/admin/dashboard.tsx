@@ -6,7 +6,7 @@ import type { RoleFilter } from "../../services/events";
 import { AdminDashboard } from "../../templates/admin-dashboard";
 import { render } from "../../utils/response";
 
-const VALID_ROLES = new Set<RoleFilter>(["user", "admin", "all"]);
+const VALID_ROLES = new Set<RoleFilter>(["user", "admin", "guest", "all"]);
 
 export const admin = {
   async index(req: BunRequest): Promise<Response> {
