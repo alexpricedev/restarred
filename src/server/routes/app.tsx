@@ -1,4 +1,11 @@
-import { account, first, home, unsubscribe, welcome } from "../controllers/app";
+import {
+  account,
+  deleteAccount,
+  first,
+  home,
+  unsubscribe,
+  welcome,
+} from "../controllers/app";
 import { callback, github, logout } from "../controllers/auth";
 import { createRouteHandler } from "../utils/route-handler";
 
@@ -16,6 +23,10 @@ export const appRoutes = {
   }),
   "/account/test-email": createRouteHandler({
     POST: account.testEmail,
+  }),
+  "/account/delete": createRouteHandler({
+    GET: deleteAccount.index,
+    POST: deleteAccount.destroy,
   }),
   "/auth/logout": createRouteHandler({
     POST: logout.create,
