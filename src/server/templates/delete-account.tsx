@@ -37,6 +37,7 @@ export const DeleteAccount = ({
           <li>All synced starred repos</li>
           <li>Digest history and preferences</li>
           <li>Your session and login data</li>
+          <li>The connection between your GitHub account and re:starred</li>
         </ul>
         <p className="delete-account-warning">This action cannot be undone.</p>
 
