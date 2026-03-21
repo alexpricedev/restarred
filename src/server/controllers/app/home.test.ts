@@ -36,21 +36,20 @@ describe("Home Controller", () => {
 
       expect(response.headers.get("content-type")).toBe("text/html");
 
-      expect(html).toContain("YOUR STARRED REPOS,");
-      expect(html).toContain("RESURFACED");
+      expect(html).toContain("RESURFACE YOUR");
+      expect(html).toContain("FORGOTTEN STARS");
       expect(html).toContain("CONNECT GITHUB");
 
-      expect(html).toContain("THE PROTOCOL");
       expect(html).toContain("HOW IT WORKS");
-      expect(html).toContain("CONNECT YOUR STARS");
-      expect(html).toContain("WEEKLY DIGEST");
-      expect(html).toContain("REDISCOVER");
+      expect(html).toContain("CONNECT YOUR GITHUB");
+      expect(html).toContain("GET 3 REPOS, WEEKLY");
+      expect(html).toContain("REVISIT WHAT&#x27;S WORTH KEEPING");
 
       expect(html).toContain("FULL CONTEXT, NOT JUST LINKS");
       expect(html).toContain("NO NOISE");
-      expect(html).toContain("SECURE BY DESIGN");
+      expect(html).toContain("SECURE BY DESIGN.");
 
-      expect(html).toContain("READY TO REDISCOVER YOUR STARS?");
+      expect(html).toContain("YOUR STARS ARE WAITING");
     });
   });
 });

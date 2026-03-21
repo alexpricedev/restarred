@@ -44,7 +44,7 @@ export const DigestPreview = () => (
         <div className="digest-chrome-field">
           <span className="digest-chrome-label">Subject</span>
           <span className="digest-chrome-value">
-            Your weekly digest — 3 stars resurfaced
+            re:starred — tldraw/tldraw and 2 others
           </span>
         </div>
       </div>
