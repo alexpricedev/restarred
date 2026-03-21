@@ -12,6 +12,7 @@
     max-width: var(--max-width-landing);
     margin: 0 auto;
     padding-inline: 2rem;
+    width: 100%;
 
     @media (width <= 640px) {
       padding-inline: 1rem;
@@ -26,13 +27,13 @@
   /* ── Hero ───────────────────────────────────────────── */
 
   .landing-hero {
-    padding: 4rem 0 3rem;
+    padding: 6rem 0 3rem;
     min-height: calc(100vh - 5rem);
     display: flex;
     align-items: flex-start;
 
     @media (width >= 768px) {
-      padding: 5rem 0 4rem;
+      padding: 7rem 0 4rem;
     }
   }
 
@@ -52,7 +53,7 @@
 
   .hero-heading {
     font-family: var(--font-display);
-    font-size: clamp(3.5rem, 12vw, 8.5rem);
+    font-size: clamp(2.25rem, 7.5vw, 7.5rem);
     font-weight: 900;
     line-height: 0.95;
     letter-spacing: -0.03em;

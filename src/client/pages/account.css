@@ -1,7 +1,11 @@
 [data-page="account"] .account-container {
   max-width: var(--max-width-app);
   margin: 0 auto;
-  padding: 4rem 2rem 2rem;
+  padding: 4rem 0 2rem;
+
+  @media (width <= 640px) {
+    padding: 2rem 0 1rem;
+  }
 }
 
 [data-page="account"] .account-header {
@@ -50,6 +54,11 @@
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   margin-bottom: 3rem;
+
+  @media (width <= 640px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 
 [data-page="account"] .account-stat {
@@ -131,6 +140,10 @@
 [data-page="account"] .account-section-heading {
   font-size: 2.5rem;
   margin-bottom: 0.25rem;
+
+  @media (width <= 640px) {
+    font-size: 1.75rem;
+  }
 }
 
 [data-page="account"] .account-section-description {
@@ -144,12 +157,20 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin-bottom: 1rem;
+
+  @media (width <= 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 [data-page="account"] .account-toggle {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
+
+  @media (width <= 640px) {
+    flex-direction: column;
+  }
 }
 
 [data-page="account"] .account-radio {
@@ -259,6 +280,10 @@
 [data-page="account"] .danger-zone-heading {
   font-size: 2.5rem;
   margin-bottom: 0.25rem;
+
+  @media (width <= 640px) {
+    font-size: 1.75rem;
+  }
 }
 
 [data-page="account"] .danger-zone-description {

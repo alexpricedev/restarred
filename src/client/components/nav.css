@@ -3,6 +3,10 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
+
+    @media (width <= 640px) {
+      gap: 0.75rem;
+    }
   }
 
   .nav-link {
@@ -17,6 +21,10 @@
     &:hover {
       color: var(--color-primary);
       text-decoration: none;
+    }
+
+    @media (width <= 640px) {
+      font-size: 0.8125rem;
     }
 
     &[aria-current="page"] {
@@ -44,7 +52,7 @@
   .nav-cta {
     background: var(--color-primary);
     color: var(--color-on-primary);
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1.5rem;
     border: none;
     font-size: inherit;
     line-height: inherit;
@@ -61,6 +69,11 @@
       background: var(--color-primary-container);
       color: var(--color-on-primary);
       text-decoration: none;
+    }
+
+    @media (width <= 640px) {
+      padding: 0.4rem 1rem;
+      font-size: 0.8125rem;
     }
   }
 }
