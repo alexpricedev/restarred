@@ -61,11 +61,19 @@ export async function claimNextJob(): Promise<Job | null> {
 }
 
 export async function completeJob(jobId: string): Promise<void> {
-  await db`
+  const rows = await db`
     UPDATE jobs
     SET status = 'completed', completed_at = now()
-    WHERE id = ${jobId}
+    WHERE id = ${jobId} AND status = 'running'
+    RETURNING id
   `;
+  if (rows.length === 0) {
+    log.warn(
+      "jobs",
+      `completeJob called for unknown or non-running job ${jobId}`,
+    );
+    return;
+  }
   log.info("jobs", `completed job ${jobId}`);
 }
 
@@ -76,6 +84,11 @@ export async function failJob(jobId: string, error: string): Promise<void> {
     WHERE id = ${jobId}
     RETURNING attempts, max_attempts
   `;
+
+  if (rows.length === 0) {
+    log.warn("jobs", `failJob called for unknown job ${jobId}`);
+    return;
+  }
 
   const { attempts, max_attempts: maxAttempts } = rows[0] as {
     attempts: number;
