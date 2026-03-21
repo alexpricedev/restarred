@@ -48,6 +48,14 @@ mock.module("../../services/users", () => ({
   deleteUser: mock(() => Promise.resolve(true)),
 }));
 
+mock.module("../../services/encryption", () => ({
+  decrypt: mock(() => "decrypted-token"),
+}));
+
+mock.module("../../services/github-api", () => ({
+  revokeGitHubGrant: mock(() => Promise.resolve(true)),
+}));
+
 mock.module("../../services/logger", () => ({
   log: { info: mock(() => {}), warn: mock(() => {}), error: mock(() => {}) },
 }));
@@ -99,6 +107,9 @@ describe("Delete Account Controller", () => {
 
     expect(response.status).toBe(303);
     expect(response.headers.get("location")).toBe("/");
+
+    const { revokeGitHubGrant } = await import("../../services/github-api");
+    expect(revokeGitHubGrant).toHaveBeenCalledWith("decrypted-token");
 
     const { deleteUser } = await import("../../services/users");
     expect(deleteUser).toHaveBeenCalledWith("user-123");

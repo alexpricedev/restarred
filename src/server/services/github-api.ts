@@ -79,6 +79,39 @@ const fetchPrimaryEmail = async (
   return primary?.email ?? emails[0]?.email ?? null;
 };
 
+export const revokeGitHubGrant = async (
+  accessToken: string,
+): Promise<boolean> => {
+  const clientId = process.env.GITHUB_CLIENT_ID;
+  const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    log.warn("github", "Missing OAuth credentials, skipping grant revocation");
+    return false;
+  }
+
+  const response = await fetch(
+    `https://api.github.com/applications/${clientId}/grant`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+        Accept: "application/vnd.github.v3+json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ access_token: accessToken }),
+    },
+  );
+
+  if (response.status === 204) {
+    log.info("github", "OAuth grant revoked successfully");
+    return true;
+  }
+
+  log.warn("github", `Grant revocation returned status ${response.status}`);
+  return false;
+};
+
 export interface StarredRepo {
   repo_id: number;
   full_name: string;

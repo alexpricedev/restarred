@@ -2,6 +2,8 @@ import type { BunRequest } from "bun";
 import { getSessionContext } from "../../middleware/auth";
 import { csrfProtection } from "../../middleware/csrf";
 import { createCsrfToken } from "../../services/csrf";
+import { decrypt } from "../../services/encryption";
+import { revokeGitHubGrant } from "../../services/github-api";
 import { log } from "../../services/logger";
 import { clearSessionCookie, setSessionCookie } from "../../services/sessions";
 import { deleteUser } from "../../services/users";
@@ -51,6 +53,16 @@ async function handlePost(req: BunRequest): Promise<Response> {
   }
 
   try {
+    try {
+      const token = decrypt(ctx.user.github_token);
+      await revokeGitHubGrant(token);
+    } catch (revokeError) {
+      log.warn(
+        "account",
+        `Failed to revoke GitHub grant: ${revokeError instanceof Error ? revokeError.message : "Unknown error"}`,
+      );
+    }
+
     await deleteUser(ctx.user.id);
     clearSessionCookie(req);
 
