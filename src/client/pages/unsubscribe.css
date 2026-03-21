@@ -12,7 +12,7 @@
 }
 
 [data-page="unsubscribe"] .unsubscribe-heading {
-  font-size: 2.2rem;
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
   margin: 0 0 1.5rem;
 }
 
