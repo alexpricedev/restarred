@@ -10,6 +10,7 @@ import type { SQL } from "bun";
 export const cleanupTestData = async (db: SQL): Promise<void> => {
   await db`TRUNCATE TABLE sessions CASCADE`;
   await db`TRUNCATE TABLE users CASCADE`;
+  await db`TRUNCATE TABLE events CASCADE`;
 };
 
 /**

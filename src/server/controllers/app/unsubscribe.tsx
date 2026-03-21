@@ -1,8 +1,9 @@
 import type { BunRequest } from "bun";
 import { getSessionContext } from "../../middleware/auth";
+import { trackEvent } from "../../services/events";
 import { log } from "../../services/logger";
 import { verifyUnsubscribeToken } from "../../services/unsubscribe";
-import { deactivateUser } from "../../services/users";
+import { deactivateUser, getUserRole } from "../../services/users";
 import { Unsubscribe } from "../../templates/unsubscribe";
 import { render } from "../../utils/response";
 
@@ -36,7 +37,11 @@ const handlePost = async (req: BunRequest): Promise<Response> => {
     );
   }
 
+  const role = await getUserRole(userId);
   await deactivateUser(userId);
+  trackEvent("unsubscribe", { role: role ?? undefined }).catch((err) => {
+    log.warn("events", `Failed to track unsubscribe: ${err}`);
+  });
   log.info("unsubscribe", `User ${userId} unsubscribed via email link`);
 
   return render(

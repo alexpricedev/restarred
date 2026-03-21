@@ -8,6 +8,7 @@ import {
 } from "../../services/digest";
 import { renderDigestEmail } from "../../services/digest-email";
 import { getEmailService } from "../../services/email";
+import { trackEvent } from "../../services/events";
 import { log } from "../../services/logger";
 import { setSessionCookie } from "../../services/sessions";
 import { getStarCount } from "../../services/stars";
@@ -94,6 +95,10 @@ async function handleSend(req: BunRequest): Promise<Response> {
       ctx.user.id,
       repos.map((r) => ({ starId: r.starId, cycle: r.cycle })),
     );
+
+    trackEvent("digest_sent", { role: ctx.user.role }).catch((err) => {
+      log.warn("events", `Failed to track digest_sent: ${err}`);
+    });
 
     log.info("first", `First digest sent to ${recipientEmail}`);
   } catch (error) {

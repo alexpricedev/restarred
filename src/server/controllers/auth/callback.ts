@@ -2,6 +2,7 @@ import type { BunRequest } from "bun";
 import { getSessionContext } from "../../middleware/auth";
 import { findOrCreateGitHubUser } from "../../services/auth";
 import { encrypt } from "../../services/encryption";
+import { trackEvent } from "../../services/events";
 import {
   exchangeCodeForToken,
   fetchGitHubUser,
@@ -64,11 +65,18 @@ export const callback = {
       const isNewUser = user.sync_status === "idle";
 
       if (isNewUser) {
-        syncUserStars(user.id, accessToken).catch((err) => {
+        trackEvent("signup", { role: user.role }).catch((err) => {
+          log.error("events", `Failed to track signup: ${err}`);
+        });
+        syncUserStars(user.id, accessToken, user.role).catch((err) => {
           log.error(
             "stars",
             `Background sync failed for user ${user.id}: ${err}`,
           );
+        });
+      } else {
+        trackEvent("login", { role: user.role }).catch((err) => {
+          log.error("events", `Failed to track login: ${err}`);
         });
       }
 

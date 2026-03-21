@@ -18,7 +18,7 @@
     "test:auth-logout": "NODE_ENV=test bun test src/server/controllers/auth/logout.test.ts",
     "test:admin": "NODE_ENV=test bun test src/server/controllers/admin",
     "test:home": "NODE_ENV=test bun test src/server/controllers/app/home.test.ts",
-    "test:services": "NODE_ENV=test bun test src/server/services/analytics.test.ts src/server/services/auth.test.ts src/server/services/csrf.test.ts src/server/services/digest-email.test.ts src/server/services/digest.test.ts src/server/services/email.test.ts src/server/services/encryption.test.ts src/server/services/github-api.test.ts src/server/services/logger.test.ts src/server/services/sessions.test.ts src/server/services/stars.test.ts src/server/services/users.test.ts src/server/middleware src/server/utils src/server/test-utils",
+    "test:services": "NODE_ENV=test bun test src/server/services/events.test.ts src/server/services/analytics.test.ts src/server/services/auth.test.ts src/server/services/csrf.test.ts src/server/services/digest-email.test.ts src/server/services/digest.test.ts src/server/services/email.test.ts src/server/services/encryption.test.ts src/server/services/github-api.test.ts src/server/services/logger.test.ts src/server/services/sessions.test.ts src/server/services/stars.test.ts src/server/services/users.test.ts src/server/middleware src/server/utils src/server/test-utils",
     "test:jobs": "NODE_ENV=test bun test src/server/services/jobs.test.ts",
     "test:dispatcher": "NODE_ENV=test bun test src/server/services/dispatcher.test.ts",
     "test:client": "NODE_ENV=test bun test src/client",
@@ -32,6 +32,7 @@
     "generate:pepper": "bun -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"",
     "migrate:up": "bun run src/server/database/cli.ts up",
     "migrate:status": "bun run src/server/database/cli.ts status",
+    "migrate:down": "bun run src/server/database/cli.ts down",
     "migrate:create": "bun run src/server/database/cli.ts create",
     "prepare": "husky"
   },

@@ -1,5 +1,6 @@
 import type { User } from "./auth";
 import { db } from "./database";
+import { trackEvent } from "./events";
 import {
   claimNextJob,
   completeJob,
@@ -11,6 +12,7 @@ import {
   type Job,
 } from "./jobs";
 import { log } from "./logger";
+import { getUserRole } from "./users";
 
 export async function getUsersDueForDigest(): Promise<User[]> {
   const rows = await db`
@@ -94,6 +96,8 @@ export function startDispatcher(): () => void {
       const job = await claimNextJob();
       if (!job) return;
 
+      const jobRole = await getUserRole(job.user_id);
+
       try {
         await executeJob(job);
         await completeJob(job.id);
@@ -102,6 +106,16 @@ export function startDispatcher(): () => void {
           job.id,
           error instanceof Error ? error.message : String(error),
         );
+        if (job.type === "send_digest") {
+          trackEvent("digest_failed", { role: jobRole ?? undefined }).catch(
+            (err) => {
+              log.warn(
+                "dispatcher",
+                `Failed to track digest_failed event: ${err}`,
+              );
+            },
+          );
+        }
       }
     } catch (error) {
       log.error(

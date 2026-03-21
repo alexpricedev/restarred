@@ -5,6 +5,7 @@ import { createCsrfToken } from "../../services/csrf";
 import { getDigestCount, selectReposForDigest } from "../../services/digest";
 import { renderDigestEmail } from "../../services/digest-email";
 import { getEmailService } from "../../services/email";
+import { trackEvent } from "../../services/events";
 import { log } from "../../services/logger";
 import { setSessionCookie } from "../../services/sessions";
 import { getStarCount } from "../../services/stars";
@@ -60,6 +61,10 @@ async function handleGet(req: BunRequest): Promise<Response> {
   if (ctx.requiresSetCookie) {
     setSessionCookie(req, ctx.sessionId);
   }
+
+  trackEvent("account_view", { role: ctx.user.role }).catch((err) => {
+    log.warn("events", `Failed to track account_view: ${err}`);
+  });
 
   const flash = getFlashCookie<{ type: "success" | "error"; message: string }>(
     req,
@@ -141,6 +146,36 @@ async function handlePost(req: BunRequest): Promise<Response> {
 
     const wasReactivated = isActive && !ctx.user.is_active;
     const wasPaused = !isActive && ctx.user.is_active;
+
+    const changedFields: string[] = [];
+    if (emailOverride !== (ctx.user.email_override ?? ""))
+      changedFields.push("email_override");
+    if (digestDay !== ctx.user.digest_day) changedFields.push("digest_day");
+    if (digestHour !== ctx.user.digest_hour) changedFields.push("digest_hour");
+    if (timezone !== ctx.user.timezone) changedFields.push("timezone");
+    if (isActive !== ctx.user.is_active) changedFields.push("is_active");
+    if (filterOwnRepos !== ctx.user.filter_own_repos)
+      changedFields.push("filter_own_repos");
+
+    if (changedFields.length > 0) {
+      trackEvent(
+        "settings_changed",
+        { fields: changedFields },
+        { role: ctx.user.role },
+      ).catch((err) => {
+        log.warn("events", `Failed to track settings_changed: ${err}`);
+      });
+    }
+
+    if (wasReactivated) {
+      trackEvent("resubscribe", { role: ctx.user.role }).catch((err) => {
+        log.warn("events", `Failed to track resubscribe: ${err}`);
+      });
+    } else if (wasPaused) {
+      trackEvent("unsubscribe", { role: ctx.user.role }).catch((err) => {
+        log.warn("events", `Failed to track unsubscribe: ${err}`);
+      });
+    }
 
     log.info("account", `Preferences updated for user ${ctx.user.id}`);
 

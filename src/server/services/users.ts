@@ -16,6 +16,18 @@ export interface UserPreferences {
   filterOwnRepos: boolean;
 }
 
+export const getUserRole = async (
+  userId: string,
+): Promise<User["role"] | null> => {
+  try {
+    const rows = await db`SELECT role FROM users WHERE id = ${userId}`;
+    if (rows.length === 0) return null;
+    return rows[0].role as User["role"];
+  } catch {
+    return null;
+  }
+};
+
 export const getUsers = async (): Promise<User[]> => {
   const results = await db`
     SELECT * FROM users

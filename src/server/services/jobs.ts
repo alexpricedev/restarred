@@ -5,6 +5,7 @@ import { recordDigestSelections, selectReposForDigest } from "./digest";
 import { renderDigestEmail } from "./digest-email";
 import { getEmailService } from "./email";
 import { decrypt } from "./encryption";
+import { trackEvent } from "./events";
 import { log } from "./logger";
 import { syncUserStars } from "./stars";
 
@@ -142,7 +143,7 @@ export async function hasPendingJob(
 
 export async function executeSyncStars(job: Job): Promise<void> {
   const rows = await db`
-    SELECT github_token FROM users WHERE id = ${job.user_id}
+    SELECT github_token, role FROM users WHERE id = ${job.user_id}
   `;
 
   if (rows.length === 0) {
@@ -150,8 +151,9 @@ export async function executeSyncStars(job: Job): Promise<void> {
   }
 
   const encryptedToken = rows[0].github_token as string;
+  const role = rows[0].role as "user" | "admin";
   const decryptedToken = decrypt(encryptedToken);
-  await syncUserStars(job.user_id, decryptedToken);
+  await syncUserStars(job.user_id, decryptedToken, role);
   log.info("jobs", `sync_stars completed for user ${job.user_id}`);
 }
 
@@ -206,6 +208,10 @@ export async function executeSendDigest(job: Job): Promise<void> {
     subject,
     html,
     text,
+  });
+
+  trackEvent("digest_sent", { role: user.role }).catch((err) => {
+    log.warn("events", `Failed to track digest_sent: ${err}`);
   });
 
   log.info("jobs", `send_digest completed for user ${job.user_id}`);

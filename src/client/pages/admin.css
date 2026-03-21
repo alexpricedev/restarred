@@ -1,48 +1,91 @@
 [data-page="admin"] {
+  &[data-component="layout"] > main {
+    max-width: var(--max-width-landing);
+  }
+
   .admin-content {
-    max-width: var(--max-width-app);
-    margin: 0 auto;
-    padding: 0 24px;
+    padding: 0;
   }
 
   .admin-header {
-    margin-bottom: 32px;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 48px;
 
-    h1,
-    h2 {
+    h1 {
       font-family: var(--font-display);
     }
-
-    p {
-      margin: 0;
-      font-size: 14px;
-    }
   }
 
-  .admin-table-wrap {
-    overflow-x: auto;
+  .role-filter {
+    display: flex;
+    gap: 4px;
   }
 
-  .data-table th {
-    padding: 10px 24px;
-    font-size: 0.6875rem;
+  .role-filter-link {
+    padding: 4px 12px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    border-radius: 4px;
+    transition:
+      color 0.15s,
+      background 0.15s;
   }
 
-  .data-table td {
-    padding: 14px 24px;
-    font-size: 14px;
-  }
-
-  .admin-email {
+  .role-filter-link:hover {
     color: var(--color-text);
+    background: var(--color-surface-lowest);
   }
 
-  .admin-date {
-    color: var(--color-text-quaternary);
+  .role-filter-link.active {
+    color: var(--color-text);
+    background: var(--color-surface-lowest);
+    font-weight: 600;
   }
 
-  .admin-empty {
-    text-align: center;
-    color: var(--color-text-quaternary);
+  .stat-section {
+    margin-bottom: 48px;
+  }
+
+  .stat-section-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    margin-bottom: 16px;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 24px;
+    background: var(--color-surface-lowest);
+    border-radius: 8px;
+  }
+
+  .stat-label {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-tertiary);
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
   }
 }

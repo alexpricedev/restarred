@@ -238,6 +238,7 @@ describe("jobs service", () => {
     expect(mockSyncUserStars).toHaveBeenCalledWith(
       userId,
       "decrypted-encrypted-token",
+      "user",
     );
   });
 

@@ -51,5 +51,20 @@ describe("Home Controller", () => {
 
       expect(html).toContain("YOUR STARS ARE WAITING");
     });
+
+    test("tracks homepage_view event as guest for unauthenticated user", async () => {
+      const request = createBunRequest("http://localhost:3000/", {
+        method: "GET",
+      });
+      await home.index(request);
+
+      // trackEvent is fire-and-forget in the controller, wait for it to flush
+      await Bun.sleep(50);
+
+      const rows =
+        await connection`SELECT * FROM events WHERE type = 'homepage_view'`;
+      expect(rows).toHaveLength(1);
+      expect(rows[0].role).toBe("guest");
+    });
   });
 });
