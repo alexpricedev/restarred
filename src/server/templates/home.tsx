@@ -18,7 +18,7 @@ export const Home = ({ user, csrfToken, flash }: HomeProps) => (
   >
     <div className="landing-main">
       {flash && (
-        <div className="landing-container" style={{ paddingTop: "2rem" }}>
+        <div className="landing-container landing-flash">
           <Flash type={flash.type}>{flash.message}</Flash>
         </div>
       )}

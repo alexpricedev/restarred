@@ -8,6 +8,10 @@
     padding-top: 5rem;
   }
 
+  .landing-flash {
+    padding-top: 2rem;
+  }
+
   .landing-container {
     max-width: var(--max-width-landing);
     margin: 0 auto;
