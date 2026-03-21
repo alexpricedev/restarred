@@ -68,6 +68,17 @@ export const Unsubscribe = ({
                 <path d="m12 5 7 7-7 7" />
               </svg>
             </a>
+            {isAuthenticated && (
+              <>
+                <hr className="unsubscribe-divider" />
+                <p className="unsubscribe-delete-text">
+                  Or permanently{" "}
+                  <a href="/account/delete" className="unsubscribe-delete-link">
+                    delete your account
+                  </a>
+                </p>
+              </>
+            )}
           </div>
         </div>
       )}

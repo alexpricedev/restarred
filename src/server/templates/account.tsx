@@ -387,6 +387,18 @@ export const Account = ({
           </div>
         </form>
       )}
+
+      <div className="account-danger-zone">
+        <span className="danger-zone-label">DANGER ZONE</span>
+        <h2 className="danger-zone-heading">Delete Account</h2>
+        <p className="danger-zone-description">
+          Permanently delete your account and all associated data. This cannot
+          be undone.
+        </p>
+        <a href="/account/delete" className="danger-zone-link">
+          Delete my account
+        </a>
+      </div>
     </div>
   </Layout>
 );

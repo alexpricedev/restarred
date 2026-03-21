@@ -1,13 +1,15 @@
 import { DigestPreview } from "@server/components/digest-preview";
+import { Flash } from "@server/components/flash";
 import { Layout } from "@server/components/layouts";
 import type { User } from "@server/services/users";
 
 interface HomeProps {
   user: User | null;
   csrfToken?: string;
+  flash?: { type: "success" | "error"; message: string };
 }
 
-export const Home = ({ user, csrfToken }: HomeProps) => (
+export const Home = ({ user, csrfToken, flash }: HomeProps) => (
   <Layout
     title="re:starred — A free weekly email for your forgotten GitHub stars"
     name="home"
@@ -15,6 +17,11 @@ export const Home = ({ user, csrfToken }: HomeProps) => (
     csrfToken={csrfToken}
   >
     <div className="landing-main">
+      {flash && (
+        <div className="landing-container landing-flash">
+          <Flash type={flash.type}>{flash.message}</Flash>
+        </div>
+      )}
       {/* Hero */}
       <section className="landing-hero">
         <div className="landing-container">

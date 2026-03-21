@@ -239,3 +239,49 @@
   background: transparent;
   border-color: #000;
 }
+
+[data-page="account"] .account-danger-zone {
+  margin-top: 5rem;
+  background: var(--color-surface-container-low);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+}
+
+[data-page="account"] .danger-zone-label {
+  font-family: var(--font-main);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-danger);
+  text-transform: uppercase;
+}
+
+[data-page="account"] .danger-zone-heading {
+  font-size: 2.5rem;
+  margin-bottom: 0.25rem;
+}
+
+[data-page="account"] .danger-zone-description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+[data-page="account"] .danger-zone-link {
+  display: inline-block;
+  background: transparent;
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-full);
+  padding: 0.75rem 2rem;
+  font-family: var(--font-main);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+[data-page="account"] .danger-zone-link:hover {
+  background: var(--color-danger);
+  color: #fff;
+}

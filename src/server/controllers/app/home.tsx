@@ -3,6 +3,7 @@ import { getSessionContext } from "../../middleware/auth";
 import { createCsrfToken } from "../../services/csrf";
 import { setSessionCookie } from "../../services/sessions";
 import { Home } from "../../templates/home";
+import { getFlashCookie } from "../../utils/flash";
 import { render } from "../../utils/response";
 
 export const home = {
@@ -18,6 +19,14 @@ export const home = {
       csrfToken = await createCsrfToken(ctx.sessionId, "POST", "/auth/logout");
     }
 
-    return render(<Home user={ctx.user} csrfToken={csrfToken} />);
+    const flash = getFlashCookie<{
+      type: "success" | "error";
+      message: string;
+    }>(req, "home");
+    const flashMessage = flash.type ? flash : undefined;
+
+    return render(
+      <Home user={ctx.user} csrfToken={csrfToken} flash={flashMessage} />,
+    );
   },
 };

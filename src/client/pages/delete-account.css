@@ -1,0 +1,78 @@
+[data-page="delete-account"] .delete-account-container {
+  max-width: var(--max-width-app);
+  margin: 0 auto;
+  padding: 4rem 2rem 2rem;
+}
+
+[data-page="delete-account"] .delete-account-back {
+  font-family: var(--font-main);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+[data-page="delete-account"] .delete-account-back:hover {
+  color: var(--color-text);
+}
+
+[data-page="delete-account"] .delete-account-content {
+  margin-top: 3rem;
+  max-width: 480px;
+}
+
+[data-page="delete-account"] .delete-account-label {
+  font-family: var(--font-main);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-danger);
+  text-transform: uppercase;
+}
+
+[data-page="delete-account"] .delete-account-heading {
+  margin-bottom: 0.5rem;
+  text-transform: none;
+}
+
+[data-page="delete-account"] .delete-account-description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+[data-page="delete-account"] .delete-account-list {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  padding-left: 1.25rem;
+}
+
+[data-page="delete-account"] .delete-account-list li {
+  margin-bottom: 0.25rem;
+}
+
+[data-page="delete-account"] .delete-account-warning {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 2rem;
+}
+
+[data-page="delete-account"] .delete-account-button {
+  background: var(--color-danger);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 0.75rem 2rem;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+[data-page="delete-account"] .delete-account-button:hover {
+  background: #9c1515;
+}

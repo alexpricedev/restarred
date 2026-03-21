@@ -71,3 +71,26 @@
 [data-page="unsubscribe"] .unsubscribe-reactivate-link:hover {
   opacity: 0.6;
 }
+
+[data-page="unsubscribe"] .unsubscribe-divider {
+  border: none;
+  border-top: 1px solid var(--color-surface-container-highest);
+  margin: 1.25rem 0;
+}
+
+[data-page="unsubscribe"] .unsubscribe-delete-text {
+  font-size: 0.8125rem;
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+[data-page="unsubscribe"] .unsubscribe-delete-link {
+  color: var(--color-danger);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 150ms ease-out;
+}
+
+[data-page="unsubscribe"] .unsubscribe-delete-link:hover {
+  opacity: 0.6;
+}
