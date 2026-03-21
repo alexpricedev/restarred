@@ -497,6 +497,23 @@
     margin: 0;
   }
 
+  .bento-link {
+    color: var(--color-text-secondary);
+    display: inline-block;
+    font-family: var(--font-main);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin-top: 1.25rem;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .bento-link:hover,
+  .bento-link:focus {
+    color: var(--color-text-primary);
+  }
+
   /* ── CTA ────────────────────────────────────────────── */
 
   .landing-cta {
