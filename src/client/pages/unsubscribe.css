@@ -1,0 +1,41 @@
+[data-page="unsubscribe"] main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  padding: 4rem 1.5rem;
+}
+
+[data-page="unsubscribe"] .unsubscribe-content {
+  max-width: 480px;
+  text-align: center;
+}
+
+[data-page="unsubscribe"] .unsubscribe-heading {
+  font-size: 2.2rem;
+  margin: 0 0 1.5rem;
+}
+
+[data-page="unsubscribe"] .unsubscribe-description {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 2rem;
+}
+
+[data-page="unsubscribe"] .unsubscribe-button {
+  font-size: 1rem;
+  padding: 0.75rem 2rem;
+}
+
+[data-page="unsubscribe"] .unsubscribe-resubscribe {
+  font-size: 0.875rem;
+  color: var(--color-text-tertiary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+[data-page="unsubscribe"] .unsubscribe-resubscribe a {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+}
