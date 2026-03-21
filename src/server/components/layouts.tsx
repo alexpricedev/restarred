@@ -104,20 +104,34 @@ export function Layout({
         </header>
         <main>{children}</main>
         <footer>
-          <a href="/privacy" target="_blank" rel="noopener noreferrer">
-            Privacy
-          </a>
-          <a href="/terms" target="_blank" rel="noopener noreferrer">
-            Terms
-          </a>
-          <a
-            href="https://github.com/alexpricedev/restarred"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub
-          </a>
-          <span>&copy; {new Date().getFullYear()} INFINITE CHAPTERS LTD</span>
+          <div className="footer-left">
+            <span>
+              Made for the community by{" "}
+              <a
+                href="https://alexprice.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                alexprice.dev
+              </a>
+            </span>
+          </div>
+          <div className="footer-right">
+            <a
+              href="https://github.com/alexpricedev/restarred"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+            <a href="/privacy" target="_blank" rel="noopener noreferrer">
+              Privacy
+            </a>
+            <a href="/terms" target="_blank" rel="noopener noreferrer">
+              Terms
+            </a>
+            <span>&copy; {new Date().getFullYear()} INFINITE CHAPTERS LTD</span>
+          </div>
         </footer>
         <script type="module" src={getAssetUrl("/assets/main.js")} />
       </body>

@@ -47,7 +47,7 @@ describe("Home Controller", () => {
 
       expect(html).toContain("FULL CONTEXT, NOT JUST LINKS");
       expect(html).toContain("NO NOISE");
-      expect(html).toContain("SECURE BY DESIGN.");
+      expect(html).toContain("OPEN SOURCE.");
 
       expect(html).toContain("YOUR STARS ARE WAITING");
     });

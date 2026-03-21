@@ -128,11 +128,19 @@ export const Home = ({ user, csrfToken, flash }: HomeProps) => (
                 <p>One email. Three repos. No ads, no tracking, no noise.</p>
               </div>
               <div className="bento-grey">
-                <h4>SECURE BY DESIGN.</h4>
+                <h4>OPEN SOURCE.</h4>
                 <p>
-                  Read-only access to public stars. Your data is never sold or
-                  used for training.
+                  Proudly open source. Read-only access to public stars. Your
+                  data is never sold or used for training.
                 </p>
+                <a
+                  href="https://github.com/alexpricedev/restarred"
+                  className="bento-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View on GitHub &rarr;
+                </a>
               </div>
             </div>
           </div>
