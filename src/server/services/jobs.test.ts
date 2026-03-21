@@ -21,6 +21,45 @@ mock.module("./database", () => ({
   },
 }));
 
+const mockSyncUserStars = mock(() => Promise.resolve());
+mock.module("./stars", () => ({
+  syncUserStars: mockSyncUserStars,
+}));
+
+const mockDecrypt = mock((stored: string) => `decrypted-${stored}`);
+mock.module("./encryption", () => ({
+  decrypt: mockDecrypt,
+}));
+
+const mockSelectReposForDigest = mock(
+  (): Promise<import("./digest").SelectedRepo[]> => Promise.resolve([]),
+);
+const mockRecordDigestSelections = mock(() => Promise.resolve());
+mock.module("./digest", () => ({
+  selectReposForDigest: mockSelectReposForDigest,
+  recordDigestSelections: mockRecordDigestSelections,
+}));
+
+const mockRenderDigestEmail = mock(() => ({
+  subject: "Your weekly digest",
+  html: "<h1>Digest</h1>",
+  text: "Digest",
+}));
+mock.module("./digest-email", () => ({
+  renderDigestEmail: mockRenderDigestEmail,
+}));
+
+const mockEmailSend = mock(() => Promise.resolve());
+const mockGetEmailService = mock(() => ({ send: mockEmailSend }));
+mock.module("./email", () => ({
+  getEmailService: mockGetEmailService,
+}));
+
+const mockComputeHMAC = mock((value: string) => `hmac-${value}`);
+mock.module("../utils/crypto", () => ({
+  computeHMAC: mockComputeHMAC,
+}));
+
 import { db } from "./database";
 
 function assertJob(job: Job | null): Job {
@@ -179,5 +218,110 @@ describe("jobs service", () => {
     const result = await hasPendingJob("sync_stars", userId);
 
     expect(result).toBe(false);
+  });
+
+  test("executeSyncStars decrypts token and calls syncUserStars", async () => {
+    const { enqueueJob, claimNextJob, executeSyncStars } = await import(
+      "./jobs"
+    );
+    mockDecrypt.mockClear();
+    mockSyncUserStars.mockClear();
+
+    await enqueueJob("sync_stars", userId);
+    const job = assertJob(await claimNextJob());
+
+    await executeSyncStars(job);
+
+    expect(mockDecrypt).toHaveBeenCalledTimes(1);
+    expect(mockDecrypt).toHaveBeenCalledWith("encrypted-token");
+    expect(mockSyncUserStars).toHaveBeenCalledTimes(1);
+    expect(mockSyncUserStars).toHaveBeenCalledWith(
+      userId,
+      "decrypted-encrypted-token",
+    );
+  });
+
+  test("executeSendDigest selects repos, records, renders, and sends email", async () => {
+    const { enqueueJob, claimNextJob, executeSendDigest } = await import(
+      "./jobs"
+    );
+
+    process.env.FROM_EMAIL = "noreply@restarred.dev";
+    process.env.FROM_NAME = "Restarred";
+
+    const mockRepos = [
+      {
+        starId: "star-1",
+        cycle: 1,
+        repoId: 100,
+        fullName: "owner/repo",
+        description: "A repo",
+        language: "TypeScript",
+        stargazersCount: 42,
+        htmlUrl: "https://github.com/owner/repo",
+        starredAt: new Date(),
+        lastActivityAt: new Date(),
+        isArchived: false,
+      },
+    ];
+
+    mockSelectReposForDigest.mockClear();
+    mockRecordDigestSelections.mockClear();
+    mockRenderDigestEmail.mockClear();
+    mockEmailSend.mockClear();
+    mockComputeHMAC.mockClear();
+    mockGetEmailService.mockClear();
+
+    mockSelectReposForDigest.mockImplementation(() =>
+      Promise.resolve(mockRepos),
+    );
+
+    await enqueueJob("send_digest", userId);
+    const job = assertJob(await claimNextJob());
+
+    await executeSendDigest(job);
+
+    expect(mockSelectReposForDigest).toHaveBeenCalledTimes(1);
+    expect(mockSelectReposForDigest).toHaveBeenCalledWith({
+      userId,
+      excludeOwner: "testuser",
+    });
+    expect(mockRecordDigestSelections).toHaveBeenCalledTimes(1);
+    expect(mockRecordDigestSelections).toHaveBeenCalledWith(userId, [
+      { starId: "star-1", cycle: 1 },
+    ]);
+    expect(mockComputeHMAC).toHaveBeenCalledWith(userId);
+    expect(mockRenderDigestEmail).toHaveBeenCalledTimes(1);
+    expect(mockEmailSend).toHaveBeenCalledTimes(1);
+    expect(mockEmailSend).toHaveBeenCalledWith({
+      to: { email: "test@example.com", name: "testuser" },
+      from: { email: "noreply@restarred.dev", name: "Restarred" },
+      subject: "Your weekly digest",
+      html: "<h1>Digest</h1>",
+      text: "Digest",
+    });
+  });
+
+  test("executeSendDigest skips email when no repos selected", async () => {
+    const { enqueueJob, claimNextJob, executeSendDigest } = await import(
+      "./jobs"
+    );
+
+    mockSelectReposForDigest.mockClear();
+    mockRecordDigestSelections.mockClear();
+    mockRenderDigestEmail.mockClear();
+    mockEmailSend.mockClear();
+    mockGetEmailService.mockClear();
+
+    mockSelectReposForDigest.mockImplementation(() => Promise.resolve([]));
+
+    await enqueueJob("send_digest", userId);
+    const job = assertJob(await claimNextJob());
+
+    await executeSendDigest(job);
+
+    expect(mockSelectReposForDigest).toHaveBeenCalledTimes(1);
+    expect(mockRecordDigestSelections).not.toHaveBeenCalled();
+    expect(mockEmailSend).not.toHaveBeenCalled();
   });
 });

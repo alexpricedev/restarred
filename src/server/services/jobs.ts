@@ -1,5 +1,12 @@
+import { computeHMAC } from "../utils/crypto";
+import type { User } from "./auth";
 import { db } from "./database";
+import { recordDigestSelections, selectReposForDigest } from "./digest";
+import { renderDigestEmail } from "./digest-email";
+import { getEmailService } from "./email";
+import { decrypt } from "./encryption";
 import { log } from "./logger";
+import { syncUserStars } from "./stars";
 
 export interface Job {
   id: string;
@@ -132,4 +139,75 @@ export async function hasPendingJob(
     LIMIT 1
   `;
   return rows.length > 0;
+}
+
+export async function executeSyncStars(job: Job): Promise<void> {
+  const rows = await db`
+    SELECT github_token FROM users WHERE id = ${job.user_id}
+  `;
+
+  if (rows.length === 0) {
+    throw new Error(`User ${job.user_id} not found`);
+  }
+
+  const encryptedToken = rows[0].github_token as string;
+  const decryptedToken = decrypt(encryptedToken);
+  await syncUserStars(job.user_id, decryptedToken);
+  log.info("jobs", `sync_stars completed for user ${job.user_id}`);
+}
+
+export async function executeSendDigest(job: Job): Promise<void> {
+  const rows = await db`
+    SELECT * FROM users WHERE id = ${job.user_id}
+  `;
+
+  if (rows.length === 0) {
+    throw new Error(`User ${job.user_id} not found`);
+  }
+
+  const user = rows[0] as User;
+
+  const excludeOwner = user.filter_own_repos ? user.github_username : undefined;
+
+  const repos = await selectReposForDigest({
+    userId: job.user_id,
+    excludeOwner,
+  });
+
+  if (repos.length === 0) {
+    log.warn(
+      "jobs",
+      `no repos selected for digest, skipping email for user ${job.user_id}`,
+    );
+    return;
+  }
+
+  await recordDigestSelections(
+    job.user_id,
+    repos.map((r) => ({ starId: r.starId, cycle: r.cycle })),
+  );
+
+  const unsubscribeToken = `${job.user_id}:${computeHMAC(job.user_id)}`;
+  const { subject, html, text } = renderDigestEmail(
+    user,
+    repos,
+    unsubscribeToken,
+  );
+
+  const emailService = getEmailService();
+  await emailService.send({
+    to: {
+      email: user.email_override || user.github_email,
+      name: user.github_username,
+    },
+    from: {
+      email: process.env.FROM_EMAIL as string,
+      name: process.env.FROM_NAME as string,
+    },
+    subject,
+    html,
+    text,
+  });
+
+  log.info("jobs", `send_digest completed for user ${job.user_id}`);
 }
