@@ -18,7 +18,7 @@ https://restarred.dev
 
 ## Support the development
 
-I build re:starred to help developers rediscover the GitHub repos they once thought were worth remembering. It’s free forever, open source, and has no ads. If you’ve found a gem in your inbox, consider buying me a coffee.
+I built re:starred to help developers rediscover the GitHub repos they once thought were worth remembering. It's free forever, open source, and has no ads. Every digest costs a fraction of a penny to send, but it adds up. If you've found a gem in your inbox, consider buying me a coffee to keep the emails flowing.
 
 [![BuyMeACoffee](https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-yellow.svg)](https://www.buymeacoffee.com/alexpricedev)
 
