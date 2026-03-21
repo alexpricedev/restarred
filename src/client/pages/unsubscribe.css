@@ -28,14 +28,46 @@
   padding: 0.75rem 2rem;
 }
 
-[data-page="unsubscribe"] .unsubscribe-resubscribe {
-  font-size: 0.875rem;
-  color: var(--color-text-tertiary);
-  line-height: 1.6;
-  margin: 0;
+[data-page="unsubscribe"] .unsubscribe-reactivate {
+  background: var(--color-surface-container-low);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  margin-top: 2.5rem;
+  text-align: center;
 }
 
-[data-page="unsubscribe"] .unsubscribe-resubscribe a {
+[data-page="unsubscribe"] .unsubscribe-reactivate-label {
+  font-family: "Inter", sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+[data-page="unsubscribe"] .unsubscribe-reactivate-text {
+  font-size: 0.9375rem;
   color: var(--color-text-secondary);
-  text-decoration: underline;
+  line-height: 1.5;
+  margin: 0 0 1.25rem;
+}
+
+[data-page="unsubscribe"] .unsubscribe-reactivate-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: "Inter", sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--color-text-primary);
+  padding-bottom: 2px;
+  transition: opacity 150ms ease-out;
+}
+
+[data-page="unsubscribe"] .unsubscribe-reactivate-link:hover {
+  opacity: 0.6;
 }

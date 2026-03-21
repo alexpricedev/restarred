@@ -34,10 +34,16 @@ export const Unsubscribe = ({ state, token }: UnsubscribeProps) => (
           <p className="unsubscribe-description">
             You won't receive any more digest emails.
           </p>
-          <p className="unsubscribe-resubscribe">
-            Changed your mind? Log in and re-enable digests from your{" "}
-            <a href="/account">account settings</a>.
-          </p>
+          <div className="unsubscribe-reactivate">
+            <span className="unsubscribe-reactivate-label">CHANGED YOUR MIND?</span>
+            <p className="unsubscribe-reactivate-text">
+              You can re-enable your weekly digest at any time.
+            </p>
+            <a href="/account" className="unsubscribe-reactivate-link">
+              Go to account settings
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+            </a>
+          </div>
         </div>
       )}
       {state === "error" && (
@@ -46,10 +52,15 @@ export const Unsubscribe = ({ state, token }: UnsubscribeProps) => (
           <p className="unsubscribe-description">
             This unsubscribe link is invalid or has expired.
           </p>
-          <p className="unsubscribe-resubscribe">
-            You can manage your digest preferences from your{" "}
-            <a href="/account">account settings</a>.
-          </p>
+          <div className="unsubscribe-reactivate">
+            <p className="unsubscribe-reactivate-text">
+              You can manage your digest preferences from your account.
+            </p>
+            <a href="/account" className="unsubscribe-reactivate-link">
+              Go to account settings
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+            </a>
+          </div>
         </div>
       )}
     </div>
