@@ -53,6 +53,10 @@ mock.module("../../services/users", () => ({
   markFirstViewed: mock(() => Promise.resolve()),
 }));
 
+mock.module("../../services/unsubscribe", () => ({
+  generateUnsubscribeToken: mock(() => "mock-unsubscribe-token"),
+}));
+
 mock.module("../../services/digest", () => ({
   selectReposForDigest: mock(() => Promise.resolve([])),
   recordDigestSelections: mock(() => Promise.resolve()),
@@ -63,6 +67,10 @@ mock.module("../../services/digest-email", () => ({
     subject: "Test Subject",
     html: "<p>Test</p>",
     text: "Test",
+    headers: {
+      "List-Unsubscribe": "<http://localhost:3000/unsubscribe?token=first>",
+      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+    },
   })),
 }));
 

@@ -179,7 +179,12 @@ export const renderDigestEmail = (
   _user: User,
   repos: SelectedRepo[],
   unsubscribeToken: string,
-): { subject: string; html: string; text: string } => {
+): {
+  subject: string;
+  html: string;
+  text: string;
+  headers: Record<string, string>;
+} => {
   const accountUrl = `${APP_URL}/account`;
   const unsubscribeUrl = `${APP_URL}/unsubscribe?token=${unsubscribeToken}`;
 
@@ -187,5 +192,10 @@ export const renderDigestEmail = (
   const html = `<!DOCTYPE html>${renderToString(<DigestEmail repos={repos} accountUrl={accountUrl} unsubscribeUrl={unsubscribeUrl} />)}`;
   const text = renderDigestPlainText(repos, accountUrl, unsubscribeUrl);
 
-  return { subject, html, text };
+  const headers = {
+    "List-Unsubscribe": `<${unsubscribeUrl}>`,
+    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+  };
+
+  return { subject, html, text, headers };
 };

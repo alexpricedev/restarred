@@ -23,6 +23,7 @@ export class ResendProvider implements EmailProvider {
       subject: message.subject,
       html: message.html,
       text: message.text,
+      headers: message.headers,
     });
 
     if (response.error) {

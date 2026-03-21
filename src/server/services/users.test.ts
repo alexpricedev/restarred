@@ -15,7 +15,7 @@ mock.module("./database", () => ({
 }));
 
 import { db } from "./database";
-import { getUsers, updateUserPreferences } from "./users";
+import { deactivateUser, getUsers, updateUserPreferences } from "./users";
 
 beforeEach(async () => {
   await cleanupTestData(db);
@@ -112,5 +112,18 @@ describe("updateUserPreferences", () => {
         filterOwnRepos: true,
       }),
     ).rejects.toThrow("User not found");
+  });
+});
+
+describe("deactivateUser", () => {
+  test("sets is_active to false for the given user", async () => {
+    const userId = randomUUID();
+    await db`INSERT INTO users (id, github_id, github_username, github_email, role, is_active) VALUES (${userId}, 99999, 'testunsubscribe', 'unsub@test.com', 'user', true)`;
+
+    await deactivateUser(userId);
+
+    const [updated] =
+      await db`SELECT is_active FROM users WHERE id = ${userId}`;
+    expect(updated.is_active).toBe(false);
   });
 });

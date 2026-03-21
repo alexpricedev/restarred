@@ -52,3 +52,10 @@ export const markFirstViewed = async (userId: string): Promise<void> => {
     WHERE id = ${userId}
   `;
 };
+
+export const deactivateUser = async (userId: string): Promise<void> => {
+  await db`
+    UPDATE users SET is_active = false, updated_at = CURRENT_TIMESTAMP
+    WHERE id = ${userId}
+  `;
+};
