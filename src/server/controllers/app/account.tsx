@@ -138,12 +138,19 @@ async function handlePost(req: BunRequest): Promise<Response> {
       filterOwnRepos,
     });
 
+    const wasReactivated = isActive && !ctx.user.is_active;
+    const wasPaused = !isActive && ctx.user.is_active;
+
     log.info("account", `Preferences updated for user ${ctx.user.id}`);
 
-    setFlashCookie(req, "account", {
-      type: "success",
-      message: "Preferences saved.",
-    });
+    if (!wasPaused) {
+      setFlashCookie(req, "account", {
+        type: "success",
+        message: wasReactivated
+          ? "Your digest has been reactivated."
+          : "Preferences saved.",
+      });
+    }
 
     return redirect("/account");
   } catch (error) {

@@ -146,6 +146,39 @@ export const Account = ({
     csrfToken={logoutCsrfToken}
   >
     <div className="account-container">
+      {!user.is_active && (
+        <form method="POST" action="/account" className="account-paused-banner">
+          <CsrfField token={csrfToken} />
+          <input
+            type="hidden"
+            name="email_override"
+            value={user.email_override ?? ""}
+          />
+          <input
+            type="hidden"
+            name="digest_day"
+            value={String(user.digest_day)}
+          />
+          <input
+            type="hidden"
+            name="digest_hour"
+            value={String(user.digest_hour)}
+          />
+          <input type="hidden" name="timezone" value={user.timezone} />
+          <input
+            type="hidden"
+            name="filter_own_repos"
+            value={String(user.filter_own_repos)}
+          />
+          <input type="hidden" name="is_active" value="true" />
+          <p>
+            Your weekly digest is paused. You won't receive any emails until you
+            reactivate.
+          </p>
+          <button type="submit">Reactivate digest</button>
+        </form>
+      )}
+
       {flash && <Flash type={flash.type}>{flash.message}</Flash>}
 
       <div className="account-header">
