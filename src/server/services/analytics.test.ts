@@ -80,6 +80,8 @@ describe("getAdminStats", () => {
       "digestFailures",
       "unsubscribes",
       "resubscribes",
+      "homepageViews",
+      "homepageViewsThisWeek",
     ];
 
     for (const key of keys) {
@@ -162,6 +164,20 @@ describe("getAdminStats", () => {
     expect(stats.accountViews).toBe(2);
     expect(stats.settingsChanges).toBe(1);
     expect(stats.accountDeletions).toBe(1);
+  });
+
+  test("counts homepage views", async () => {
+    await trackEvent("homepage_view", { role: "guest" });
+    await trackEvent("homepage_view", { role: "guest" });
+    await trackEvent("homepage_view", { role: "user" });
+
+    const guestStats = await getAdminStats("guest");
+    expect(guestStats.homepageViews).toBe(2);
+    expect(guestStats.homepageViewsThisWeek).toBe(2);
+
+    const allStats = await getAdminStats("all");
+    expect(allStats.homepageViews).toBe(3);
+    expect(allStats.homepageViewsThisWeek).toBe(3);
   });
 
   test("filters by role", async () => {

@@ -33,6 +33,8 @@ export interface AdminStats {
   digestFailures: number;
   unsubscribes: number;
   resubscribes: number;
+  homepageViews: number;
+  homepageViewsThisWeek: number;
 }
 
 export const getAdminStats = async (
@@ -60,6 +62,8 @@ export const getAdminStats = async (
     digestFailures,
     unsubscribes,
     resubscribes,
+    homepageViews,
+    homepageViewsThisWeek,
   ] = await Promise.all([
     countEvents("signup", undefined, roleFilter),
     countEvents("account_deletion", undefined, roleFilter),
@@ -82,6 +86,8 @@ export const getAdminStats = async (
     countEvents("digest_failed", undefined, roleFilter),
     countEvents("unsubscribe", undefined, roleFilter),
     countEvents("resubscribe", undefined, roleFilter),
+    countEvents("homepage_view", undefined, roleFilter),
+    countEvents("homepage_view", weekAgo, roleFilter),
   ]);
 
   return {
@@ -102,5 +108,7 @@ export const getAdminStats = async (
     digestFailures,
     unsubscribes,
     resubscribes,
+    homepageViews,
+    homepageViewsThisWeek,
   };
 };

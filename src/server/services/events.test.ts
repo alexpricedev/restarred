@@ -61,6 +61,15 @@ describe("trackEvent", () => {
     expect(rows[0].role).toBe("user");
   });
 
+  test("inserts a homepage_view event with guest role", async () => {
+    await trackEvent("homepage_view", { role: "guest" });
+
+    const rows = await db`SELECT * FROM events WHERE type = 'homepage_view'`;
+    expect(rows).toHaveLength(1);
+    expect(rows[0].role).toBe("guest");
+    expect(rows[0].metadata).toBeNull();
+  });
+
   test("inserts an event with array metadata", async () => {
     await trackEvent("settings_changed", { fields: ["email", "frequency"] });
 
@@ -93,6 +102,16 @@ describe("countEvents", () => {
 
     const past = new Date(Date.now() - 60_000);
     expect(await countEvents("signup", past)).toBe(1);
+  });
+
+  test("filters by guest role", async () => {
+    await trackEvent("homepage_view", { role: "guest" });
+    await trackEvent("homepage_view", { role: "guest" });
+    await trackEvent("homepage_view", { role: "user" });
+
+    expect(await countEvents("homepage_view", undefined, "guest")).toBe(2);
+    expect(await countEvents("homepage_view", undefined, "user")).toBe(1);
+    expect(await countEvents("homepage_view", undefined, "all")).toBe(3);
   });
 
   test("filters by role", async () => {
