@@ -29,7 +29,7 @@ export const DeleteAccount = ({
         <span className="delete-account-label">DANGER ZONE</span>
         <h1 className="delete-account-heading">Delete your account</h1>
         <p className="delete-account-description">
-          This will permanently delete your{" "}
+          This will permanently delete your re:starred{" "}
           <strong>{user.github_username}</strong> account and all associated
           data, including:
         </p>
