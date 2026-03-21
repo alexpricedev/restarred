@@ -87,38 +87,37 @@ export async function completeJob(jobId: string): Promise<void> {
 export async function failJob(jobId: string, error: string): Promise<void> {
   const rows = await db`
     UPDATE jobs
-    SET attempts = attempts + 1, error = ${error}
-    WHERE id = ${jobId}
-    RETURNING attempts, max_attempts
+    SET
+      attempts = attempts + 1,
+      error = ${error},
+      status = CASE WHEN attempts + 1 >= max_attempts THEN 'failed' ELSE 'pending' END,
+      run_at = CASE WHEN attempts + 1 >= max_attempts THEN run_at ELSE now() + ((attempts + 1) * 30 || ' seconds')::interval END
+    WHERE id = ${jobId} AND status = 'running'
+    RETURNING attempts, max_attempts, status
   `;
 
   if (rows.length === 0) {
-    log.warn("jobs", `failJob called for unknown job ${jobId}`);
+    log.warn("jobs", `failJob called for unknown or non-running job ${jobId}`);
     return;
   }
 
-  const { attempts, max_attempts: maxAttempts } = rows[0] as {
+  const {
+    attempts,
+    max_attempts: maxAttempts,
+    status,
+  } = rows[0] as {
     attempts: number;
     max_attempts: number;
+    status: string;
   };
 
-  if (attempts >= maxAttempts) {
-    await db`
-      UPDATE jobs
-      SET status = 'failed'
-      WHERE id = ${jobId}
-    `;
+  if (status === "failed") {
     log.warn(
       "jobs",
       `job ${jobId} permanently failed after ${attempts} attempts: ${error}`,
     );
   } else {
     const backoffSeconds = attempts * 30;
-    await db`
-      UPDATE jobs
-      SET status = 'pending', run_at = now() + ${`${backoffSeconds} seconds`}::interval
-      WHERE id = ${jobId}
-    `;
     log.info(
       "jobs",
       `job ${jobId} will retry in ${backoffSeconds}s (attempt ${attempts}/${maxAttempts})`,
