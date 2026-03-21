@@ -19,9 +19,13 @@ export interface UserPreferences {
 export const getUserRole = async (
   userId: string,
 ): Promise<User["role"] | null> => {
-  const rows = await db`SELECT role FROM users WHERE id = ${userId}`;
-  if (rows.length === 0) return null;
-  return rows[0].role as User["role"];
+  try {
+    const rows = await db`SELECT role FROM users WHERE id = ${userId}`;
+    if (rows.length === 0) return null;
+    return rows[0].role as User["role"];
+  } catch {
+    return null;
+  }
 };
 
 export const getUsers = async (): Promise<User[]> => {

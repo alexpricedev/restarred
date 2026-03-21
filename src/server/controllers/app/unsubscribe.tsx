@@ -37,12 +37,7 @@ const handlePost = async (req: BunRequest): Promise<Response> => {
     );
   }
 
-  let role: Awaited<ReturnType<typeof getUserRole>> = null;
-  try {
-    role = await getUserRole(userId);
-  } catch {
-    /* best-effort role lookup */
-  }
+  const role = await getUserRole(userId);
   await deactivateUser(userId);
   trackEvent("unsubscribe", { role: role ?? undefined }).catch((err) => {
     log.warn("events", `Failed to track unsubscribe: ${err}`);
