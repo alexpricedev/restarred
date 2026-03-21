@@ -53,10 +53,9 @@ export async function trackEvent<T extends EventType>(
     role = secondArg?.role ?? null;
   }
 
-  const jsonMetadata = metadata ? JSON.stringify(metadata) : null;
   await db`
     INSERT INTO events (type, role, metadata)
-    VALUES (${type}, ${role}, ${jsonMetadata}::jsonb)
+    VALUES (${type}, ${role}, ${metadata ?? null})
   `;
 }
 
