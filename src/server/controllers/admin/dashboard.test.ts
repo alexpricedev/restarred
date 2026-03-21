@@ -113,6 +113,7 @@ mock.module("../../middleware/auth", () => {
 
 import { randomUUID } from "node:crypto";
 import { db } from "../../services/database";
+import { trackEvent } from "../../services/events";
 import { createBunRequest } from "../../test-utils/bun-request";
 import { computeHMAC } from "../../utils/crypto";
 import { admin } from "./dashboard";
@@ -189,6 +190,22 @@ describe("Admin Dashboard Controller", () => {
     await createTestUser(db, { githubEmail: "user1@example.com" });
     const sessionId = await createAuthenticatedSession(adminUser.id);
 
+    await trackEvent("signup", { role: "user" });
+    await trackEvent("login", { role: "user" });
+    await trackEvent("account_view", { role: "user" });
+    await trackEvent(
+      "settings_changed",
+      { fields: ["email"] },
+      { role: "user" },
+    );
+    await trackEvent("digest_sent", { role: "user" });
+    await trackEvent("digest_failed", { role: "user" });
+    await trackEvent("stars_synced", { count: 10 }, { role: "user" });
+    await trackEvent("star_sync_failed", { role: "user" });
+    await trackEvent("unsubscribe", { role: "user" });
+    await trackEvent("resubscribe", { role: "user" });
+    await trackEvent("homepage_view", { role: "user" });
+
     const request = createBunRequest("http://localhost:3000/admin", {
       headers: { cookie: `session_id=${sessionId}` },
     });
@@ -208,6 +225,7 @@ describe("Admin Dashboard Controller", () => {
     expect(html).toContain("Sync failures");
     expect(html).toContain("Unsubscribes");
     expect(html).toContain("Resubscribes");
+    expect(html).toContain("Homepage views");
   });
 
   test("renders role filter with user selected by default", async () => {
@@ -228,6 +246,7 @@ describe("Admin Dashboard Controller", () => {
     expect(html).toContain('class="role-filter-link active"');
     expect(html).toContain("Users");
     expect(html).toContain("Admins");
+    expect(html).toContain("Guests");
     expect(html).toContain("All");
   });
 
