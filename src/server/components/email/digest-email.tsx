@@ -40,7 +40,7 @@ export const DigestEmail = ({
         style={{ backgroundColor: "#f9f9f9" }}
       >
         <tr>
-          <td style={{ padding: "32px 16px" }} align="center">
+          <td style={{ padding: "32px 8px" }} align="center">
             <table
               cellPadding={0}
               cellSpacing={0}
@@ -53,7 +53,7 @@ export const DigestEmail = ({
               }}
             >
               <tr>
-                <td style={{ padding: "32px 32px 24px 32px" }}>
+                <td style={{ padding: "32px 16px 24px 16px" }}>
                   {/* Header */}
                   <table
                     width="100%"

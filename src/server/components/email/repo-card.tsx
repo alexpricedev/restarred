@@ -26,7 +26,7 @@ export const RepoCard = ({ repo }: RepoCardProps) => {
           style={{
             backgroundColor: "#f3f3f4",
             borderRadius: "8px",
-            padding: "24px",
+            padding: "16px",
           }}
         >
           <a
