@@ -5,23 +5,34 @@ import type { User } from "@server/services/users";
 
 const formatNumber = (n: number): string => n.toLocaleString("en-US");
 
-const StatCard = (props: { label: string; value: string | number }) => (
-  <div className="stat-card">
-    <span className="stat-label">{props.label}</span>
-    <span className="stat-value">
-      {typeof props.value === "number"
-        ? formatNumber(props.value)
-        : props.value}
-    </span>
-  </div>
-);
+const StatCard = (props: { label: string; value: string | number }) => {
+  if (props.value === 0) return null;
+  return (
+    <div className="stat-card">
+      <span className="stat-label">{props.label}</span>
+      <span className="stat-value">
+        {typeof props.value === "number"
+          ? formatNumber(props.value)
+          : props.value}
+      </span>
+    </div>
+  );
+};
 
-const StatSection = (props: { title: string; children: React.ReactNode }) => (
-  <div className="stat-section">
-    <h2 className="stat-section-title">{props.title}</h2>
-    <div className="stat-grid">{props.children}</div>
-  </div>
-);
+const StatSection = (props: { title: string; children: React.ReactNode }) => {
+  const children = Array.isArray(props.children)
+    ? props.children.filter(Boolean)
+    : props.children
+      ? [props.children]
+      : [];
+  if (children.length === 0) return null;
+  return (
+    <div className="stat-section">
+      <h2 className="stat-section-title">{props.title}</h2>
+      <div className="stat-grid">{children}</div>
+    </div>
+  );
+};
 
 const ROLE_OPTIONS: { value: RoleFilter; label: string }[] = [
   { value: "user", label: "Users" },
