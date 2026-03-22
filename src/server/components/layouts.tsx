@@ -124,6 +124,7 @@ export function Layout({
             >
               GitHub
             </a>
+            <a href="/feedback">Feedback</a>
             <a href="/privacy" target="_blank" rel="noopener noreferrer">
               Privacy
             </a>
