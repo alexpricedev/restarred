@@ -1,4 +1,4 @@
-import { log } from "./logger";
+import { log, maskEmail } from "./logger";
 
 const GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token";
 const GITHUB_USER_URL = "https://api.github.com/user";
@@ -54,7 +54,10 @@ export const fetchGitHubUser = async (
     profile.email = await fetchPrimaryEmail(accessToken);
   }
 
-  log.info("github", `Resolved email: ${profile.email ?? "(none)"}`);
+  log.info(
+    "github",
+    `Resolved email: ${profile.email ? maskEmail(profile.email) : "(none)"}`,
+  );
   return profile;
 };
 

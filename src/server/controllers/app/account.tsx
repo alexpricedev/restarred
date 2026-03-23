@@ -13,7 +13,7 @@ import {
   verifyPin,
 } from "../../services/email-verification";
 import { trackEvent } from "../../services/events";
-import { log } from "../../services/logger";
+import { log, maskEmail } from "../../services/logger";
 import { setSessionCookie } from "../../services/sessions";
 import { getStarCount } from "../../services/stars";
 import { generateUnsubscribeToken } from "../../services/unsubscribe";
@@ -310,7 +310,7 @@ async function handleTestEmail(req: BunRequest): Promise<Response> {
       headers: email.headers,
     });
 
-    log.info("account", `Test email sent to ${recipientEmail}`);
+    log.info("account", `Test email sent to ${maskEmail(recipientEmail)}`);
 
     setFlashCookie(req, "account", {
       type: "success",

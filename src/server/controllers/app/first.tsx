@@ -9,7 +9,7 @@ import {
 import { renderDigestEmail } from "../../services/digest-email";
 import { getEmailService } from "../../services/email";
 import { trackEvent } from "../../services/events";
-import { log } from "../../services/logger";
+import { log, maskEmail } from "../../services/logger";
 import { setSessionCookie } from "../../services/sessions";
 import { getStarCount } from "../../services/stars";
 import { generateUnsubscribeToken } from "../../services/unsubscribe";
@@ -137,7 +137,7 @@ async function handleSend(req: BunRequest): Promise<Response> {
       log.warn("events", `Failed to track digest_sent: ${err}`);
     });
 
-    log.info("first", `First digest sent to ${recipientEmail}`);
+    log.info("first", `First digest sent to ${maskEmail(recipientEmail)}`);
   } catch (error) {
     log.error(
       "first",
