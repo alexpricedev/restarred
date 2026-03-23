@@ -259,6 +259,7 @@ describe("renderDigestPlainText", () => {
         stargazersCount: 1500,
         htmlUrl: "https://github.com/owner/test-repo",
         lastActivityAt: ago(14 * DAY),
+        starredAt: ago(365 * 2 * DAY),
       }),
     ];
     const text = renderDigestPlainText(
@@ -274,6 +275,8 @@ describe("renderDigestPlainText", () => {
     expect(text).toContain("1.5k");
     expect(text).toContain("https://github.com/owner/test-repo");
     expect(text).toContain("Active");
+    expect(text).toContain("Last commit 2 weeks ago");
+    expect(text).toContain("You starred this");
   });
 
   test("contains footer links", () => {

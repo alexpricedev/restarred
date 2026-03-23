@@ -2,35 +2,36 @@ const repos = [
   {
     owner: "charmbracelet",
     name: "vhs",
-    description: "Your CLI home video recorder. Write terminal GIFs as code.",
+    description: "Your CLI home video recorder.",
     language: "Go",
-    stars: "15.2k",
+    stars: "19.1k",
     status: "Active",
     statusClass: "active",
-    lastCommit: "Last commit 4 days ago",
+    lastCommit: "Last commit 1 day ago",
     starredAgo: "2 years ago",
   },
   {
-    owner: "tldraw",
-    name: "tldraw",
-    description: "A tiny little drawing app. Collaborative whiteboard SDK.",
-    language: "TypeScript",
-    stars: "37.4k",
+    owner: "mattdesl",
+    name: "canvas-sketch",
+    description:
+      "A framework for making generative artwork in JavaScript and the browser.",
+    language: "JavaScript",
+    stars: "5.2k",
     status: "Dormant",
     statusClass: "dormant",
-    lastCommit: "Last commit 2 years ago",
-    starredAgo: "3 years ago",
+    lastCommit: "Last commit Feb 2024",
+    starredAgo: "5 years ago",
   },
   {
-    owner: "tinyhttp",
-    name: "tinyhttp",
-    description: "Modern Express-like web framework. 0-legacy, tiny & fast.",
-    language: "TypeScript",
-    stars: "2.7k",
+    owner: "atom",
+    name: "atom",
+    description: "The hackable text editor.",
+    language: "JavaScript",
+    stars: "61k",
     status: "Archived",
     statusClass: "archived",
-    lastCommit: "Last commit 3 years ago",
-    starredAgo: "4 years ago",
+    lastCommit: "Last commit Jan 2023",
+    starredAgo: "8 years ago",
   },
 ];
 
@@ -50,7 +51,7 @@ export const DigestPreview = () => (
         <div className="digest-chrome-field">
           <span className="digest-chrome-label">Subject</span>
           <span className="digest-chrome-value">
-            tldraw/tldraw and 2 others — from your stars
+            atom/atom and 2 others — from your stars
           </span>
         </div>
       </div>

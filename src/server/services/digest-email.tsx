@@ -171,7 +171,13 @@ export const renderDigestPlainText = (
       parts.push(repo.language);
     }
     parts.push(activity.label);
+    if (activity.detail) {
+      parts.push(activity.detail);
+    }
     lines.push(`   ${parts.join(" · ")}`);
+    if (repo.starredAt) {
+      lines.push(`   You starred this ${formatRelativeDate(repo.starredAt)}`);
+    }
     lines.push(`   ${repo.htmlUrl}`);
     lines.push("");
   });
