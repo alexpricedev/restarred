@@ -315,6 +315,13 @@
     opacity: 0.4;
   }
 
+  .digest-repo-starred {
+    font-family: var(--font-main);
+    font-size: 0.6875rem;
+    color: var(--color-text-tertiary);
+    margin: 0.375rem 0 0;
+  }
+
   /* ── Protocol / How It Works ────────────────────────── */
 
   .landing-protocol {

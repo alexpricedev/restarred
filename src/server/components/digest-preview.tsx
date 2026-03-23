@@ -6,7 +6,7 @@ const repos = [
     language: "Go",
     stars: "15.2k",
     status: "Active",
-    updated: "3d ago",
+    starredAgo: "2 years ago",
   },
   {
     owner: "tldraw",
@@ -14,8 +14,8 @@ const repos = [
     description: "A tiny little drawing app. Collaborative whiteboard SDK.",
     language: "TypeScript",
     stars: "37.4k",
-    status: "Active",
-    updated: "1d ago",
+    status: "Dormant",
+    starredAgo: "3 years ago",
   },
   {
     owner: "tinyhttp",
@@ -23,8 +23,8 @@ const repos = [
     description: "Modern Express-like web framework. 0-legacy, tiny & fast.",
     language: "TypeScript",
     stars: "2.7k",
-    status: "Active",
-    updated: "6d ago",
+    status: "Archived",
+    starredAgo: "4 years ago",
   },
 ];
 
@@ -75,9 +75,10 @@ export const DigestPreview = () => (
               <span className="digest-repo-lang">{repo.language}</span>
               <span className="digest-repo-dot">&middot;</span>
               <span>{repo.status}</span>
-              <span className="digest-repo-dot">&middot;</span>
-              <span>Updated {repo.updated}</span>
             </div>
+            <p className="digest-repo-starred">
+              You starred this {repo.starredAgo}
+            </p>
           </div>
         ))}
       </div>
