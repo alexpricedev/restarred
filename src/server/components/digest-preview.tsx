@@ -85,6 +85,7 @@ export const DigestPreview = () => (
               >
                 {repo.status}
               </span>
+              <span className="digest-repo-dot">&middot;</span>
               <span>{repo.lastCommit}</span>
             </div>
             <div className="digest-repo-footer">

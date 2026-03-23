@@ -21,8 +21,8 @@ export const ActivityBadge = ({ activity }: ActivityBadgeProps) => (
     <span
       style={{
         ...badgeBase,
-        backgroundColor: activity.badgeColor,
-        color: "#ffffff",
+        backgroundColor: activity.badgeBg,
+        color: activity.badgeColor,
       }}
     >
       {activity.label}

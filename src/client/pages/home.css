@@ -328,11 +328,13 @@
   }
 
   .digest-repo-badge--active {
-    background: var(--color-success);
+    background: color-mix(in srgb, var(--color-success) 15%, transparent);
+    color: var(--color-success);
   }
 
   .digest-repo-badge--dormant {
-    background: var(--color-danger);
+    background: color-mix(in srgb, var(--color-danger) 15%, transparent);
+    color: var(--color-danger);
   }
 
   .digest-repo-badge--archived {

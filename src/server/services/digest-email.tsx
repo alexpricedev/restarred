@@ -13,6 +13,7 @@ export interface RepoActivity {
   label: string;
   detail: string;
   badgeColor: string;
+  badgeBg: string;
 }
 
 const MINUTE = 60 * 1000;
@@ -80,6 +81,7 @@ export const getActivityStatus = (
       label: "Dormant",
       detail: "No recent activity",
       badgeColor: "#ba1a1a",
+      badgeBg: "#f5dcdc",
     };
   }
 
@@ -93,6 +95,7 @@ export const getActivityStatus = (
       label: "Active",
       detail,
       badgeColor: "#2d6a4f",
+      badgeBg: "#dff0e8",
     };
   }
 
@@ -103,6 +106,7 @@ export const getActivityStatus = (
       label: "Quiet",
       detail,
       badgeColor: "#5e5e5e",
+      badgeBg: "#ececec",
     };
   }
 
@@ -112,6 +116,7 @@ export const getActivityStatus = (
     label: "Dormant",
     detail,
     badgeColor: "#ba1a1a",
+    badgeBg: "#f5dcdc",
   };
 };
 

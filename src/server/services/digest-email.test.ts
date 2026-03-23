@@ -98,6 +98,7 @@ describe("getActivityStatus", () => {
     expect(result.label).toBe("Dormant");
     expect(result.detail).toBe("No recent activity");
     expect(result.badgeColor).toBe("#ba1a1a");
+    expect(result.badgeBg).toBe("#f5dcdc");
     expect(result.isArchived).toBe(false);
   });
 
@@ -106,6 +107,7 @@ describe("getActivityStatus", () => {
     expect(result.status).toBe("active");
     expect(result.label).toBe("Active");
     expect(result.badgeColor).toBe("#2d6a4f");
+    expect(result.badgeBg).toBe("#dff0e8");
     expect(result.detail).toStartWith("Last commit ");
   });
 
@@ -114,6 +116,7 @@ describe("getActivityStatus", () => {
     expect(result.status).toBe("quiet");
     expect(result.label).toBe("Quiet");
     expect(result.badgeColor).toBe("#5e5e5e");
+    expect(result.badgeBg).toBe("#ececec");
   });
 
   test("365+ days returns dormant with detail", () => {
@@ -121,6 +124,7 @@ describe("getActivityStatus", () => {
     expect(result.status).toBe("dormant");
     expect(result.label).toBe("Dormant");
     expect(result.badgeColor).toBe("#ba1a1a");
+    expect(result.badgeBg).toBe("#f5dcdc");
     expect(result.detail).toStartWith("Last commit ");
   });
 
