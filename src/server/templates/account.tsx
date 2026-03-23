@@ -10,6 +10,8 @@ interface AccountProps {
   csrfToken: string;
   logoutCsrfToken: string;
   testEmailCsrfToken?: string;
+  resendCsrfToken?: string;
+  pendingEmail?: string;
   flash?: { type: "success" | "error"; message: string };
 }
 
@@ -136,6 +138,8 @@ export const Account = ({
   csrfToken,
   logoutCsrfToken,
   testEmailCsrfToken,
+  resendCsrfToken,
+  pendingEmail,
   flash,
 }: AccountProps) => (
   <Layout
@@ -240,6 +244,26 @@ export const Account = ({
             By default, digests are sent to your GitHub email. Set an override
             to use a different address.
           </p>
+          {pendingEmail && (
+            <div className="account-pending-verification">
+              <p>
+                Verification email sent to <strong>{pendingEmail}</strong>.
+                Check your inbox to confirm.
+              </p>
+              {resendCsrfToken && (
+                <form
+                  method="POST"
+                  action="/account/resend-verification"
+                  className="account-resend-form"
+                >
+                  <CsrfField token={resendCsrfToken} />
+                  <button type="submit" className="button-secondary">
+                    Resend verification email
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
           <div className="form-field">
             <label htmlFor="email_override">Email address</label>
             <input
