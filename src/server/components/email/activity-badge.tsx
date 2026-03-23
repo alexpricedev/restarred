@@ -40,17 +40,19 @@ export const ActivityBadge = ({ activity }: ActivityBadgeProps) => (
       </span>
     )}
     {activity.detail && (
-      <span
-        style={{
-          fontFamily: "Inter, sans-serif",
-          fontSize: "11px",
-          color: "#ababab",
-          marginLeft: "8px",
-          verticalAlign: "middle",
-        }}
-      >
-        {activity.detail}
-      </span>
+      <>
+        <span style={{ margin: "0 8px", color: "#ababab" }}>&middot;</span>
+        <span
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontSize: "11px",
+            color: "#ababab",
+            verticalAlign: "middle",
+          }}
+        >
+          {activity.detail}
+        </span>
+      </>
     )}
   </span>
 );
