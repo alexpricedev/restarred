@@ -16,7 +16,8 @@ export type EventType =
   | "resubscribe"
   | "stars_synced"
   | "star_sync_failed"
-  | "homepage_view";
+  | "homepage_view"
+  | "repo_unstarred";
 
 export interface EventMetadata {
   signup: never;
@@ -31,6 +32,7 @@ export interface EventMetadata {
   stars_synced: { count: number };
   star_sync_failed: never;
   homepage_view: never;
+  repo_unstarred: { source: string };
 }
 
 type HasMetadata<T extends EventType> = EventMetadata[T] extends never
