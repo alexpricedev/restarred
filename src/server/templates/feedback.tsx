@@ -18,9 +18,9 @@ export const Feedback = ({ user, csrfToken }: FeedbackProps) => (
   >
     <div className="feedback-container">
       <span className="feedback-label">FEEDBACK</span>
-      <h1 className="feedback-heading">We'd love to hear from you</h1>
+      <h1 className="feedback-heading">I'D LOVE TO HEAR FROM YOU</h1>
       <p className="feedback-description">
-        Found a bug? Got an idea? Open an issue on GitHub and we'll take a look.
+        Found a bug? Got an idea? Open an issue on GitHub and I'll take a look.
       </p>
 
       <div className="feedback-cards">
@@ -63,6 +63,21 @@ export const Feedback = ({ user, csrfToken }: FeedbackProps) => (
             rel="noopener noreferrer"
           >
             alexprice.dev
+          </a>
+        </p>
+      </div>
+
+      <div className="feedback-support">
+        <span className="feedback-support-label">SUPPORT</span>
+        <p className="feedback-support-description">
+          re:starred is built and maintained by one person. Your support helps
+          cover email and hosting costs.{" "}
+          <a
+            href="https://buymeacoffee.com/alexpricedev"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Buy me a coffee
           </a>
         </p>
       </div>
