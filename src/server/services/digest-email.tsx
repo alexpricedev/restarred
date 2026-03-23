@@ -13,6 +13,7 @@ export interface RepoActivity {
   label: string;
   detail: string;
   badgeColor: string;
+  badgeBg: string;
 }
 
 const MINUTE = 60 * 1000;
@@ -79,7 +80,8 @@ export const getActivityStatus = (
       isArchived,
       label: "Dormant",
       detail: "No recent activity",
-      badgeColor: "#ababab",
+      badgeColor: "#ba1a1a",
+      badgeBg: "#f5dcdc",
     };
   }
 
@@ -92,7 +94,8 @@ export const getActivityStatus = (
       isArchived,
       label: "Active",
       detail,
-      badgeColor: "#000000",
+      badgeColor: "#2d6a4f",
+      badgeBg: "#dff0e8",
     };
   }
 
@@ -103,6 +106,7 @@ export const getActivityStatus = (
       label: "Quiet",
       detail,
       badgeColor: "#5e5e5e",
+      badgeBg: "#ececec",
     };
   }
 
@@ -111,7 +115,8 @@ export const getActivityStatus = (
     isArchived,
     label: "Dormant",
     detail,
-    badgeColor: "#ababab",
+    badgeColor: "#ba1a1a",
+    badgeBg: "#f5dcdc",
   };
 };
 
@@ -166,7 +171,13 @@ export const renderDigestPlainText = (
       parts.push(repo.language);
     }
     parts.push(activity.label);
+    if (activity.detail) {
+      parts.push(activity.detail);
+    }
     lines.push(`   ${parts.join(" · ")}`);
+    if (repo.starredAt) {
+      lines.push(`   You starred this ${formatRelativeDate(repo.starredAt)}`);
+    }
     lines.push(`   ${repo.htmlUrl}`);
     lines.push("");
   });

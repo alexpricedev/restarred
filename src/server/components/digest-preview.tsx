@@ -2,29 +2,36 @@ const repos = [
   {
     owner: "charmbracelet",
     name: "vhs",
-    description: "Your CLI home video recorder. Write terminal GIFs as code.",
+    description: "Your CLI home video recorder.",
     language: "Go",
-    stars: "15.2k",
+    stars: "19.1k",
     status: "Active",
-    updated: "3d ago",
+    statusClass: "active",
+    lastCommit: "Last commit 1 day ago",
+    starredAgo: "2 years ago",
   },
   {
-    owner: "tldraw",
-    name: "tldraw",
-    description: "A tiny little drawing app. Collaborative whiteboard SDK.",
-    language: "TypeScript",
-    stars: "37.4k",
-    status: "Active",
-    updated: "1d ago",
+    owner: "mattdesl",
+    name: "canvas-sketch",
+    description:
+      "A framework for making generative artwork in JavaScript and the browser.",
+    language: "JavaScript",
+    stars: "5.2k",
+    status: "Dormant",
+    statusClass: "dormant",
+    lastCommit: "Last commit Feb 2024",
+    starredAgo: "5 years ago",
   },
   {
-    owner: "tinyhttp",
-    name: "tinyhttp",
-    description: "Modern Express-like web framework. 0-legacy, tiny & fast.",
-    language: "TypeScript",
-    stars: "2.7k",
-    status: "Active",
-    updated: "6d ago",
+    owner: "atom",
+    name: "atom",
+    description: "The hackable text editor.",
+    language: "JavaScript",
+    stars: "61k",
+    status: "Archived",
+    statusClass: "archived",
+    lastCommit: "Last commit Jan 2023",
+    starredAgo: "8 years ago",
   },
 ];
 
@@ -44,7 +51,7 @@ export const DigestPreview = () => (
         <div className="digest-chrome-field">
           <span className="digest-chrome-label">Subject</span>
           <span className="digest-chrome-value">
-            tldraw/tldraw and 2 others — from your stars
+            atom/atom and 2 others — from your stars
           </span>
         </div>
       </div>
@@ -64,19 +71,33 @@ export const DigestPreview = () => (
       <div className="digest-body">
         {repos.map((repo) => (
           <div className="digest-repo" key={`${repo.owner}/${repo.name}`}>
-            <div className="digest-repo-top">
-              <span className="digest-repo-name">
-                {repo.owner}/{repo.name}
-              </span>
-              <span className="digest-repo-stars">&#9733; {repo.stars}</span>
-            </div>
+            <a
+              className="digest-repo-name"
+              href={`https://github.com/${repo.owner}/${repo.name}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {repo.owner}/{repo.name}
+            </a>
             <p className="digest-repo-desc">{repo.description}</p>
             <div className="digest-repo-meta">
               <span className="digest-repo-lang">{repo.language}</span>
               <span className="digest-repo-dot">&middot;</span>
-              <span>{repo.status}</span>
+              <span>&#9733; {repo.stars}</span>
               <span className="digest-repo-dot">&middot;</span>
-              <span>Updated {repo.updated}</span>
+              <span
+                className={`digest-repo-badge digest-repo-badge--${repo.statusClass}`}
+              >
+                {repo.status}
+              </span>
+              <span className="digest-repo-dot">&middot;</span>
+              <span>{repo.lastCommit}</span>
+            </div>
+            <div className="digest-repo-footer">
+              <p className="digest-repo-starred">
+                You starred this {repo.starredAgo}
+              </p>
+              <span className="digest-repo-unstar">Unstar</span>
             </div>
           </div>
         ))}

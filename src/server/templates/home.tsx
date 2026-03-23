@@ -82,26 +82,26 @@ export const Home = ({ user, csrfToken, flash }: HomeProps) => (
           <div className="protocol-grid">
             <div className="protocol-step">
               <div className="step-number">01</div>
-              <h3>CONNECT YOUR GITHUB</h3>
+              <h3>YOU ALREADY DID THE WORK</h3>
               <p>
-                We pull in every repo you've ever starred. No duplicates until
-                you've seen them all.
+                Every repo you starred was worth remembering. Connect GitHub and
+                we'll pull in your full list.
               </p>
             </div>
             <div className="protocol-step">
               <div className="step-number">02</div>
-              <h3>GET 3 REPOS, WEEKLY</h3>
+              <h3>WE SURFACE 3 A WEEK</h3>
               <p>
-                Each week, you get 3 of your starred repos in a single email. No
+                Each week, you get 3 forgotten repos in a single email. No
                 repeats until you've seen them all.
               </p>
             </div>
             <div className="protocol-step">
               <div className="step-number">03</div>
-              <h3>REVISIT WHAT'S WORTH KEEPING</h3>
+              <h3>YOU DECIDE WHAT'S STILL USEFUL</h3>
               <p>
-                See what's changed — activity status, latest commits, star
-                count. Revisit the ones worth keeping.
+                Revisit the ones worth keeping. Unstar the rest — right from the
+                email.
               </p>
             </div>
           </div>
@@ -114,11 +114,11 @@ export const Home = ({ user, csrfToken, flash }: HomeProps) => (
           <div className="bento-grid">
             <div className="bento-large">
               <div className="bento-large-content">
-                <h3>FULL CONTEXT, NOT JUST LINKS</h3>
+                <h3>ENOUGH CONTEXT TO DECIDE</h3>
                 <p>
-                  Each repo comes with its description, primary language, star
-                  count, and activity status — so you know if it's still alive
-                  before you click.
+                  Each repo comes with its description, language, star count,
+                  and activity status — so you can tell what's alive at a
+                  glance.
                 </p>
               </div>
             </div>

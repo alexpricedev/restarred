@@ -97,7 +97,8 @@ describe("getActivityStatus", () => {
     expect(result.status).toBe("dormant");
     expect(result.label).toBe("Dormant");
     expect(result.detail).toBe("No recent activity");
-    expect(result.badgeColor).toBe("#ababab");
+    expect(result.badgeColor).toBe("#ba1a1a");
+    expect(result.badgeBg).toBe("#f5dcdc");
     expect(result.isArchived).toBe(false);
   });
 
@@ -105,7 +106,8 @@ describe("getActivityStatus", () => {
     const result = getActivityStatus(ago(10 * DAY), false);
     expect(result.status).toBe("active");
     expect(result.label).toBe("Active");
-    expect(result.badgeColor).toBe("#000000");
+    expect(result.badgeColor).toBe("#2d6a4f");
+    expect(result.badgeBg).toBe("#dff0e8");
     expect(result.detail).toStartWith("Last commit ");
   });
 
@@ -114,13 +116,15 @@ describe("getActivityStatus", () => {
     expect(result.status).toBe("quiet");
     expect(result.label).toBe("Quiet");
     expect(result.badgeColor).toBe("#5e5e5e");
+    expect(result.badgeBg).toBe("#ececec");
   });
 
   test("365+ days returns dormant with detail", () => {
     const result = getActivityStatus(ago(400 * DAY), false);
     expect(result.status).toBe("dormant");
     expect(result.label).toBe("Dormant");
-    expect(result.badgeColor).toBe("#ababab");
+    expect(result.badgeColor).toBe("#ba1a1a");
+    expect(result.badgeBg).toBe("#f5dcdc");
     expect(result.detail).toStartWith("Last commit ");
   });
 
@@ -255,6 +259,7 @@ describe("renderDigestPlainText", () => {
         stargazersCount: 1500,
         htmlUrl: "https://github.com/owner/test-repo",
         lastActivityAt: ago(14 * DAY),
+        starredAt: ago(365 * 2 * DAY),
       }),
     ];
     const text = renderDigestPlainText(
@@ -270,6 +275,8 @@ describe("renderDigestPlainText", () => {
     expect(text).toContain("1.5k");
     expect(text).toContain("https://github.com/owner/test-repo");
     expect(text).toContain("Active");
+    expect(text).toContain("Last commit 2 weeks ago");
+    expect(text).toContain("You starred this");
   });
 
   test("contains footer links", () => {
