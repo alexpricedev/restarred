@@ -67,7 +67,7 @@ interface ConsentContext {
   userAgent: string | null;
 }
 
-export const recordConsentAndMarkViewed = async (
+export const recordConsent = async (
   userId: string,
   context: ConsentContext,
 ): Promise<void> => {

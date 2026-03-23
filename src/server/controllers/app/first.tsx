@@ -13,7 +13,7 @@ import { log } from "../../services/logger";
 import { setSessionCookie } from "../../services/sessions";
 import { getStarCount } from "../../services/stars";
 import { generateUnsubscribeToken } from "../../services/unsubscribe";
-import { recordConsentAndMarkViewed } from "../../services/users";
+import { recordConsent } from "../../services/users";
 import { First } from "../../templates/first";
 import { redirect, render } from "../../utils/response";
 
@@ -145,7 +145,7 @@ async function handleSend(req: BunRequest): Promise<Response> {
     );
   }
 
-  await recordConsentAndMarkViewed(ctx.user.id, getConsentContext(req));
+  await recordConsent(ctx.user.id, getConsentContext(req));
   return redirect("/account");
 }
 
@@ -170,7 +170,7 @@ async function handleSkip(req: BunRequest): Promise<Response> {
     );
   }
 
-  await recordConsentAndMarkViewed(ctx.user.id, getConsentContext(req));
+  await recordConsent(ctx.user.id, getConsentContext(req));
   log.info("first", `User ${ctx.user.id} skipped first digest`);
   return redirect("/account");
 }

@@ -51,7 +51,7 @@ mock.module("../../middleware/csrf", () => ({
 }));
 
 mock.module("../../services/users", () => ({
-  recordConsentAndMarkViewed: mock(() => Promise.resolve()),
+  recordConsent: mock(() => Promise.resolve()),
 }));
 
 mock.module("../../services/unsubscribe", () => ({
@@ -175,8 +175,8 @@ describe("First Controller", () => {
     expect(response.status).toBe(303);
     expect(response.headers.get("location")).toBe("/account");
 
-    const { recordConsentAndMarkViewed } = await import("../../services/users");
-    expect(recordConsentAndMarkViewed).toHaveBeenCalled();
+    const { recordConsent } = await import("../../services/users");
+    expect(recordConsent).toHaveBeenCalled();
   });
 
   test("POST /first/skip without consent re-renders with error", async () => {
@@ -204,8 +204,8 @@ describe("First Controller", () => {
     expect(response.status).toBe(303);
     expect(response.headers.get("location")).toBe("/account");
 
-    const { recordConsentAndMarkViewed } = await import("../../services/users");
-    expect(recordConsentAndMarkViewed).toHaveBeenCalled();
+    const { recordConsent } = await import("../../services/users");
+    expect(recordConsent).toHaveBeenCalled();
   });
 
   test("POST /first/send without consent re-renders with error", async () => {
