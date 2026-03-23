@@ -250,6 +250,10 @@ const mockUser: User = {
 };
 
 describe("renderDigestPlainText", () => {
+  const defaultUnstarUrls: Record<string, string> = {
+    "star-1": "http://localhost:3000/unstar?token=test-token",
+  };
+
   test("contains all repo details", () => {
     const repos = [
       makeRepo({
@@ -265,6 +269,7 @@ describe("renderDigestPlainText", () => {
     const text = renderDigestPlainText(
       "TestUser",
       repos,
+      defaultUnstarUrls,
       "http://localhost:3000/account",
       "http://localhost:3000/unsubscribe?token=abc",
     );
@@ -279,11 +284,27 @@ describe("renderDigestPlainText", () => {
     expect(text).toContain("You starred this");
   });
 
+  test("contains unstar URLs", () => {
+    const repos = [makeRepo()];
+    const text = renderDigestPlainText(
+      "TestUser",
+      repos,
+      defaultUnstarUrls,
+      "http://localhost:3000/account",
+      "http://localhost:3000/unsubscribe?token=abc",
+    );
+
+    expect(text).toContain(
+      "Unstar: http://localhost:3000/unstar?token=test-token",
+    );
+  });
+
   test("contains footer links", () => {
     const repos = [makeRepo()];
     const text = renderDigestPlainText(
       "TestUser",
       repos,
+      defaultUnstarUrls,
       "http://localhost:3000/account",
       "http://localhost:3000/unsubscribe?token=abc",
     );
@@ -300,6 +321,7 @@ describe("renderDigestPlainText", () => {
     const text = renderDigestPlainText(
       "TestUser",
       repos,
+      defaultUnstarUrls,
       "http://x",
       "http://y",
     );
@@ -314,6 +336,7 @@ describe("renderDigestPlainText", () => {
     const text = renderDigestPlainText(
       "Test User",
       repos,
+      defaultUnstarUrls,
       "http://x",
       "http://y",
     );
@@ -325,6 +348,7 @@ describe("renderDigestPlainText", () => {
     const text = renderDigestPlainText(
       "TestUser",
       repos,
+      defaultUnstarUrls,
       "http://x",
       "http://y",
     );
@@ -337,6 +361,7 @@ describe("renderDigestPlainText", () => {
     const text = renderDigestPlainText(
       "TestUser",
       repos,
+      defaultUnstarUrls,
       "http://x",
       "http://y",
     );
@@ -417,5 +442,17 @@ describe("renderDigestEmail", () => {
     const result = renderDigestEmail(mockUser, repos, "token-123");
     expect(result.html).toContain("/account");
     expect(result.text).toContain("/account");
+  });
+
+  test("html contains unstar links", () => {
+    const result = renderDigestEmail(mockUser, repos, "token-123");
+    expect(result.html).toContain("/unstar?token=");
+    expect(result.html).toContain(">Unstar</a>");
+  });
+
+  test("text contains unstar URLs", () => {
+    const result = renderDigestEmail(mockUser, repos, "token-123");
+    expect(result.text).toContain("Unstar: ");
+    expect(result.text).toContain("/unstar?token=");
   });
 });
