@@ -3,5 +3,7 @@ export { deleteAccount } from "./delete-account";
 export { feedback } from "./feedback";
 export { first } from "./first";
 export { home } from "./home";
+export { privacy } from "./privacy";
+export { terms } from "./terms";
 export { unsubscribe } from "./unsubscribe";
 export { welcome } from "./welcome";

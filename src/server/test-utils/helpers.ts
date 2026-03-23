@@ -8,6 +8,7 @@ import type { SQL } from "bun";
  * @param db - The database connection to use (should be the mocked testDb from each test file)
  */
 export const cleanupTestData = async (db: SQL): Promise<void> => {
+  await db`TRUNCATE TABLE consent_records CASCADE`;
   await db`TRUNCATE TABLE sessions CASCADE`;
   await db`TRUNCATE TABLE users CASCADE`;
   await db`TRUNCATE TABLE events CASCADE`;

@@ -187,7 +187,10 @@ describe("Admin Dashboard Controller", () => {
       githubEmail: "admin@example.com",
       role: "admin",
     });
-    await createTestUser(db, { githubEmail: "user1@example.com" });
+    const user1 = await createTestUser(db, {
+      githubEmail: "user1@example.com",
+    });
+    await db`UPDATE users SET is_active = true WHERE id = ${user1.id}`;
     const sessionId = await createAuthenticatedSession(adminUser.id);
 
     await trackEvent("signup", { role: "user" });

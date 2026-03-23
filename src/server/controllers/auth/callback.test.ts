@@ -11,10 +11,11 @@ const mockUser = {
   digest_hour: 9,
   timezone: "UTC",
   is_active: true,
+  consented_to_emails: true,
+  consented_at: new Date(),
   sync_status: "idle",
   role: "user",
   filter_own_repos: true,
-  has_viewed_first: false,
   created_at: new Date(),
   updated_at: new Date(),
 };

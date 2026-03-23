@@ -7,6 +7,7 @@
 @import "./pages/first.css";
 @import "./pages/unsubscribe.css";
 @import "./pages/feedback.css";
+@import "./pages/legal.css";
 
 /* Component styles */
 @import "./components/layout.css";

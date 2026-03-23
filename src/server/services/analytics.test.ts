@@ -104,10 +104,10 @@ describe("getAdminStats", () => {
   });
 
   test("counts totalUsers and activeUsers from users table", async () => {
+    const user1 = await createTestUser(db, { role: "user" });
+    const user2 = await createTestUser(db, { role: "user" });
     await createTestUser(db, { role: "user" });
-    await createTestUser(db, { role: "user" });
-    const inactive = await createTestUser(db, { role: "user" });
-    await db`UPDATE users SET is_active = false WHERE id = ${inactive.id}`;
+    await db`UPDATE users SET is_active = true WHERE id IN (${user1.id}, ${user2.id})`;
 
     const stats = await getAdminStats("user");
 

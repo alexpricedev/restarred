@@ -4,6 +4,8 @@ import {
   feedback,
   first,
   home,
+  privacy,
+  terms,
   unsubscribe,
   welcome,
 } from "../controllers/app";
@@ -13,6 +15,8 @@ import { createRouteHandler } from "../utils/route-handler";
 export const appRoutes = {
   "/": home.index,
   "/feedback": feedback.index,
+  "/terms": terms.index,
+  "/privacy": privacy.index,
   "/welcome": welcome.index,
   "/first": first.index,
   "/first/send": createRouteHandler({ POST: first.send }),

@@ -6,10 +6,22 @@ const DOM_FIXTURE = `
       <span class="first-label">SYNC COMPLETE</span>
       <h1 class="first-heading">42 REPOS READY</h1>
       <p class="first-description">Each week, we'll email you 3 forgotten starred repos.</p>
+      <div class="first-consent">
+        <label class="first-consent-checkbox">
+          <span>I agree to receive weekly digest emails from re:starred.</span>
+          <input type="checkbox" data-consent-checkbox />
+        </label>
+      </div>
       <div class="first-actions">
         <form method="POST" action="/first/send" data-send-form>
           <input type="hidden" name="_csrf" value="mock-token" />
-          <button type="submit" class="first-btn first-btn-primary">SEND MY FIRST DIGEST NOW</button>
+          <input type="hidden" name="consent" value="" data-consent-field />
+          <button type="submit" class="first-btn first-btn-primary" disabled>SEND MY FIRST DIGEST NOW</button>
+        </form>
+        <form method="POST" action="/first/skip">
+          <input type="hidden" name="_csrf" value="mock-token" />
+          <input type="hidden" name="consent" value="" data-consent-field />
+          <button type="submit" class="first-btn first-btn-secondary" disabled>I'll wait for my regular digest</button>
         </form>
       </div>
     </div>
@@ -130,5 +142,56 @@ describe("first page", () => {
 
     expect(btn.textContent).toBe("SEND MY FIRST DIGEST NOW");
     expect(btn.disabled).toBe(false);
+  });
+
+  test("buttons start disabled and enable when consent checkbox is checked", async () => {
+    const { init } = await import("./first");
+    init();
+
+    const checkbox = document.querySelector<HTMLInputElement>(
+      "[data-consent-checkbox]",
+    );
+    const buttons = document.querySelectorAll<HTMLButtonElement>(
+      ".first-actions button",
+    );
+    const hiddenFields = document.querySelectorAll<HTMLInputElement>(
+      "[data-consent-field]",
+    );
+
+    expect(buttons[0].disabled).toBe(true);
+    expect(buttons[1].disabled).toBe(true);
+
+    if (checkbox) {
+      checkbox.checked = true;
+      checkbox.dispatchEvent(new Event("change"));
+    }
+
+    expect(buttons[0].disabled).toBe(false);
+    expect(buttons[1].disabled).toBe(false);
+    expect(hiddenFields[0].value).toBe("on");
+    expect(hiddenFields[1].value).toBe("on");
+  });
+
+  test("buttons re-disable when consent checkbox is unchecked", async () => {
+    const { init } = await import("./first");
+    init();
+
+    const checkbox = document.querySelector<HTMLInputElement>(
+      "[data-consent-checkbox]",
+    );
+    const buttons = document.querySelectorAll<HTMLButtonElement>(
+      ".first-actions button",
+    );
+
+    if (checkbox) {
+      checkbox.checked = true;
+      checkbox.dispatchEvent(new Event("change"));
+      expect(buttons[0].disabled).toBe(false);
+
+      checkbox.checked = false;
+      checkbox.dispatchEvent(new Event("change"));
+    }
+    expect(buttons[0].disabled).toBe(true);
+    expect(buttons[1].disabled).toBe(true);
   });
 });

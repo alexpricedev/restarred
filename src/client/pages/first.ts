@@ -102,6 +102,30 @@ function createConfetti() {
   window.addEventListener("resize", onResize);
 }
 
+function setupConsentCheckbox() {
+  const checkbox = document.querySelector<HTMLInputElement>(
+    "[data-consent-checkbox]",
+  );
+  if (!checkbox) return;
+
+  const buttons = document.querySelectorAll<HTMLButtonElement>(
+    ".first-actions button",
+  );
+  const hiddenFields = document.querySelectorAll<HTMLInputElement>(
+    "[data-consent-field]",
+  );
+
+  checkbox.addEventListener("change", () => {
+    const checked = checkbox.checked;
+    for (const btn of buttons) {
+      btn.disabled = !checked;
+    }
+    for (const field of hiddenFields) {
+      field.value = checked ? "on" : "";
+    }
+  });
+}
+
 function resetButton(btn: HTMLButtonElement | null) {
   if (btn) {
     btn.textContent = "SEND MY FIRST DIGEST NOW";
@@ -160,5 +184,6 @@ function showSuccess() {
 
 export function init() {
   createConfetti();
+  setupConsentCheckbox();
   setupSendForm();
 }
