@@ -173,6 +173,12 @@ export const renderDigestPlainText = (
   lines.push("---");
   lines.push(`Manage preferences: ${accountUrl}`);
   lines.push(`Unsubscribe: ${unsubscribeUrl}`);
+  lines.push("Privacy Policy: https://restarred.dev/privacy");
+  lines.push("");
+  lines.push("INFINITE CHAPTERS LTD");
+  lines.push(
+    "Electric Works Digital Campus, 3 Concourse Way, Sheffield, S1 2BJ, United Kingdom",
+  );
 
   return lines.join("\n");
 };
