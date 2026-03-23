@@ -88,6 +88,7 @@ export const getSessionContextFromDB = async (
         u.id as user_id_result, u.github_id, u.github_username,
         u.github_email, u.email_override, u.github_name, u.github_token,
         u.digest_day, u.digest_hour, u.timezone, u.is_active, u.filter_own_repos,
+        u.consented_to_emails, u.consented_at,
         u.role, u.sync_status, u.created_at as user_created_at, u.updated_at as user_updated_at
       FROM sessions s
       LEFT JOIN users u ON s.user_id = u.id

@@ -219,7 +219,7 @@ describe("Admin Dashboard Controller", () => {
 
     expect(html).toContain("Lifetime signups");
     expect(html).toContain("Current users");
-    expect(html).toContain("Active users");
+    expect(html).toContain("Signups this week");
     expect(html).toContain("Total logins");
     expect(html).toContain("Account views");
     expect(html).toContain("Settings changes");

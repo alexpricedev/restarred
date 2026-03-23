@@ -6,4 +6,5 @@ export { home } from "./home";
 export { privacy } from "./privacy";
 export { terms } from "./terms";
 export { unsubscribe } from "./unsubscribe";
+
 export { welcome } from "./welcome";

@@ -144,6 +144,27 @@
   width: 100%;
 }
 
+[data-page="account"] .account-section {
+  margin-top: 5rem;
+}
+
+[data-page="account"] .account-section:first-of-type {
+  margin-top: 0;
+}
+
+[data-page="account"] .account-container > .flash-success,
+[data-page="account"] .account-container > .flash-error {
+  margin-bottom: 2rem;
+}
+
+[data-page="account"] .account-container > .account-section {
+  margin-bottom: 5rem;
+}
+
+[data-page="account"] .account-section-heading[id] {
+  scroll-margin-top: 6rem;
+}
+
 [data-page="account"] .account-section-heading {
   font-size: 2.5rem;
   margin-bottom: 0.25rem;
@@ -157,6 +178,52 @@
   font-size: 0.875rem;
   color: var(--color-text-secondary);
   margin-bottom: 1.5rem;
+}
+
+[data-page="account"] .account-pending-verification {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+[data-page="account"] .account-pending-verification p {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin: 0 0 1rem;
+}
+
+[data-page="account"] .account-pin-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  @media (width <= 640px) {
+    flex-direction: column;
+  }
+}
+
+@media (width <= 640px) {
+  [data-page="account"] .account-pin-row input,
+  [data-page="account"] .account-pin-row button,
+  [data-page="account"] .account-pin-row form,
+  [data-page="account"] .account-pin-row .account-pin-row {
+    width: 100%;
+  }
+}
+
+[data-page="account"] .account-pin-input {
+  font-family: var(--font-code);
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  width: 12ch;
+  text-align: center;
+}
+
+[data-page="account"] .account-pin-row button[type="submit"] {
+  padding: 0.75rem 1.5rem;
+  white-space: nowrap;
 }
 
 [data-page="account"] .account-schedule-grid {
@@ -230,6 +297,13 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-top: 5rem;
+
+  @media (width <= 640px) {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
 
   button[type="submit"] {
     background: var(--color-success);
@@ -266,6 +340,10 @@
 [data-page="account"] .button-secondary:focus {
   background: transparent;
   border-color: #000;
+}
+
+[data-page="account"] .account-pin-row .button-secondary {
+  padding: 0.75rem 1.5rem;
 }
 
 [data-page="account"] .account-danger-zone {

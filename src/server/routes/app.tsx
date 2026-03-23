@@ -37,6 +37,15 @@ export const appRoutes = {
   "/auth/logout": createRouteHandler({
     POST: logout.create,
   }),
+  "/account/verify-pin": createRouteHandler({
+    POST: account.verifyPin,
+  }),
+  "/account/resend-verification": createRouteHandler({
+    POST: account.resendVerification,
+  }),
+  "/account/cancel-verification": createRouteHandler({
+    POST: account.cancelVerification,
+  }),
   "/unsubscribe": createRouteHandler({
     GET: unsubscribe.index,
     POST: unsubscribe.confirm,

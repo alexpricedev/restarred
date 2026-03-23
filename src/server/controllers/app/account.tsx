@@ -5,6 +5,13 @@ import { createCsrfToken } from "../../services/csrf";
 import { getDigestCount, selectReposForDigest } from "../../services/digest";
 import { renderDigestEmail } from "../../services/digest-email";
 import { getEmailService } from "../../services/email";
+import {
+  cancelPendingVerification,
+  createVerification,
+  getPendingVerification,
+  RateLimitError,
+  verifyPin,
+} from "../../services/email-verification";
 import { trackEvent } from "../../services/events";
 import { log } from "../../services/logger";
 import { setSessionCookie } from "../../services/sessions";
@@ -22,10 +29,12 @@ async function renderAccountPage(
   user: User,
   sessionId: string,
   flash?: { type: "success" | "error"; message: string },
+  emailFlash?: { type: "success" | "error"; message: string },
 ): Promise<Response> {
-  const [starCount, digestCount] = await Promise.all([
+  const [starCount, digestCount, pendingVerification] = await Promise.all([
     getStarCount(user.id),
     getDigestCount(user.id),
+    getPendingVerification(user.id),
   ]);
   const csrfToken = await createCsrfToken(sessionId, "POST", "/account");
   const logoutCsrfToken = await createCsrfToken(
@@ -37,6 +46,15 @@ async function renderAccountPage(
     user.role === "admin"
       ? await createCsrfToken(sessionId, "POST", "/account/test-email")
       : undefined;
+  const resendCsrfToken = pendingVerification
+    ? await createCsrfToken(sessionId, "POST", "/account/resend-verification")
+    : undefined;
+  const verifyPinCsrfToken = pendingVerification
+    ? await createCsrfToken(sessionId, "POST", "/account/verify-pin")
+    : undefined;
+  const cancelVerificationCsrfToken = pendingVerification
+    ? await createCsrfToken(sessionId, "POST", "/account/cancel-verification")
+    : undefined;
 
   return render(
     <Account
@@ -46,7 +64,12 @@ async function renderAccountPage(
       csrfToken={csrfToken}
       logoutCsrfToken={logoutCsrfToken}
       testEmailCsrfToken={testEmailCsrfToken}
+      resendCsrfToken={resendCsrfToken}
+      verifyPinCsrfToken={verifyPinCsrfToken}
+      cancelVerificationCsrfToken={cancelVerificationCsrfToken}
+      pendingEmail={pendingVerification?.email}
       flash={flash}
+      emailFlash={emailFlash}
     />,
   );
 }
@@ -74,9 +97,19 @@ async function handleGet(req: BunRequest): Promise<Response> {
     req,
     "account",
   );
+  const emailFlash = getFlashCookie<{
+    type: "success" | "error";
+    message: string;
+  }>(req, "account-email");
   const flashMessage = flash.type ? flash : undefined;
+  const emailFlashMessage = emailFlash.type ? emailFlash : undefined;
 
-  return renderAccountPage(ctx.user, ctx.sessionId, flashMessage);
+  return renderAccountPage(
+    ctx.user,
+    ctx.sessionId,
+    flashMessage,
+    emailFlashMessage,
+  );
 }
 
 async function handlePost(req: BunRequest): Promise<Response> {
@@ -139,8 +172,19 @@ async function handlePost(req: BunRequest): Promise<Response> {
     const isActive = isActiveRaw === "true";
     const filterOwnRepos = filterOwnReposRaw !== "false";
 
+    const currentOverride = ctx.user.email_override ?? "";
+    const emailChanged = emailOverride !== currentOverride;
+    const emailCleared = emailChanged && !emailOverride;
+    const emailRequiresVerification = emailChanged && !!emailOverride;
+
+    if (emailCleared) {
+      await cancelPendingVerification(ctx.user.id);
+    }
+
     await updateUserPreferences(ctx.user.id, {
-      emailOverride,
+      emailOverride: emailRequiresVerification
+        ? currentOverride
+        : emailOverride,
       digestDay,
       digestHour,
       timezone,
@@ -148,12 +192,26 @@ async function handlePost(req: BunRequest): Promise<Response> {
       filterOwnRepos,
     });
 
+    if (emailRequiresVerification) {
+      try {
+        await createVerification(ctx.user.id, emailOverride);
+      } catch (error) {
+        if (error instanceof RateLimitError) {
+          setFlashCookie(req, "account-email", {
+            type: "error",
+            message: "You can request a new code in 5 minutes.",
+          });
+          return redirect("/account#delivery-email");
+        }
+        throw error;
+      }
+    }
+
     const wasReactivated = isActive && !ctx.user.is_active;
     const wasPaused = !isActive && ctx.user.is_active;
 
     const changedFields: string[] = [];
-    if (emailOverride !== (ctx.user.email_override ?? ""))
-      changedFields.push("email_override");
+    if (emailChanged) changedFields.push("email_override");
     if (digestDay !== ctx.user.digest_day) changedFields.push("digest_day");
     if (digestHour !== ctx.user.digest_hour) changedFields.push("digest_hour");
     if (timezone !== ctx.user.timezone) changedFields.push("timezone");
@@ -183,6 +241,13 @@ async function handlePost(req: BunRequest): Promise<Response> {
 
     log.info("account", `Preferences updated for user ${ctx.user.id}`);
 
+    if (emailRequiresVerification) {
+      setFlashCookie(req, "account-email", {
+        type: "success",
+        message: `Verification email sent to ${emailOverride}. Please check your inbox.`,
+      });
+      return redirect("/account#delivery-email");
+    }
     if (!wasPaused) {
       setFlashCookie(req, "account", {
         type: "success",
@@ -266,8 +331,129 @@ async function handleTestEmail(req: BunRequest): Promise<Response> {
   return redirect("/account");
 }
 
+async function handleResendVerification(req: BunRequest): Promise<Response> {
+  const csrfError = await csrfProtection(req, {
+    path: "/account/resend-verification",
+  });
+  if (csrfError) return csrfError;
+
+  const ctx = await getSessionContext(req);
+
+  if (!ctx.isAuthenticated || !ctx.user || !ctx.sessionId) {
+    return redirect("/");
+  }
+
+  try {
+    const pending = await getPendingVerification(ctx.user.id);
+
+    if (!pending) {
+      setFlashCookie(req, "account-email", {
+        type: "error",
+        message: "No pending verification to resend.",
+      });
+      return redirect("/account#delivery-email");
+    }
+
+    await createVerification(ctx.user.id, pending.email);
+
+    setFlashCookie(req, "account-email", {
+      type: "success",
+      message: `Verification email resent to ${pending.email}.`,
+    });
+  } catch (error) {
+    if (error instanceof RateLimitError) {
+      setFlashCookie(req, "account-email", {
+        type: "error",
+        message: "You can request a new code in 5 minutes.",
+      });
+    } else {
+      log.error(
+        "account",
+        `Failed to resend verification: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
+      setFlashCookie(req, "account-email", {
+        type: "error",
+        message: "Failed to resend verification email. Please try again.",
+      });
+    }
+  }
+
+  return redirect("/account#delivery-email");
+}
+
+async function handleVerifyPin(req: BunRequest): Promise<Response> {
+  const csrfError = await csrfProtection(req, {
+    path: "/account/verify-pin",
+  });
+  if (csrfError) return csrfError;
+
+  const ctx = await getSessionContext(req);
+
+  if (!ctx.isAuthenticated || !ctx.user || !ctx.sessionId) {
+    return redirect("/");
+  }
+
+  try {
+    const formData = await req.formData();
+    const pin = (formData.get("pin") as string) ?? "";
+
+    const result = await verifyPin(pin);
+
+    if (result.success) {
+      setFlashCookie(req, "account-email", {
+        type: "success",
+        message: `Email verified! Your digest will now be delivered to ${result.email}.`,
+      });
+    } else {
+      setFlashCookie(req, "account-email", {
+        type: "error",
+        message:
+          result.reason === "expired"
+            ? "Code expired. Please request a new one."
+            : "Invalid code. Please try again.",
+      });
+    }
+  } catch (error) {
+    log.error(
+      "account",
+      `PIN verification failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+    );
+    setFlashCookie(req, "account-email", {
+      type: "error",
+      message: "Something went wrong. Please try again.",
+    });
+  }
+
+  return redirect("/account#delivery-email");
+}
+
+async function handleCancelVerification(req: BunRequest): Promise<Response> {
+  const csrfError = await csrfProtection(req, {
+    path: "/account/cancel-verification",
+  });
+  if (csrfError) return csrfError;
+
+  const ctx = await getSessionContext(req);
+
+  if (!ctx.isAuthenticated || !ctx.user || !ctx.sessionId) {
+    return redirect("/");
+  }
+
+  await cancelPendingVerification(ctx.user.id);
+
+  setFlashCookie(req, "account-email", {
+    type: "success",
+    message: "Verification cancelled.",
+  });
+
+  return redirect("/account#delivery-email");
+}
+
 export const account = {
   index: handleGet,
   update: handlePost,
   testEmail: handleTestEmail,
+  resendVerification: handleResendVerification,
+  verifyPin: handleVerifyPin,
+  cancelVerification: handleCancelVerification,
 };
