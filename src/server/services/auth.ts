@@ -5,6 +5,7 @@ export interface User {
   id: string;
   github_id: number;
   github_username: string;
+  github_name: string | null;
   github_email: string;
   email_override: string | null;
   github_token: string;
@@ -28,6 +29,7 @@ export type AuthResult =
 interface GitHubUserInput {
   githubId: number;
   githubUsername: string;
+  githubName: string | null;
   githubEmail: string;
   encryptedToken: string;
 }
@@ -43,6 +45,7 @@ export const findOrCreateGitHubUser = async (
     const updated = await db`
       UPDATE users
       SET github_username = ${input.githubUsername},
+          github_name = ${input.githubName},
           github_email = ${input.githubEmail},
           github_token = ${input.encryptedToken},
           updated_at = CURRENT_TIMESTAMP
@@ -54,8 +57,8 @@ export const findOrCreateGitHubUser = async (
 
   const userId = randomUUID();
   const newUser = await db`
-    INSERT INTO users (id, github_id, github_username, github_email, github_token)
-    VALUES (${userId}, ${input.githubId}, ${input.githubUsername}, ${input.githubEmail}, ${input.encryptedToken})
+    INSERT INTO users (id, github_id, github_username, github_name, github_email, github_token)
+    VALUES (${userId}, ${input.githubId}, ${input.githubUsername}, ${input.githubName}, ${input.githubEmail}, ${input.encryptedToken})
     RETURNING *
   `;
 

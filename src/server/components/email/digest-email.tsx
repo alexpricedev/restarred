@@ -3,12 +3,14 @@ import { EmailFooter } from "./email-footer";
 import { RepoCard } from "./repo-card";
 
 interface DigestEmailProps {
+  displayName: string;
   repos: SelectedRepo[];
   accountUrl: string;
   unsubscribeUrl: string;
 }
 
 export const DigestEmail = ({
+  displayName,
   repos,
   accountUrl,
   unsubscribeUrl,
@@ -104,8 +106,8 @@ export const DigestEmail = ({
                       lineHeight: "20px",
                     }}
                   >
-                    Here are {repos.length} repos from your stars worth
-                    revisiting.
+                    Hi {displayName}, here are {repos.length} repos from your
+                    stars worth revisiting.
                   </p>
 
                   {repos.map((repo) => (

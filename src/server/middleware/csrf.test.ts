@@ -34,6 +34,7 @@ describe("CSRF Middleware", () => {
     const user = await findOrCreateGitHubUser({
       githubId: Math.floor(Math.random() * 1_000_000),
       githubUsername: `testuser-${Date.now()}`,
+      githubName: null,
       githubEmail: `test-${Date.now()}@example.com`,
       encryptedToken: "encrypted-token",
     });

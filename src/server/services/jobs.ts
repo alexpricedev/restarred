@@ -195,7 +195,7 @@ export async function executeSendDigest(job: Job): Promise<void> {
   await emailService.send({
     to: {
       email: user.email_override || user.github_email,
-      name: user.github_username,
+      name: user.github_name || user.github_username,
     },
     from: {
       email: process.env.FROM_EMAIL as string,
