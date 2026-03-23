@@ -100,8 +100,8 @@ export const Home = ({ user, csrfToken, flash }: HomeProps) => (
               <div className="step-number">03</div>
               <h3>YOU DECIDE WHAT'S STILL USEFUL</h3>
               <p>
-                Some you'll revisit. Some you'll let go. Either way, your stars
-                stop collecting dust.
+                Revisit the ones worth keeping. Unstar the rest — right from the
+                email.
               </p>
             </div>
           </div>

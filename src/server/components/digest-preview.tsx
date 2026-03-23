@@ -76,9 +76,12 @@ export const DigestPreview = () => (
               <span className="digest-repo-dot">&middot;</span>
               <span>{repo.status}</span>
             </div>
-            <p className="digest-repo-starred">
-              You starred this {repo.starredAgo}
-            </p>
+            <div className="digest-repo-footer">
+              <p className="digest-repo-starred">
+                You starred this {repo.starredAgo}
+              </p>
+              <span className="digest-repo-unstar">Unstar</span>
+            </div>
           </div>
         ))}
       </div>
