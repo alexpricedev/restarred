@@ -8,8 +8,8 @@ const DOM_FIXTURE = `
       <p class="first-description">Each week, we'll email you 3 forgotten starred repos.</p>
       <div class="first-consent">
         <label class="first-consent-checkbox">
-          <input type="checkbox" data-consent-checkbox />
           <span>I agree to receive weekly digest emails from re:starred.</span>
+          <input type="checkbox" data-consent-checkbox />
         </label>
       </div>
       <div class="first-actions">

@@ -16,7 +16,6 @@ const mockUser = {
   sync_status: "idle",
   role: "user",
   filter_own_repos: true,
-  has_viewed_first: false,
   created_at: new Date(),
   updated_at: new Date(),
 };

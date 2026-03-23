@@ -16,7 +16,6 @@ export interface User {
   consented_at: Date | null;
   role: "user" | "admin";
   filter_own_repos: boolean;
-  has_viewed_first: boolean;
   sync_status: "idle" | "syncing" | "done" | "error";
   created_at: Date;
   updated_at: Date;

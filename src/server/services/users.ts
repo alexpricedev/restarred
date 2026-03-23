@@ -76,7 +76,6 @@ export const recordConsentAndMarkViewed = async (
       consented_to_emails = true,
       consented_at = CURRENT_TIMESTAMP,
       is_active = true,
-      has_viewed_first = true,
       updated_at = CURRENT_TIMESTAMP
     WHERE id = ${userId}
   `;

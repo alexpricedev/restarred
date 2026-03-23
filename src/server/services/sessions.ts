@@ -87,7 +87,7 @@ export const getSessionContextFromDB = async (
         s.expires_at, s.last_activity_at, s.created_at,
         u.id as user_id_result, u.github_id, u.github_username,
         u.github_email, u.email_override, u.github_token,
-        u.digest_day, u.digest_hour, u.timezone, u.is_active, u.filter_own_repos, u.has_viewed_first,
+        u.digest_day, u.digest_hour, u.timezone, u.is_active, u.filter_own_repos,
         u.role, u.sync_status, u.created_at as user_created_at, u.updated_at as user_updated_at
       FROM sessions s
       LEFT JOIN users u ON s.user_id = u.id
@@ -117,7 +117,6 @@ export const getSessionContextFromDB = async (
       consented_to_emails: boolean | null;
       consented_at: string | null;
       filter_own_repos: boolean | null;
-      has_viewed_first: boolean | null;
       role: "user" | "admin" | null;
       sync_status: "idle" | "syncing" | "done" | "error" | null;
       user_created_at: string | null;
@@ -141,7 +140,6 @@ export const getSessionContextFromDB = async (
           consented_to_emails: (data.consented_to_emails as boolean) ?? false,
           consented_at: data.consented_at ? new Date(data.consented_at) : null,
           filter_own_repos: (data.filter_own_repos as boolean) ?? true,
-          has_viewed_first: (data.has_viewed_first as boolean) ?? false,
           role: (data.role as "user" | "admin") ?? "user",
           sync_status:
             (data.sync_status as "idle" | "syncing" | "done" | "error") ??

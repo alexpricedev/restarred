@@ -15,7 +15,6 @@ const mockUser = {
   consented_at: null,
   role: "user",
   filter_own_repos: true,
-  has_viewed_first: false,
   sync_status: "done",
   created_at: new Date(),
   updated_at: new Date(),
@@ -103,13 +102,17 @@ describe("First Controller", () => {
     expect(html).toContain('href="/privacy"');
   });
 
-  test("redirects to /account if has_viewed_first is true", async () => {
+  test("redirects to /account if user has already consented", async () => {
     const { getSessionContext } = await import("../../middleware/auth");
     (getSessionContext as ReturnType<typeof mock>).mockResolvedValueOnce({
       sessionId: "session-123",
       sessionHash: "hash-123",
       sessionType: "authenticated",
-      user: { ...mockUser, has_viewed_first: true },
+      user: {
+        ...mockUser,
+        consented_to_emails: true,
+        consented_at: new Date(),
+      },
       isGuest: false,
       isAuthenticated: true,
       requiresSetCookie: false,

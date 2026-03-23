@@ -79,12 +79,25 @@
   text-align: left;
   max-width: 360px;
   margin: 0 auto 2.5rem;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--color-border);
+  transition:
+    background 200ms ease,
+    border-color 200ms ease;
+}
+
+[data-page="first"] .first-consent:has(input:checked) {
+  background: #f0faf0;
+  border-color: rgba(45, 106, 79, 0.2);
 }
 
 [data-page="first"] .first-consent-checkbox {
   display: flex;
-  gap: 0.75rem;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   cursor: pointer;
   font-family: var(--font-main);
   font-size: 0.875rem;
@@ -93,27 +106,62 @@
 }
 
 [data-page="first"] .first-consent-checkbox input[type="checkbox"] {
-  margin-top: 0.2rem;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-page="first"] .first-consent-checkbox svg {
   flex-shrink: 0;
-  accent-color: var(--color-primary);
+  width: 28px;
+  height: 28px;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+}
+
+[data-page="first"] .first-consent-checkbox .first-check-filled {
+  display: none;
+  color: var(--color-success);
+}
+
+[data-page="first"]
+  .first-consent-checkbox:has(input:checked)
+  .first-check-empty {
+  display: none;
+}
+
+[data-page="first"]
+  .first-consent-checkbox:has(input:checked)
+  .first-check-filled {
+  display: block;
+}
+
+[data-page="first"] .first-consent-unsub {
+  font-family: var(--font-main);
+  font-size: 0.8125rem;
+  color: var(--color-text-tertiary);
+  margin: 0.5rem 0 0;
+  line-height: 1.5;
 }
 
 [data-page="first"] .first-consent-legal {
   font-family: var(--font-main);
   font-size: 0.75rem;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-quaternary);
   margin: 0.75rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
   line-height: 1.5;
 }
 
 [data-page="first"] .first-consent-legal a {
-  color: var(--color-text-secondary);
+  color: var(--color-text-tertiary);
   text-decoration: underline;
 }
 
 [data-page="first"] .first-btn-secondary:disabled {
   opacity: 0.4;
-  cursor: default;
+  cursor: not-allowed;
 }
 
 [data-page="first"] .first-actions {
@@ -169,7 +217,7 @@
 
 [data-page="first"] .first-btn-primary:disabled {
   opacity: 0.6;
-  cursor: default;
+  cursor: not-allowed;
 }
 
 [data-page="first"] .first-fade-out {

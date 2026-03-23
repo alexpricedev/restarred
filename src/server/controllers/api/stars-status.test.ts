@@ -21,7 +21,6 @@ const mockGetSessionContext = mock(
         consented_to_emails: true,
         consented_at: new Date(),
         filter_own_repos: true,
-        has_viewed_first: false,
         role: "user",
         sync_status: "done",
         created_at: new Date(),

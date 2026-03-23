@@ -58,7 +58,7 @@ async function handleGet(req: BunRequest): Promise<Response> {
     return redirect("/");
   }
 
-  if (!ctx.user.consented_to_emails && !ctx.user.has_viewed_first) {
+  if (!ctx.user.consented_to_emails) {
     return redirect("/first");
   }
 

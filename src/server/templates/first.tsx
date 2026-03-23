@@ -35,12 +35,45 @@ export const First = ({
         {error && <p className="first-error">{error}</p>}
         <div className="first-consent">
           <label className="first-consent-checkbox">
-            <input type="checkbox" data-consent-checkbox />
             <span>
-              I agree to receive weekly digest emails from re:starred. You can
-              unsubscribe at any time.
+              I agree to receive weekly digest emails from re:starred.
             </span>
+            <input type="checkbox" data-consent-checkbox />
+            <svg
+              className="first-check-empty"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect width="18" height="18" x="3" y="3" rx="2" />
+            </svg>
+            <svg
+              className="first-check-filled"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect width="18" height="18" x="3" y="3" rx="2" />
+              <path d="m9 12 2 2 4-4" />
+            </svg>
           </label>
+          <p className="first-consent-unsub">
+            You can unsubscribe at any time.
+          </p>
           <p className="first-consent-legal">
             By continuing, you accept our{" "}
             <a href="/terms" target="_blank" rel="noopener noreferrer">
