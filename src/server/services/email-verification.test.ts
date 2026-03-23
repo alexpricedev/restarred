@@ -31,7 +31,7 @@ import {
   createVerification,
   getPendingVerification,
   RateLimitError,
-  verifyToken,
+  verifyPin,
 } from "./email-verification";
 
 beforeEach(async () => {
@@ -103,20 +103,20 @@ describe("createVerification", () => {
   });
 });
 
-describe("verifyToken", () => {
+describe("verifyPin", () => {
   test("valid token updates user email_override and deletes record", async () => {
     const user = await createTestUser(db);
     await createVerification(user.id, "verified@example.com");
 
-    // Extract the token from the verification email that was sent
+    // Extract the PIN from the verification email that was sent
     const emailCall = mockEmailSend.mock.calls[0]?.[0] as unknown as {
-      html: string;
+      text: string;
     };
-    const tokenMatch = emailCall.html.match(/token=([^"&]+)/);
-    expect(tokenMatch).toBeTruthy();
-    const token = tokenMatch?.[1] ?? "";
+    const pinMatch = emailCall.text.match(/code: (\d{6})/);
+    expect(pinMatch).toBeTruthy();
+    const pin = pinMatch?.[1] ?? "";
 
-    const result = await verifyToken(token);
+    const result = await verifyPin(pin);
 
     expect(result.success).toBe(true);
     expect(result.email).toBe("verified@example.com");
@@ -133,13 +133,13 @@ describe("verifyToken", () => {
   });
 
   test("returns invalid for non-existent token", async () => {
-    const result = await verifyToken("nonexistent-token");
+    const result = await verifyPin("nonexistent-token");
     expect(result.success).toBe(false);
     expect(result.reason).toBe("invalid");
   });
 
   test("returns invalid for empty token", async () => {
-    const result = await verifyToken("");
+    const result = await verifyPin("");
     expect(result.success).toBe(false);
     expect(result.reason).toBe("invalid");
   });
@@ -151,7 +151,7 @@ describe("verifyToken", () => {
     await db`INSERT INTO email_verifications (user_id, email, token_hash, expires_at)
       VALUES (${user.id}, 'expired@example.com', ${tokenHash}, NOW() - INTERVAL '1 second')`;
 
-    const result = await verifyToken("test-expired-token");
+    const result = await verifyPin("test-expired-token");
 
     expect(result.success).toBe(false);
     expect(result.reason).toBe("invalid");

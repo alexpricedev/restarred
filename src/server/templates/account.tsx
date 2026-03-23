@@ -11,8 +11,11 @@ interface AccountProps {
   logoutCsrfToken: string;
   testEmailCsrfToken?: string;
   resendCsrfToken?: string;
+  verifyPinCsrfToken?: string;
+  cancelVerificationCsrfToken?: string;
   pendingEmail?: string;
   flash?: { type: "success" | "error"; message: string };
+  emailFlash?: { type: "success" | "error"; message: string };
 }
 
 const DAYS = [
@@ -139,8 +142,11 @@ export const Account = ({
   logoutCsrfToken,
   testEmailCsrfToken,
   resendCsrfToken,
+  verifyPinCsrfToken,
+  cancelVerificationCsrfToken,
   pendingEmail,
   flash,
+  emailFlash,
 }: AccountProps) => (
   <Layout
     title="re:starred — Account"
@@ -182,8 +188,6 @@ export const Account = ({
           <button type="submit">Reactivate digest</button>
         </form>
       )}
-
-      {flash && <Flash type={flash.type}>{flash.message}</Flash>}
 
       <div className="account-header">
         <div>
@@ -235,21 +239,48 @@ export const Account = ({
         </div>
       </div>
 
-      <form method="POST" action="/account" className="account-form">
-        <CsrfField token={csrfToken} />
+      {flash && <Flash type={flash.type}>{flash.message}</Flash>}
 
+      {pendingEmail && (
         <div className="account-section">
-          <h2 className="account-section-heading">Delivery Email Address</h2>
+          <h2 className="account-section-heading" id="delivery-email">
+            Delivery Email Address
+          </h2>
           <p className="account-section-description">
             By default, digests are sent to your GitHub email. Set an override
             to use a different address.
           </p>
-          {pendingEmail && (
-            <div className="account-pending-verification">
-              <p>
-                Verification email sent to <strong>{pendingEmail}</strong>.
-                Check your inbox to confirm.
-              </p>
+          {emailFlash && (
+            <Flash type={emailFlash.type}>{emailFlash.message}</Flash>
+          )}
+          <div className="account-pending-verification">
+            <p>
+              Enter the 6-digit code we sent to <strong>{pendingEmail}</strong>
+            </p>
+            <div className="account-pin-row">
+              {verifyPinCsrfToken && (
+                <form
+                  method="POST"
+                  action="/account/verify-pin"
+                  className="account-pin-form"
+                >
+                  <CsrfField token={verifyPinCsrfToken} />
+                  <div className="account-pin-row">
+                    <input
+                      type="text"
+                      name="pin"
+                      inputMode="numeric"
+                      pattern="[0-9]{6}"
+                      maxLength={6}
+                      placeholder="000000"
+                      autoComplete="one-time-code"
+                      className="account-pin-input"
+                      required
+                    />
+                    <button type="submit">Verify</button>
+                  </div>
+                </form>
+              )}
               {resendCsrfToken && (
                 <form
                   method="POST"
@@ -258,23 +289,54 @@ export const Account = ({
                 >
                   <CsrfField token={resendCsrfToken} />
                   <button type="submit" className="button-secondary">
-                    Resend verification email
+                    Resend code
+                  </button>
+                </form>
+              )}
+              {cancelVerificationCsrfToken && (
+                <form
+                  method="POST"
+                  action="/account/cancel-verification"
+                  className="account-cancel-form"
+                >
+                  <CsrfField token={cancelVerificationCsrfToken} />
+                  <button type="submit" className="button-secondary">
+                    Cancel
                   </button>
                 </form>
               )}
             </div>
-          )}
-          <div className="form-field">
-            <label htmlFor="email_override">Email address</label>
-            <input
-              type="email"
-              id="email_override"
-              name="email_override"
-              placeholder={user.github_email}
-              defaultValue={user.email_override ?? ""}
-            />
           </div>
         </div>
+      )}
+
+      <form method="POST" action="/account" className="account-form">
+        <CsrfField token={csrfToken} />
+
+        {!pendingEmail && (
+          <div className="account-section">
+            <h2 className="account-section-heading" id="delivery-email">
+              Delivery Email Address
+            </h2>
+            <p className="account-section-description">
+              By default, digests are sent to your GitHub email. Set an override
+              to use a different address.
+            </p>
+            {emailFlash && (
+              <Flash type={emailFlash.type}>{emailFlash.message}</Flash>
+            )}
+            <div className="form-field">
+              <label htmlFor="email_override">Email address</label>
+              <input
+                type="email"
+                id="email_override"
+                name="email_override"
+                placeholder={user.github_email}
+                defaultValue={user.email_override ?? ""}
+              />
+            </div>
+          </div>
+        )}
 
         <div className="account-section">
           <h2 className="account-section-heading">Digest Schedule</h2>

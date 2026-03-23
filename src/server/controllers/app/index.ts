@@ -6,5 +6,5 @@ export { home } from "./home";
 export { privacy } from "./privacy";
 export { terms } from "./terms";
 export { unsubscribe } from "./unsubscribe";
-export { verifyEmail } from "./verify-email";
+
 export { welcome } from "./welcome";

@@ -12,7 +12,7 @@
     "dev:server": "bun --watch run src/server/main.ts",
     "dev:css": "bun build ./src/client/style.css --outdir ./dist/assets --entry-naming main.css --watch",
     "test": "NODE_ENV=test bun run src/server/database/cli.ts up && bun run test:app && bun run test:api && bun run test:auth-callback && bun run test:auth-logout && bun run test:admin && bun run test:home && bun run test:services && bun run test:email-verification && bun run test:jobs && bun run test:dispatcher && bun run test:client",
-    "test:app": "NODE_ENV=test bun test src/server/controllers/app/welcome.test.ts src/server/controllers/app/first.test.ts src/server/controllers/app/account.test.ts src/server/controllers/app/unsubscribe.test.ts src/server/controllers/app/delete-account.test.ts src/server/controllers/app/verify-email.test.ts",
+    "test:app": "NODE_ENV=test bun test src/server/controllers/app/welcome.test.ts src/server/controllers/app/first.test.ts src/server/controllers/app/account.test.ts src/server/controllers/app/unsubscribe.test.ts src/server/controllers/app/delete-account.test.ts",
     "test:api": "NODE_ENV=test bun test src/server/controllers/api",
     "test:auth-callback": "NODE_ENV=test bun test src/server/controllers/auth/callback.test.ts",
     "test:auth-logout": "NODE_ENV=test bun test src/server/controllers/auth/logout.test.ts",

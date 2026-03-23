@@ -86,11 +86,23 @@ const mockGetPendingVerification = mock(
     } | null>,
 );
 const mockCancelPendingVerification = mock(() => Promise.resolve());
+const mockVerifyPin = mock(
+  () =>
+    Promise.resolve({
+      success: true,
+      email: "verified@example.com",
+    }) as Promise<{
+      success: boolean;
+      email?: string;
+      reason?: "expired" | "invalid";
+    }>,
+);
 
 mock.module("../../services/email-verification", () => ({
   createVerification: mockCreateVerification,
   getPendingVerification: mockGetPendingVerification,
   cancelPendingVerification: mockCancelPendingVerification,
+  verifyPin: mockVerifyPin,
   RateLimitError: class RateLimitError extends Error {
     constructor(message: string) {
       super(message);
@@ -103,7 +115,7 @@ mock.module("../../services/logger", () => ({
   log: { info: mock(() => {}), warn: mock(() => {}), error: mock(() => {}) },
 }));
 
-import { createBunRequest } from "../../test-utils/bun-request";
+import { createBunRequest, findSetCookie } from "../../test-utils/bun-request";
 import { account } from "./account";
 
 describe("Account Controller", () => {
@@ -156,7 +168,7 @@ describe("Account Controller", () => {
     const response = await account.update(request);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get("location")).toBe("/account");
+    expect(response.headers.get("location")).toBe("/account#delivery-email");
   });
 
   test("POST returns error for invalid email", async () => {
@@ -273,7 +285,7 @@ describe("Account Controller", () => {
     const response = await account.update(request);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get("location")).toBe("/account");
+    expect(response.headers.get("location")).toBe("/account#delivery-email");
     expect(mockCreateVerification).toHaveBeenCalledWith(
       "user-123",
       "new@example.com",
@@ -408,7 +420,7 @@ describe("Account Controller", () => {
     const response = await account.update(request);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get("location")).toBe("/account");
+    expect(response.headers.get("location")).toBe("/account#delivery-email");
   });
 
   test("GET shows pending verification in template", async () => {
@@ -423,7 +435,8 @@ describe("Account Controller", () => {
     expect(response.status).toBe(200);
     const html = await response.text();
     expect(html).toContain("pending@example.com");
-    expect(html).toContain("Verification email sent to");
+    expect(html).toContain("Enter the 6-digit code we sent to");
+    expect(html).toContain("/account/verify-pin");
   });
 
   test("POST resend-verification sends email", async () => {
@@ -448,7 +461,7 @@ describe("Account Controller", () => {
     const response = await account.resendVerification(request);
 
     expect(response.status).toBe(303);
-    expect(response.headers.get("location")).toBe("/account");
+    expect(response.headers.get("location")).toBe("/account#delivery-email");
     expect(mockCreateVerification).toHaveBeenCalledWith(
       "user-123",
       "pending@example.com",
@@ -473,6 +486,259 @@ describe("Account Controller", () => {
     const response = await account.resendVerification(request);
 
     expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("/account#delivery-email");
+  });
+
+  test("POST verify-pin with valid PIN redirects with success", async () => {
+    mockVerifyPin.mockResolvedValueOnce({
+      success: true,
+      email: "verified@example.com",
+    });
+
+    const formBody = new URLSearchParams({
+      _csrf: "mock-token",
+      pin: "123456",
+    }).toString();
+
+    const request = createBunRequest(
+      "http://localhost:3000/account/verify-pin",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formBody,
+      },
+    );
+    const response = await account.verifyPin(request);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("/account#delivery-email");
+    expect(mockVerifyPin).toHaveBeenCalledWith("123456");
+  });
+
+  test("POST verify-pin with invalid PIN redirects with error", async () => {
+    mockVerifyPin.mockResolvedValueOnce({
+      success: false,
+      reason: "invalid",
+    });
+
+    const formBody = new URLSearchParams({
+      _csrf: "mock-token",
+      pin: "000000",
+    }).toString();
+
+    const request = createBunRequest(
+      "http://localhost:3000/account/verify-pin",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formBody,
+      },
+    );
+    const response = await account.verifyPin(request);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("/account#delivery-email");
+  });
+
+  test("POST verify-pin with expired PIN redirects with error", async () => {
+    mockVerifyPin.mockResolvedValueOnce({
+      success: false,
+      reason: "expired",
+    });
+
+    const formBody = new URLSearchParams({
+      _csrf: "mock-token",
+      pin: "123456",
+    }).toString();
+
+    const request = createBunRequest(
+      "http://localhost:3000/account/verify-pin",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formBody,
+      },
+    );
+    const response = await account.verifyPin(request);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("/account#delivery-email");
+  });
+
+  test("POST verify-pin unauthenticated redirects to /", async () => {
+    const { getSessionContext } = await import("../../middleware/auth");
+    (getSessionContext as ReturnType<typeof mock>).mockResolvedValueOnce({
+      sessionId: null,
+      sessionHash: null,
+      sessionType: null,
+      user: null,
+      isGuest: true,
+      isAuthenticated: false,
+      requiresSetCookie: false,
+    });
+
+    const formBody = new URLSearchParams({
+      _csrf: "mock-token",
+      pin: "123456",
+    }).toString();
+
+    const request = createBunRequest(
+      "http://localhost:3000/account/verify-pin",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formBody,
+      },
+    );
+    const response = await account.verifyPin(request);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("/");
+  });
+
+  test("POST verify-pin sets flash on account-email cookie, not account", async () => {
+    mockVerifyPin.mockResolvedValueOnce({
+      success: true,
+      email: "verified@example.com",
+    });
+
+    const formBody = new URLSearchParams({
+      _csrf: "mock-token",
+      pin: "123456",
+    }).toString();
+
+    const request = createBunRequest(
+      "http://localhost:3000/account/verify-pin",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formBody,
+      },
+    );
+    await account.verifyPin(request);
+
+    expect(findSetCookie(request, "flash_account-email")).toBeDefined();
+    expect(findSetCookie(request, "flash_account")).toBeUndefined();
+  });
+
+  test("POST preferences saved sets flash on account cookie, not account-email", async () => {
+    const formBody = new URLSearchParams({
+      _csrf: "mock-token",
+      email_override: "",
+      digest_day: "1",
+      digest_hour: "9",
+      timezone: "UTC",
+      is_active: "true",
+      filter_own_repos: "true",
+    }).toString();
+
+    const request = createBunRequest("http://localhost:3000/account", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formBody,
+    });
+    const response = await account.update(request);
+
+    expect(response.status).toBe(303);
     expect(response.headers.get("location")).toBe("/account");
+    expect(findSetCookie(request, "flash_account")).toBeDefined();
+    expect(findSetCookie(request, "flash_account-email")).toBeUndefined();
+  });
+
+  test("POST email change sets flash on account-email cookie", async () => {
+    mockCreateVerification.mockClear();
+
+    const formBody = new URLSearchParams({
+      _csrf: "mock-token",
+      email_override: "new@example.com",
+      digest_day: "1",
+      digest_hour: "9",
+      timezone: "UTC",
+      is_active: "true",
+      filter_own_repos: "true",
+    }).toString();
+
+    const request = createBunRequest("http://localhost:3000/account", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formBody,
+    });
+    await account.update(request);
+
+    expect(findSetCookie(request, "flash_account-email")).toBeDefined();
+    expect(findSetCookie(request, "flash_account")).toBeUndefined();
+  });
+
+  test("POST cancel-verification cancels and redirects", async () => {
+    mockCancelPendingVerification.mockClear();
+
+    const formBody = new URLSearchParams({
+      _csrf: "mock-token",
+    }).toString();
+
+    const request = createBunRequest(
+      "http://localhost:3000/account/cancel-verification",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formBody,
+      },
+    );
+    const response = await account.cancelVerification(request);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("/account#delivery-email");
+    expect(mockCancelPendingVerification).toHaveBeenCalledWith("user-123");
+    expect(findSetCookie(request, "flash_account-email")).toBeDefined();
+  });
+
+  test("GET with pending verification hides email input", async () => {
+    mockGetPendingVerification.mockResolvedValueOnce({
+      email: "pending@example.com",
+      createdAt: new Date(),
+    });
+
+    const request = createBunRequest("http://localhost:3000/account");
+    const response = await account.index(request);
+
+    const html = await response.text();
+    expect(html).toContain("Enter the 6-digit code we sent to");
+    expect(html).not.toContain('id="email_override"');
+  });
+
+  test("GET without pending verification shows email input", async () => {
+    mockGetPendingVerification.mockResolvedValueOnce(null);
+
+    const request = createBunRequest("http://localhost:3000/account");
+    const response = await account.index(request);
+
+    const html = await response.text();
+    expect(html).not.toContain("Enter the 6-digit code we sent to");
+    expect(html).toContain('id="email_override"');
+  });
+
+  test("POST resend-verification sets flash on account-email cookie", async () => {
+    mockGetPendingVerification.mockResolvedValueOnce({
+      email: "pending@example.com",
+      createdAt: new Date(),
+    });
+    mockCreateVerification.mockClear();
+
+    const formBody = new URLSearchParams({
+      _csrf: "mock-token",
+    }).toString();
+
+    const request = createBunRequest(
+      "http://localhost:3000/account/resend-verification",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formBody,
+      },
+    );
+    await account.resendVerification(request);
+
+    expect(findSetCookie(request, "flash_account-email")).toBeDefined();
+    expect(findSetCookie(request, "flash_account")).toBeUndefined();
   });
 });

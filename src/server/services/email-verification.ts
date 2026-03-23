@@ -1,9 +1,9 @@
-import { computeHMAC, generateSecureToken } from "../utils/crypto";
+import { randomInt } from "node:crypto";
+import { computeHMAC } from "../utils/crypto";
 import { db } from "./database";
 import { getEmailService } from "./email";
 import { log } from "./logger";
 
-const APP_URL = process.env.APP_URL as string;
 const RATE_LIMIT_MS = 5 * 60 * 1000;
 const EXPIRY_HOURS = 24;
 
@@ -42,8 +42,8 @@ export async function createVerification(
   await db`DELETE FROM email_verifications WHERE user_id = ${userId}`;
   await cleanupExpired();
 
-  const token = generateSecureToken(32);
-  const tokenHash = computeHMAC(token);
+  const pin = randomInt(0, 1000000).toString().padStart(6, "0");
+  const tokenHash = computeHMAC(pin);
   const expiresAt = new Date(Date.now() + EXPIRY_HOURS * 60 * 60 * 1000);
 
   await db`
@@ -51,19 +51,17 @@ export async function createVerification(
 		VALUES (${userId}, ${email}, ${tokenHash}, ${expiresAt})
 	`;
 
-  const verifyUrl = `${APP_URL}/verify-email?token=${token}`;
-
   await getEmailService().send({
     to: { email },
     from: {
       email: process.env.FROM_EMAIL as string,
       name: process.env.FROM_NAME as string,
     },
-    subject: "Verify your email for re:starred",
-    html: `<p>Click the link below to confirm your email address for re:starred digest delivery:</p>
-<p><a href="${verifyUrl}">${verifyUrl}</a></p>
-<p>This link expires in ${EXPIRY_HOURS} hours.</p>`,
-    text: `Confirm your email address for re:starred digest delivery:\n\n${verifyUrl}\n\nThis link expires in ${EXPIRY_HOURS} hours.`,
+    subject: "Your re:starred verification code",
+    html: `<p>Enter this code on your account page to verify your email address:</p>
+<p style="font-size: 32px; font-family: monospace; letter-spacing: 0.15em; font-weight: bold;">${pin}</p>
+<p>This code expires in ${EXPIRY_HOURS} hours.</p>`,
+    text: `Your re:starred verification code: ${pin}\n\nEnter this code on your account page to verify your email address.\n\nThis code expires in ${EXPIRY_HOURS} hours.`,
   });
 
   log.info(
@@ -72,12 +70,12 @@ export async function createVerification(
   );
 }
 
-export async function verifyToken(token: string): Promise<VerifyResult> {
-  if (!token) return { success: false, reason: "invalid" };
+export async function verifyPin(pin: string): Promise<VerifyResult> {
+  if (!pin) return { success: false, reason: "invalid" };
 
   await cleanupExpired();
 
-  const tokenHash = computeHMAC(token);
+  const tokenHash = computeHMAC(pin);
   const rows =
     await db`SELECT user_id, email, expires_at FROM email_verifications WHERE token_hash = ${tokenHash}`;
 

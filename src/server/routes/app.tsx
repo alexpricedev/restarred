@@ -7,7 +7,6 @@ import {
   privacy,
   terms,
   unsubscribe,
-  verifyEmail,
   welcome,
 } from "../controllers/app";
 import { callback, github, logout } from "../controllers/auth";
@@ -38,9 +37,14 @@ export const appRoutes = {
   "/auth/logout": createRouteHandler({
     POST: logout.create,
   }),
-  "/verify-email": verifyEmail.index,
+  "/account/verify-pin": createRouteHandler({
+    POST: account.verifyPin,
+  }),
   "/account/resend-verification": createRouteHandler({
     POST: account.resendVerification,
+  }),
+  "/account/cancel-verification": createRouteHandler({
+    POST: account.cancelVerification,
   }),
   "/unsubscribe": createRouteHandler({
     GET: unsubscribe.index,

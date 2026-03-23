@@ -23,6 +23,7 @@ const {
 } = await import("./sessions");
 
 const { findOrCreateGitHubUser } = await import("./auth");
+const { recordConsent } = await import("./users");
 const { computeHMAC } = await import("../utils/crypto");
 
 const db = connection;
@@ -128,6 +129,23 @@ describe("getSessionContextFromDB", () => {
     expect(ctx?.isAuthenticated).toBe(true);
     expect(ctx?.user).not.toBeNull();
     expect(ctx?.user?.github_email).toBe("auth@example.com");
+  });
+
+  test("includes consented_to_emails from database", async () => {
+    const user = await createTestUser("consent@example.com");
+    const rawId = await createAuthenticatedSession(user.id);
+
+    const before = await getSessionContextFromDB(rawId);
+    expect(before?.user?.consented_to_emails).toBe(false);
+
+    await recordConsent(user.id, {
+      ipAddress: "127.0.0.1",
+      userAgent: "test",
+    });
+
+    const after = await getSessionContextFromDB(rawId);
+    expect(after?.user?.consented_to_emails).toBe(true);
+    expect(after?.user?.consented_at).toBeInstanceOf(Date);
   });
 
   test("returns null for expired session", async () => {
