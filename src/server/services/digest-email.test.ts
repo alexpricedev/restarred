@@ -281,6 +281,16 @@ describe("renderDigestPlainText", () => {
     expect(text).toContain(
       "Unsubscribe: http://localhost:3000/unsubscribe?token=abc",
     );
+    expect(text).toContain("Privacy Policy: https://restarred.dev/privacy");
+  });
+
+  test("contains company name and address", () => {
+    const repos = [makeRepo()];
+    const text = renderDigestPlainText(repos, "http://x", "http://y");
+
+    expect(text).toContain("INFINITE CHAPTERS LTD");
+    expect(text).toContain("Electric Works Digital Campus");
+    expect(text).toContain("Sheffield, S1 2BJ");
   });
 
   test("handles null description", () => {
@@ -342,6 +352,10 @@ describe("renderDigestEmail", () => {
     expect(result.html).toContain("Your weekly digest");
     expect(result.html).toContain("Manage your digest");
     expect(result.html).toContain("Unsubscribe");
+    expect(result.html).toContain("Privacy Policy");
+    expect(result.html).toContain("https://restarred.dev/privacy");
+    expect(result.html).toContain("INFINITE CHAPTERS LTD");
+    expect(result.html).toContain("Electric Works Digital Campus");
   });
 
   test("text contains repo details", () => {

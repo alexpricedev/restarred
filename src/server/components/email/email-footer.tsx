@@ -1,3 +1,7 @@
+const COMPANY_NAME = "INFINITE CHAPTERS LTD";
+const COMPANY_ADDRESS =
+  "Electric Works Digital Campus, 3 Concourse Way, Sheffield, S1 2BJ, United Kingdom";
+
 interface EmailFooterProps {
   accountUrl: string;
   unsubscribeUrl: string;
@@ -47,6 +51,32 @@ export const EmailFooter = ({
         >
           Unsubscribe
         </a>
+        <span style={{ margin: "0 8px", color: "#ababab" }}>&middot;</span>
+        <a
+          href="https://restarred.dev/privacy"
+          style={{
+            color: "#ababab",
+            textDecoration: "underline",
+          }}
+        >
+          Privacy Policy
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          textAlign: "center",
+          fontFamily: "Inter, sans-serif",
+          fontSize: "12px",
+          color: "#ababab",
+          lineHeight: "18px",
+          paddingTop: "32px",
+        }}
+      >
+        {COMPANY_NAME}
+        <br />
+        {COMPANY_ADDRESS}
       </td>
     </tr>
   </table>
