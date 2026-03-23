@@ -199,8 +199,7 @@ async function handlePost(req: BunRequest): Promise<Response> {
         if (error instanceof RateLimitError) {
           setFlashCookie(req, "account-email", {
             type: "error",
-            message:
-              "Please wait a few minutes before requesting another verification email.",
+            message: "You can request a new code in 5 minutes.",
           });
           return redirect("/account#delivery-email");
         }
@@ -365,8 +364,7 @@ async function handleResendVerification(req: BunRequest): Promise<Response> {
     if (error instanceof RateLimitError) {
       setFlashCookie(req, "account-email", {
         type: "error",
-        message:
-          "Please wait a few minutes before requesting another verification email.",
+        message: "You can request a new code in 5 minutes.",
       });
     } else {
       log.error(
