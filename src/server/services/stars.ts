@@ -95,3 +95,15 @@ export const getSyncStatus = async (
     count: Number(result[0].count),
   };
 };
+
+export const removeLocalStar = async (
+  userId: string,
+  fullName: string,
+): Promise<void> => {
+  await db`DELETE FROM stars WHERE user_id = ${userId} AND full_name = ${fullName}`;
+  await db`
+    DELETE FROM digest_history
+    WHERE user_id = ${userId}
+    AND star_id NOT IN (SELECT id FROM stars WHERE user_id = ${userId})
+  `;
+};

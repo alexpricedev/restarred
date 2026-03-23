@@ -183,3 +183,26 @@ export const fetchAllStarredRepos = async (
 
   return allRepos;
 };
+
+export const unstarRepo = async (
+  accessToken: string,
+  fullName: string,
+): Promise<boolean> => {
+  const response = await fetch(
+    `https://api.github.com/user/starred/${fullName}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/vnd.github.v3+json",
+      },
+    },
+  );
+
+  if (response.status === 204 || response.status === 404) {
+    return true;
+  }
+
+  log.warn("github", `Unstar ${fullName} returned status ${response.status}`);
+  return false;
+};

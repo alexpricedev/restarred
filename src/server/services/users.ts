@@ -100,3 +100,9 @@ export const deleteUser = async (userId: string): Promise<boolean> => {
   const result = await db`DELETE FROM users WHERE id = ${userId}`;
   return hasAffectedRows(result as DatabaseMutationResult);
 };
+
+export const getUserById = async (userId: string): Promise<User | null> => {
+  const rows = await db`SELECT * FROM users WHERE id = ${userId}`;
+  if (rows.length === 0) return null;
+  return rows[0] as User;
+};
