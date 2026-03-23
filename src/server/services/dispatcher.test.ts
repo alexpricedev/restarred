@@ -40,6 +40,7 @@ describe("dispatcher service", () => {
   let userId: string;
 
   beforeEach(async () => {
+    await db`DELETE FROM consent_records`;
     await db`DELETE FROM jobs`;
     await db`DELETE FROM stars`;
     await db`DELETE FROM sessions`;
@@ -61,14 +62,15 @@ describe("dispatcher service", () => {
     );
 
     const users = await db`
-      INSERT INTO users (id, github_id, github_username, github_email, github_token, digest_day, digest_hour, timezone, is_active)
-      VALUES (gen_random_uuid(), 99999, 'testuser', 'test@example.com', 'encrypted-token', ${currentDow}, ${currentHour}, 'UTC', true)
+      INSERT INTO users (id, github_id, github_username, github_email, github_token, digest_day, digest_hour, timezone, is_active, consented_to_emails)
+      VALUES (gen_random_uuid(), 99999, 'testuser', 'test@example.com', 'encrypted-token', ${currentDow}, ${currentHour}, 'UTC', true, true)
       RETURNING id
     `;
     userId = users[0].id as string;
   });
 
   afterEach(async () => {
+    await db`DELETE FROM consent_records`;
     await db`DELETE FROM jobs`;
     await db`DELETE FROM stars`;
     await db`DELETE FROM sessions`;

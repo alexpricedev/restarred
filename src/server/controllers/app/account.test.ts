@@ -17,8 +17,10 @@ mock.module("../../middleware/auth", () => ({
         digest_hour: 9,
         timezone: "UTC",
         is_active: true,
+        consented_to_emails: true,
+        consented_at: new Date(),
         filter_own_repos: true,
-        has_viewed_first: false,
+        has_viewed_first: true,
         role: "user",
         sync_status: "done",
         created_at: new Date(),
@@ -65,8 +67,10 @@ mock.module("../../services/users", () => ({
       digest_hour: 14,
       timezone: "America/New_York",
       is_active: true,
+      consented_to_emails: true,
+      consented_at: new Date(),
       filter_own_repos: true,
-      has_viewed_first: false,
+      has_viewed_first: true,
       role: "user",
       sync_status: "done",
       created_at: new Date(),
@@ -156,6 +160,44 @@ describe("Account Controller", () => {
     expect(response.status).toBe(200);
     const html = await response.text();
     expect(html).toContain("Please enter a valid email address.");
+  });
+
+  test("GET redirects to /first if user has not consented", async () => {
+    const { getSessionContext } = await import("../../middleware/auth");
+    (getSessionContext as ReturnType<typeof mock>).mockResolvedValueOnce({
+      sessionId: "session-123",
+      sessionHash: "hash-123",
+      sessionType: "authenticated",
+      user: {
+        id: "user-123",
+        github_id: 12345,
+        github_username: "testuser",
+        github_email: "test@example.com",
+        email_override: null,
+        github_token: "encrypted-token",
+        digest_day: 1,
+        digest_hour: 9,
+        timezone: "UTC",
+        is_active: false,
+        consented_to_emails: false,
+        consented_at: null,
+        filter_own_repos: true,
+        has_viewed_first: false,
+        role: "user",
+        sync_status: "done",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      isGuest: false,
+      isAuthenticated: true,
+      requiresSetCookie: false,
+    });
+
+    const request = createBunRequest("http://localhost:3000/account");
+    const response = await account.index(request);
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("/first");
   });
 
   test("POST redirects unauthenticated user to /", async () => {

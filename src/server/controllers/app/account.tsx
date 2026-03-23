@@ -58,6 +58,10 @@ async function handleGet(req: BunRequest): Promise<Response> {
     return redirect("/");
   }
 
+  if (!ctx.user.consented_to_emails && !ctx.user.has_viewed_first) {
+    return redirect("/first");
+  }
+
   if (ctx.requiresSetCookie) {
     setSessionCookie(req, ctx.sessionId);
   }

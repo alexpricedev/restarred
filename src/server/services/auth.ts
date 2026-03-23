@@ -12,6 +12,8 @@ export interface User {
   digest_hour: number;
   timezone: string;
   is_active: boolean;
+  consented_to_emails: boolean;
+  consented_at: Date | null;
   role: "user" | "admin";
   filter_own_repos: boolean;
   has_viewed_first: boolean;

@@ -13,7 +13,7 @@ import { log } from "../../services/logger";
 import { setSessionCookie } from "../../services/sessions";
 import { getStarCount } from "../../services/stars";
 import { generateUnsubscribeToken } from "../../services/unsubscribe";
-import { markFirstViewed } from "../../services/users";
+import { recordConsentAndMarkViewed } from "../../services/users";
 import { First } from "../../templates/first";
 import { redirect, render } from "../../utils/response";
 
@@ -58,6 +58,32 @@ async function handleGet(req: BunRequest): Promise<Response> {
   );
 }
 
+async function renderFirstWithError(
+  sessionId: string,
+  user: Parameters<typeof First>[0]["user"],
+  error: string,
+): Promise<Response> {
+  const starCount = await getStarCount(user.id);
+  const sendCsrfToken = await createCsrfToken(sessionId, "POST", "/first/send");
+  const skipCsrfToken = await createCsrfToken(sessionId, "POST", "/first/skip");
+  return render(
+    <First
+      user={user}
+      starCount={starCount}
+      sendCsrfToken={sendCsrfToken}
+      skipCsrfToken={skipCsrfToken}
+      error={error}
+    />,
+  );
+}
+
+function getConsentContext(req: BunRequest) {
+  return {
+    ipAddress: req.headers.get("x-forwarded-for") || null,
+    userAgent: req.headers.get("user-agent") || null,
+  };
+}
+
 async function handleSend(req: BunRequest): Promise<Response> {
   const csrfError = await csrfProtection(req, { path: "/first/send" });
   if (csrfError) return csrfError;
@@ -66,6 +92,17 @@ async function handleSend(req: BunRequest): Promise<Response> {
 
   if (!ctx.isAuthenticated || !ctx.user || !ctx.sessionId) {
     return redirect("/");
+  }
+
+  const formData = await req.formData();
+  const consent = formData.get("consent");
+
+  if (!consent) {
+    return renderFirstWithError(
+      ctx.sessionId,
+      ctx.user,
+      "You must agree to receive emails and accept the terms to continue.",
+    );
   }
 
   try {
@@ -108,7 +145,7 @@ async function handleSend(req: BunRequest): Promise<Response> {
     );
   }
 
-  await markFirstViewed(ctx.user.id);
+  await recordConsentAndMarkViewed(ctx.user.id, getConsentContext(req));
   return redirect("/account");
 }
 
@@ -122,7 +159,18 @@ async function handleSkip(req: BunRequest): Promise<Response> {
     return redirect("/");
   }
 
-  await markFirstViewed(ctx.user.id);
+  const formData = await req.formData();
+  const consent = formData.get("consent");
+
+  if (!consent) {
+    return renderFirstWithError(
+      ctx.sessionId,
+      ctx.user,
+      "You must agree to receive emails and accept the terms to continue.",
+    );
+  }
+
+  await recordConsentAndMarkViewed(ctx.user.id, getConsentContext(req));
   log.info("first", `User ${ctx.user.id} skipped first digest`);
   return redirect("/account");
 }

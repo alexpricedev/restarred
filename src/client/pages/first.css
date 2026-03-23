@@ -68,6 +68,54 @@
   }
 }
 
+[data-page="first"] .first-error {
+  font-family: var(--font-main);
+  font-size: 0.875rem;
+  color: var(--color-error);
+  margin: 0 0 1.5rem;
+}
+
+[data-page="first"] .first-consent {
+  text-align: left;
+  max-width: 360px;
+  margin: 0 auto 2.5rem;
+}
+
+[data-page="first"] .first-consent-checkbox {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  cursor: pointer;
+  font-family: var(--font-main);
+  font-size: 0.875rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+[data-page="first"] .first-consent-checkbox input[type="checkbox"] {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+  accent-color: var(--color-primary);
+}
+
+[data-page="first"] .first-consent-legal {
+  font-family: var(--font-main);
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  margin: 0.75rem 0 0;
+  line-height: 1.5;
+}
+
+[data-page="first"] .first-consent-legal a {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+}
+
+[data-page="first"] .first-btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 [data-page="first"] .first-actions {
   display: flex;
   flex-direction: column;

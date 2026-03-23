@@ -114,6 +114,8 @@ export const getSessionContextFromDB = async (
       digest_hour: number | null;
       timezone: string | null;
       is_active: boolean | null;
+      consented_to_emails: boolean | null;
+      consented_at: string | null;
       filter_own_repos: boolean | null;
       has_viewed_first: boolean | null;
       role: "user" | "admin" | null;
@@ -136,6 +138,8 @@ export const getSessionContextFromDB = async (
           digest_hour: data.digest_hour as number,
           timezone: data.timezone as string,
           is_active: data.is_active as boolean,
+          consented_to_emails: (data.consented_to_emails as boolean) ?? false,
+          consented_at: data.consented_at ? new Date(data.consented_at) : null,
           filter_own_repos: (data.filter_own_repos as boolean) ?? true,
           has_viewed_first: (data.has_viewed_first as boolean) ?? false,
           role: (data.role as "user" | "admin") ?? "user",

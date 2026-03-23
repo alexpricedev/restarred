@@ -11,6 +11,8 @@ const mockUser = {
   digest_hour: 9,
   timezone: "UTC",
   is_active: true,
+  consented_to_emails: false,
+  consented_at: null,
   role: "user",
   filter_own_repos: true,
   has_viewed_first: false,
@@ -50,7 +52,7 @@ mock.module("../../middleware/csrf", () => ({
 }));
 
 mock.module("../../services/users", () => ({
-  markFirstViewed: mock(() => Promise.resolve()),
+  recordConsentAndMarkViewed: mock(() => Promise.resolve()),
 }));
 
 mock.module("../../services/unsubscribe", () => ({
@@ -84,7 +86,7 @@ import { createBunRequest } from "../../test-utils/bun-request";
 import { first } from "./first";
 
 describe("First Controller", () => {
-  test("renders first page for authenticated user with sync done and has_viewed_first false", async () => {
+  test("renders first page with consent checkbox and legal links", async () => {
     const request = createBunRequest("http://localhost:3000/first");
     const response = await first.index(request);
 
@@ -95,6 +97,10 @@ describe("First Controller", () => {
     expect(html).toContain("REPOS READY");
     expect(html).toContain("SEND MY FIRST DIGEST NOW");
     expect(html).toContain("wait for my regular digest");
+    expect(html).toContain("data-consent-checkbox");
+    expect(html).toContain("I agree to receive weekly digest emails");
+    expect(html).toContain('href="/terms"');
+    expect(html).toContain('href="/privacy"');
   });
 
   test("redirects to /account if has_viewed_first is true", async () => {
@@ -154,29 +160,61 @@ describe("First Controller", () => {
     expect(response.headers.get("location")).toBe("/");
   });
 
-  test("POST /first/skip marks first as viewed and redirects", async () => {
+  test("POST /first/skip with consent records consent and redirects", async () => {
+    const formBody = new URLSearchParams({ consent: "on" }).toString();
     const request = createBunRequest("http://localhost:3000/first/skip", {
       method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formBody,
     });
     const response = await first.skip(request);
 
     expect(response.status).toBe(303);
     expect(response.headers.get("location")).toBe("/account");
 
-    const { markFirstViewed } = await import("../../services/users");
-    expect(markFirstViewed).toHaveBeenCalledWith("user-123");
+    const { recordConsentAndMarkViewed } = await import("../../services/users");
+    expect(recordConsentAndMarkViewed).toHaveBeenCalled();
   });
 
-  test("POST /first/send sends email, marks viewed, and redirects", async () => {
+  test("POST /first/skip without consent re-renders with error", async () => {
+    const request = createBunRequest("http://localhost:3000/first/skip", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: "",
+    });
+    const response = await first.skip(request);
+
+    expect(response.status).toBe(200);
+    const html = await response.text();
+    expect(html).toContain("You must agree");
+  });
+
+  test("POST /first/send with consent sends email and redirects", async () => {
+    const formBody = new URLSearchParams({ consent: "on" }).toString();
     const request = createBunRequest("http://localhost:3000/first/send", {
       method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formBody,
     });
     const response = await first.send(request);
 
     expect(response.status).toBe(303);
     expect(response.headers.get("location")).toBe("/account");
 
-    const { markFirstViewed } = await import("../../services/users");
-    expect(markFirstViewed).toHaveBeenCalledWith("user-123");
+    const { recordConsentAndMarkViewed } = await import("../../services/users");
+    expect(recordConsentAndMarkViewed).toHaveBeenCalled();
+  });
+
+  test("POST /first/send without consent re-renders with error", async () => {
+    const request = createBunRequest("http://localhost:3000/first/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: "",
+    });
+    const response = await first.send(request);
+
+    expect(response.status).toBe(200);
+    const html = await response.text();
+    expect(html).toContain("You must agree");
   });
 });

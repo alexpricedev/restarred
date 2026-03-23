@@ -17,6 +17,8 @@ mock.module("../../middleware/auth", () => ({
         digest_hour: 9,
         timezone: "UTC",
         is_active: true,
+        consented_to_emails: true,
+        consented_at: new Date(),
         filter_own_repos: true,
         has_viewed_first: false,
         role: "user",

@@ -18,6 +18,7 @@ export async function getUsersDueForDigest(): Promise<User[]> {
   const rows = await db`
     SELECT * FROM users
     WHERE is_active = true
+      AND consented_to_emails = true
       AND EXTRACT(ISODOW FROM now() AT TIME ZONE timezone) = digest_day + 1
       AND EXTRACT(HOUR FROM now() AT TIME ZONE timezone) = digest_hour
   `;
@@ -28,6 +29,7 @@ export async function getUsersDueForSync(): Promise<User[]> {
   const rows = await db`
     SELECT * FROM users
     WHERE is_active = true
+      AND consented_to_emails = true
       AND EXTRACT(ISODOW FROM (now() + interval '30 minutes') AT TIME ZONE timezone) = digest_day + 1
       AND EXTRACT(HOUR FROM (now() + interval '30 minutes') AT TIME ZONE timezone) = digest_hour
   `;

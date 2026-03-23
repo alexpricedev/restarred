@@ -235,6 +235,8 @@ const mockUser: User = {
   digest_hour: 9,
   timezone: "America/New_York",
   is_active: true,
+  consented_to_emails: true,
+  consented_at: new Date("2024-01-01"),
   filter_own_repos: true,
   has_viewed_first: false,
   role: "user",

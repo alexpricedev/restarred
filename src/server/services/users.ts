@@ -62,10 +62,31 @@ export const updateUserPreferences = async (
   return result[0] as User;
 };
 
-export const markFirstViewed = async (userId: string): Promise<void> => {
+interface ConsentContext {
+  ipAddress: string | null;
+  userAgent: string | null;
+}
+
+export const recordConsentAndMarkViewed = async (
+  userId: string,
+  context: ConsentContext,
+): Promise<void> => {
   await db`
-    UPDATE users SET has_viewed_first = true, updated_at = CURRENT_TIMESTAMP
+    UPDATE users SET
+      consented_to_emails = true,
+      consented_at = CURRENT_TIMESTAMP,
+      is_active = true,
+      has_viewed_first = true,
+      updated_at = CURRENT_TIMESTAMP
     WHERE id = ${userId}
+  `;
+
+  await db`
+    INSERT INTO consent_records (user_id, consent_type, ip_address, user_agent)
+    VALUES
+      (${userId}, 'email_digest', ${context.ipAddress}, ${context.userAgent}),
+      (${userId}, 'terms', ${context.ipAddress}, ${context.userAgent}),
+      (${userId}, 'privacy', ${context.ipAddress}, ${context.userAgent})
   `;
 };
 
