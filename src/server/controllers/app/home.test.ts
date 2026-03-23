@@ -41,11 +41,11 @@ describe("Home Controller", () => {
       expect(html).toContain("CONNECT GITHUB");
 
       expect(html).toContain("HOW IT WORKS");
-      expect(html).toContain("CONNECT YOUR GITHUB");
-      expect(html).toContain("GET 3 REPOS, WEEKLY");
-      expect(html).toContain("REVISIT WHAT&#x27;S WORTH KEEPING");
+      expect(html).toContain("YOU ALREADY DID THE WORK");
+      expect(html).toContain("WE SURFACE 3 A WEEK");
+      expect(html).toContain("YOU DECIDE WHAT&#x27;S STILL USEFUL");
 
-      expect(html).toContain("FULL CONTEXT, NOT JUST LINKS");
+      expect(html).toContain("ENOUGH CONTEXT TO DECIDE");
       expect(html).toContain("NO NOISE");
       expect(html).toContain("OPEN SOURCE.");
 
