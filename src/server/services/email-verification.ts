@@ -1,4 +1,6 @@
 import { randomInt } from "node:crypto";
+import { renderToString } from "react-dom/server";
+import { VerificationEmail } from "../components/email/verification-email";
 import { computeHMAC } from "../utils/crypto";
 import { db } from "./database";
 import { getEmailService } from "./email";
@@ -51,6 +53,8 @@ export async function createVerification(
 		VALUES (${userId}, ${email}, ${tokenHash}, ${expiresAt})
 	`;
 
+  const html = `<!DOCTYPE html>${renderToString(VerificationEmail({ pin, expiryHours: EXPIRY_HOURS }))}`;
+
   await getEmailService().send({
     to: { email },
     from: {
@@ -58,9 +62,7 @@ export async function createVerification(
       name: process.env.FROM_NAME as string,
     },
     subject: "Your re:starred verification code",
-    html: `<p>Enter this code on your account page to verify your email address:</p>
-<p style="font-size: 32px; font-family: monospace; letter-spacing: 0.15em; font-weight: bold;">${pin}</p>
-<p>This code expires in ${EXPIRY_HOURS} hours.</p>`,
+    html,
     text: `Your re:starred verification code: ${pin}\n\nEnter this code on your account page to verify your email address.\n\nThis code expires in ${EXPIRY_HOURS} hours.`,
   });
 
