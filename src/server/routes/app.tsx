@@ -1,6 +1,7 @@
 import {
   account,
   deleteAccount,
+  feedback,
   first,
   home,
   unsubscribe,
@@ -11,6 +12,7 @@ import { createRouteHandler } from "../utils/route-handler";
 
 export const appRoutes = {
   "/": home.index,
+  "/feedback": feedback.index,
   "/welcome": welcome.index,
   "/first": first.index,
   "/first/send": createRouteHandler({ POST: first.send }),

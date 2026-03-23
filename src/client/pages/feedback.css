@@ -1,0 +1,144 @@
+[data-page="feedback"] .feedback-container {
+  max-width: var(--max-width-app);
+  margin: 0 auto;
+  padding: 4rem 2rem 2rem;
+
+  @media (width <= 640px) {
+    padding: 2rem 0 1rem;
+  }
+}
+
+[data-page="feedback"] .feedback-label {
+  font-family: var(--font-main);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+}
+
+[data-page="feedback"] .feedback-heading {
+  margin-bottom: 0.5rem;
+  text-transform: none;
+}
+
+[data-page="feedback"] .feedback-description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  max-width: 480px;
+}
+
+[data-page="feedback"] .feedback-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  max-width: 640px;
+
+  @media (width <= 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+[data-page="feedback"] .feedback-card {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease;
+}
+
+[data-page="feedback"] .feedback-card:hover {
+  background: var(--color-surface-container-low);
+}
+
+[data-page="feedback"] .feedback-card-label {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+[data-page="feedback"] .feedback-card-description {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.5rem;
+  flex: 1;
+}
+
+[data-page="feedback"] .feedback-card-arrow {
+  font-size: 1.25rem;
+  color: var(--color-text-tertiary);
+  margin-top: 1.5rem;
+  transition: color 0.15s ease;
+}
+
+[data-page="feedback"] .feedback-card:hover .feedback-card-arrow {
+  color: var(--color-text);
+}
+
+[data-page="feedback"] .feedback-contact {
+  margin-top: 3rem;
+  padding-top: 2rem;
+}
+
+[data-page="feedback"] .feedback-contact-label {
+  font-family: var(--font-main);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+}
+
+[data-page="feedback"] .feedback-contact-description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.5rem;
+}
+
+[data-page="feedback"] .feedback-contact-description a {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+[data-page="feedback"] .feedback-contact-description a:hover {
+  color: var(--color-text-secondary);
+}
+
+[data-page="feedback"] .feedback-support {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+[data-page="feedback"] .feedback-support-label {
+  font-family: var(--font-main);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+}
+
+[data-page="feedback"] .feedback-support-description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.5rem;
+}
+
+[data-page="feedback"] .feedback-support-description a {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+[data-page="feedback"] .feedback-support-description a:hover {
+  color: var(--color-text-secondary);
+}
