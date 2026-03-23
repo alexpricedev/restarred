@@ -33,6 +33,7 @@ const createTestUser = async (email: string) => {
   return findOrCreateGitHubUser({
     githubId: testGithubIdCounter,
     githubUsername: `testuser-${testGithubIdCounter}`,
+    githubName: null,
     githubEmail: email,
     encryptedToken: "encrypted-token",
   });

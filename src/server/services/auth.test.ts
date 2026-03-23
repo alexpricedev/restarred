@@ -43,12 +43,14 @@ describe("auth service", () => {
     const result = await findOrCreateGitHubUser({
       githubId: 12345,
       githubUsername: "testuser",
+      githubName: "Test User",
       githubEmail: "test@example.com",
       encryptedToken: "encrypted:token:value",
     });
 
     expect(result.github_id).toBe(12345);
     expect(result.github_username).toBe("testuser");
+    expect(result.github_name).toBe("Test User");
     expect(result.github_email).toBe("test@example.com");
   });
 
@@ -57,6 +59,7 @@ describe("auth service", () => {
     await findOrCreateGitHubUser({
       githubId: 12345,
       githubUsername: "oldname",
+      githubName: "Old Name",
       githubEmail: "old@example.com",
       encryptedToken: "encrypted:token:v1",
     });
@@ -64,11 +67,13 @@ describe("auth service", () => {
     const updated = await findOrCreateGitHubUser({
       githubId: 12345,
       githubUsername: "newname",
+      githubName: "New Name",
       githubEmail: "new@example.com",
       encryptedToken: "encrypted:token:v2",
     });
 
     expect(updated.github_username).toBe("newname");
+    expect(updated.github_name).toBe("New Name");
     expect(updated.github_email).toBe("new@example.com");
 
     const count =

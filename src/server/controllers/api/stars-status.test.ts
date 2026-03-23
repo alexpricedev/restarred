@@ -11,6 +11,7 @@ const mockGetSessionContext = mock(
         id: "user-123",
         github_id: 12345,
         github_username: "testuser",
+        github_name: null,
         github_email: "test@example.com",
         email_override: null,
         github_token: "encrypted-token",

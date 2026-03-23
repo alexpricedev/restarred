@@ -228,6 +228,7 @@ const mockUser: User = {
   id: "user-1",
   github_id: 12345,
   github_username: "testuser",
+  github_name: "Test User",
   github_email: "test@example.com",
   email_override: null,
   github_token: "encrypted-token",
@@ -257,6 +258,7 @@ describe("renderDigestPlainText", () => {
       }),
     ];
     const text = renderDigestPlainText(
+      "TestUser",
       repos,
       "http://localhost:3000/account",
       "http://localhost:3000/unsubscribe?token=abc",
@@ -273,6 +275,7 @@ describe("renderDigestPlainText", () => {
   test("contains footer links", () => {
     const repos = [makeRepo()];
     const text = renderDigestPlainText(
+      "TestUser",
       repos,
       "http://localhost:3000/account",
       "http://localhost:3000/unsubscribe?token=abc",
@@ -287,23 +290,49 @@ describe("renderDigestPlainText", () => {
 
   test("contains company name and address", () => {
     const repos = [makeRepo()];
-    const text = renderDigestPlainText(repos, "http://x", "http://y");
+    const text = renderDigestPlainText(
+      "TestUser",
+      repos,
+      "http://x",
+      "http://y",
+    );
 
     expect(text).toContain("INFINITE CHAPTERS LTD");
     expect(text).toContain("Electric Works Digital Campus");
     expect(text).toContain("Sheffield, S1 2BJ");
   });
 
+  test("contains greeting with display name", () => {
+    const repos = [makeRepo()];
+    const text = renderDigestPlainText(
+      "Test User",
+      repos,
+      "http://x",
+      "http://y",
+    );
+    expect(text).toContain("Hi Test User,");
+  });
+
   test("handles null description", () => {
     const repos = [makeRepo({ description: null })];
-    const text = renderDigestPlainText(repos, "http://x", "http://y");
+    const text = renderDigestPlainText(
+      "TestUser",
+      repos,
+      "http://x",
+      "http://y",
+    );
 
     expect(text).not.toContain("null");
   });
 
   test("handles null language", () => {
     const repos = [makeRepo({ language: null })];
-    const text = renderDigestPlainText(repos, "http://x", "http://y");
+    const text = renderDigestPlainText(
+      "TestUser",
+      repos,
+      "http://x",
+      "http://y",
+    );
 
     expect(text).not.toContain("null");
   });
@@ -357,6 +386,12 @@ describe("renderDigestEmail", () => {
     expect(result.html).toContain("https://restarred.dev/privacy");
     expect(result.html).toContain("INFINITE CHAPTERS LTD");
     expect(result.html).toContain("Electric Works Digital Campus");
+  });
+
+  test("html contains greeting with display name", () => {
+    const result = renderDigestEmail(mockUser, repos, "token-123");
+    expect(result.html).toContain("Test User");
+    expect(result.html).toMatch(/Hi\b.*Test User.*,/);
   });
 
   test("text contains repo details", () => {

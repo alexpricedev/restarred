@@ -85,6 +85,7 @@ mock.module("../../middleware/auth", () => {
             id: data.user_id_result as string,
             github_id: data.github_id as number,
             github_username: data.github_username as string,
+            github_name: (data.github_name as string | null) ?? null,
             github_email: data.github_email as string,
             email_override: data.email_override as string | null,
             github_token: data.github_token as string,

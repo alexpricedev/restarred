@@ -142,6 +142,7 @@ export const generateSubjectLine = (repos: SelectedRepo[]): string => {
 };
 
 export const renderDigestPlainText = (
+  displayName: string,
   repos: SelectedRepo[],
   accountUrl: string,
   unsubscribeUrl: string,
@@ -149,7 +150,7 @@ export const renderDigestPlainText = (
   const lines: string[] = [
     `${repos.length} repos from your stars`,
     "",
-    `Here are ${repos.length} repos from your stars worth revisiting.`,
+    `Hi ${displayName}, here are ${repos.length} repos from your stars worth revisiting.`,
     "",
   ];
 
@@ -186,7 +187,7 @@ export const renderDigestPlainText = (
 const APP_URL = process.env.APP_URL as string;
 
 export const renderDigestEmail = (
-  _user: User,
+  user: User,
   repos: SelectedRepo[],
   unsubscribeToken: string,
 ): {
@@ -197,10 +198,16 @@ export const renderDigestEmail = (
 } => {
   const accountUrl = `${APP_URL}/account`;
   const unsubscribeUrl = `${APP_URL}/unsubscribe?token=${unsubscribeToken}`;
+  const displayName = user.github_name || user.github_username;
 
   const subject = generateSubjectLine(repos);
-  const html = `<!DOCTYPE html>${renderToString(<DigestEmail repos={repos} accountUrl={accountUrl} unsubscribeUrl={unsubscribeUrl} />)}`;
-  const text = renderDigestPlainText(repos, accountUrl, unsubscribeUrl);
+  const html = `<!DOCTYPE html>${renderToString(<DigestEmail displayName={displayName} repos={repos} accountUrl={accountUrl} unsubscribeUrl={unsubscribeUrl} />)}`;
+  const text = renderDigestPlainText(
+    displayName,
+    repos,
+    accountUrl,
+    unsubscribeUrl,
+  );
 
   const headers = {
     "List-Unsubscribe": `<${unsubscribeUrl}>`,

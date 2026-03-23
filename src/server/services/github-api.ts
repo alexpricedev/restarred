@@ -6,6 +6,7 @@ const GITHUB_USER_URL = "https://api.github.com/user";
 export interface GitHubUserProfile {
   id: number;
   login: string;
+  name: string | null;
   email: string | null;
 }
 

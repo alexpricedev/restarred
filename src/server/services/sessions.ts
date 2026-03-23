@@ -86,7 +86,7 @@ export const getSessionContextFromDB = async (
         s.id_hash, s.user_id, s.session_type,
         s.expires_at, s.last_activity_at, s.created_at,
         u.id as user_id_result, u.github_id, u.github_username,
-        u.github_email, u.email_override, u.github_token,
+        u.github_email, u.email_override, u.github_name, u.github_token,
         u.digest_day, u.digest_hour, u.timezone, u.is_active, u.filter_own_repos,
         u.role, u.sync_status, u.created_at as user_created_at, u.updated_at as user_updated_at
       FROM sessions s
@@ -109,6 +109,7 @@ export const getSessionContextFromDB = async (
       github_username: string | null;
       github_email: string | null;
       email_override: string | null;
+      github_name: string | null;
       github_token: string | null;
       digest_day: number | null;
       digest_hour: number | null;
@@ -132,6 +133,7 @@ export const getSessionContextFromDB = async (
           github_username: data.github_username as string,
           github_email: data.github_email as string,
           email_override: data.email_override,
+          github_name: data.github_name ?? null,
           github_token: data.github_token as string,
           digest_day: data.digest_day as number,
           digest_hour: data.digest_hour as number,

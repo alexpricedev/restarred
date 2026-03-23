@@ -51,6 +51,7 @@ export const callback = {
       const user = await findOrCreateGitHubUser({
         githubId: githubUser.id,
         githubUsername: githubUser.login,
+        githubName: githubUser.name,
         githubEmail: githubUser.email ?? "",
         encryptedToken,
       });
