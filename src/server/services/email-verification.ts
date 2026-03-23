@@ -4,7 +4,7 @@ import { VerificationEmail } from "../components/email/verification-email";
 import { computeHMAC } from "../utils/crypto";
 import { db } from "./database";
 import { getEmailService } from "./email";
-import { log } from "./logger";
+import { log, maskEmail } from "./logger";
 
 const RATE_LIMIT_MS = 5 * 60 * 1000;
 const EXPIRY_HOURS = 24;
@@ -99,7 +99,10 @@ export async function verifyPin(pin: string): Promise<VerifyResult> {
   await db`UPDATE users SET email_override = ${email}, updated_at = CURRENT_TIMESTAMP WHERE id = ${userId}`;
   await db`DELETE FROM email_verifications WHERE token_hash = ${tokenHash}`;
 
-  log.info("email-verification", `Email verified: ${email} for user ${userId}`);
+  log.info(
+    "email-verification",
+    `Email verified: ${maskEmail(email)} for user ${userId}`,
+  );
 
   return { success: true, email };
 }
