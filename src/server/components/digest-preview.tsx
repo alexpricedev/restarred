@@ -71,20 +71,19 @@ export const DigestPreview = () => (
       <div className="digest-body">
         {repos.map((repo) => (
           <div className="digest-repo" key={`${repo.owner}/${repo.name}`}>
-            <div className="digest-repo-top">
-              <a
-                className="digest-repo-name"
-                href={`https://github.com/${repo.owner}/${repo.name}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {repo.owner}/{repo.name}
-              </a>
-              <span className="digest-repo-stars">&#9733; {repo.stars}</span>
-            </div>
+            <a
+              className="digest-repo-name"
+              href={`https://github.com/${repo.owner}/${repo.name}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {repo.owner}/{repo.name}
+            </a>
             <p className="digest-repo-desc">{repo.description}</p>
             <div className="digest-repo-meta">
               <span className="digest-repo-lang">{repo.language}</span>
+              <span className="digest-repo-dot">&middot;</span>
+              <span>&#9733; {repo.stars}</span>
               <span className="digest-repo-dot">&middot;</span>
               <span
                 className={`digest-repo-badge digest-repo-badge--${repo.statusClass}`}
