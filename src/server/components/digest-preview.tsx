@@ -7,6 +7,7 @@ const repos = [
     stars: "15.2k",
     status: "Active",
     statusClass: "active",
+    lastCommit: "Last commit 4 days ago",
     starredAgo: "2 years ago",
   },
   {
@@ -17,6 +18,7 @@ const repos = [
     stars: "37.4k",
     status: "Dormant",
     statusClass: "dormant",
+    lastCommit: "Last commit 2 years ago",
     starredAgo: "3 years ago",
   },
   {
@@ -27,6 +29,7 @@ const repos = [
     stars: "2.7k",
     status: "Archived",
     statusClass: "archived",
+    lastCommit: "Last commit 3 years ago",
     starredAgo: "4 years ago",
   },
 ];
@@ -82,6 +85,7 @@ export const DigestPreview = () => (
               >
                 {repo.status}
               </span>
+              <span>{repo.lastCommit}</span>
             </div>
             <div className="digest-repo-footer">
               <p className="digest-repo-starred">
