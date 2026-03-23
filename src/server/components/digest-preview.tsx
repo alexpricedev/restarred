@@ -72,9 +72,14 @@ export const DigestPreview = () => (
         {repos.map((repo) => (
           <div className="digest-repo" key={`${repo.owner}/${repo.name}`}>
             <div className="digest-repo-top">
-              <span className="digest-repo-name">
+              <a
+                className="digest-repo-name"
+                href={`https://github.com/${repo.owner}/${repo.name}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {repo.owner}/{repo.name}
-              </span>
+              </a>
               <span className="digest-repo-stars">&#9733; {repo.stars}</span>
             </div>
             <p className="digest-repo-desc">{repo.description}</p>

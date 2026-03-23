@@ -279,6 +279,7 @@
     font-size: 0.8125rem;
     font-weight: 700;
     color: var(--color-primary);
+    text-decoration: none;
   }
 
   .digest-repo-stars {
