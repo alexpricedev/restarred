@@ -79,7 +79,7 @@ export const getActivityStatus = (
       isArchived,
       label: "Dormant",
       detail: "No recent activity",
-      badgeColor: "#ababab",
+      badgeColor: "#ba1a1a",
     };
   }
 
@@ -92,7 +92,7 @@ export const getActivityStatus = (
       isArchived,
       label: "Active",
       detail,
-      badgeColor: "#000000",
+      badgeColor: "#2d6a4f",
     };
   }
 
@@ -111,7 +111,7 @@ export const getActivityStatus = (
     isArchived,
     label: "Dormant",
     detail,
-    badgeColor: "#ababab",
+    badgeColor: "#ba1a1a",
   };
 };
 

@@ -6,6 +6,7 @@ const repos = [
     language: "Go",
     stars: "15.2k",
     status: "Active",
+    statusClass: "active",
     starredAgo: "2 years ago",
   },
   {
@@ -15,6 +16,7 @@ const repos = [
     language: "TypeScript",
     stars: "37.4k",
     status: "Dormant",
+    statusClass: "dormant",
     starredAgo: "3 years ago",
   },
   {
@@ -24,6 +26,7 @@ const repos = [
     language: "TypeScript",
     stars: "2.7k",
     status: "Archived",
+    statusClass: "archived",
     starredAgo: "4 years ago",
   },
 ];
@@ -74,7 +77,11 @@ export const DigestPreview = () => (
             <div className="digest-repo-meta">
               <span className="digest-repo-lang">{repo.language}</span>
               <span className="digest-repo-dot">&middot;</span>
-              <span>{repo.status}</span>
+              <span
+                className={`digest-repo-badge digest-repo-badge--${repo.statusClass}`}
+              >
+                {repo.status}
+              </span>
             </div>
             <div className="digest-repo-footer">
               <p className="digest-repo-starred">

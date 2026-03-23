@@ -97,7 +97,7 @@ describe("getActivityStatus", () => {
     expect(result.status).toBe("dormant");
     expect(result.label).toBe("Dormant");
     expect(result.detail).toBe("No recent activity");
-    expect(result.badgeColor).toBe("#ababab");
+    expect(result.badgeColor).toBe("#ba1a1a");
     expect(result.isArchived).toBe(false);
   });
 
@@ -105,7 +105,7 @@ describe("getActivityStatus", () => {
     const result = getActivityStatus(ago(10 * DAY), false);
     expect(result.status).toBe("active");
     expect(result.label).toBe("Active");
-    expect(result.badgeColor).toBe("#000000");
+    expect(result.badgeColor).toBe("#2d6a4f");
     expect(result.detail).toStartWith("Last commit ");
   });
 
@@ -120,7 +120,7 @@ describe("getActivityStatus", () => {
     const result = getActivityStatus(ago(400 * DAY), false);
     expect(result.status).toBe("dormant");
     expect(result.label).toBe("Dormant");
-    expect(result.badgeColor).toBe("#ababab");
+    expect(result.badgeColor).toBe("#ba1a1a");
     expect(result.detail).toStartWith("Last commit ");
   });
 
