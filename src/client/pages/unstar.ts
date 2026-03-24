@@ -1,10 +1,8 @@
+import { confetti } from "@client/confetti";
+
 export function init() {
-  const closeButton = document.querySelector<HTMLButtonElement>(
-    "[data-close-window]",
-  );
-  if (closeButton) {
-    closeButton.addEventListener("click", () => {
-      window.close();
-    });
+  const heading = document.querySelector(".unstar-heading");
+  if (heading?.textContent === "UNSTARRED") {
+    confetti("burst");
   }
 }

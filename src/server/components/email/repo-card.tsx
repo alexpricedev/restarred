@@ -98,19 +98,19 @@ export const RepoCard = ({ repo, unstarUrl }: RepoCardProps) => {
             }}
           >
             You starred this {formatRelativeDate(repo.starredAt)}
+            <a
+              href={unstarUrl}
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: "12px",
+                color: "#ababab",
+                textDecoration: "underline",
+                float: "right",
+              }}
+            >
+              Unstar
+            </a>
           </p>
-
-          <a
-            href={unstarUrl}
-            style={{
-              fontFamily: "Inter, sans-serif",
-              fontSize: "12px",
-              color: "#ababab",
-              textDecoration: "underline",
-            }}
-          >
-            Unstar
-          </a>
         </td>
       </tr>
     </table>

@@ -12,7 +12,7 @@ export const github = {
     const params = new URLSearchParams({
       client_id: clientId,
       redirect_uri: callbackUrl,
-      scope: "read:user user:email",
+      scope: "read:user user:email public_repo",
       state,
     });
 
