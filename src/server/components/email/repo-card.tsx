@@ -8,9 +8,10 @@ import { ActivityBadge } from "./activity-badge";
 
 interface RepoCardProps {
   repo: SelectedRepo;
+  unstarUrl: string;
 }
 
-export const RepoCard = ({ repo }: RepoCardProps) => {
+export const RepoCard = ({ repo, unstarUrl }: RepoCardProps) => {
   const activity = getActivityStatus(repo.lastActivityAt, repo.isArchived);
 
   return (
@@ -97,6 +98,18 @@ export const RepoCard = ({ repo }: RepoCardProps) => {
             }}
           >
             You starred this {formatRelativeDate(repo.starredAt)}
+            <a
+              href={unstarUrl}
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: "12px",
+                color: "#ababab",
+                textDecoration: "underline",
+                float: "right",
+              }}
+            >
+              Unstar
+            </a>
           </p>
         </td>
       </tr>

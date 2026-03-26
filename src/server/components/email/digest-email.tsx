@@ -5,6 +5,7 @@ import { RepoCard } from "./repo-card";
 interface DigestEmailProps {
   displayName: string;
   repos: SelectedRepo[];
+  unstarUrls: Record<string, string>;
   accountUrl: string;
   unsubscribeUrl: string;
 }
@@ -12,6 +13,7 @@ interface DigestEmailProps {
 export const DigestEmail = ({
   displayName,
   repos,
+  unstarUrls,
   accountUrl,
   unsubscribeUrl,
 }: DigestEmailProps) => (
@@ -111,7 +113,11 @@ export const DigestEmail = ({
                   </p>
 
                   {repos.map((repo) => (
-                    <RepoCard key={repo.starId} repo={repo} />
+                    <RepoCard
+                      key={repo.starId}
+                      repo={repo}
+                      unstarUrl={unstarUrls[repo.starId]}
+                    />
                   ))}
 
                   {/* Footer */}

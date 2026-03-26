@@ -1,6 +1,7 @@
 import { renderToString } from "react-dom/server";
 import { DigestEmail } from "../components/email/digest-email";
 import type { SelectedRepo } from "./digest";
+import { generateUnstarToken } from "./unstar";
 import type { User } from "./users";
 
 export type { SelectedRepo };
@@ -149,6 +150,7 @@ export const generateSubjectLine = (repos: SelectedRepo[]): string => {
 export const renderDigestPlainText = (
   displayName: string,
   repos: SelectedRepo[],
+  unstarUrls: Record<string, string>,
   accountUrl: string,
   unsubscribeUrl: string,
 ): string => {
@@ -179,6 +181,7 @@ export const renderDigestPlainText = (
       lines.push(`   You starred this ${formatRelativeDate(repo.starredAt)}`);
     }
     lines.push(`   ${repo.htmlUrl}`);
+    lines.push(`   Unstar: ${unstarUrls[repo.starId]}`);
     lines.push("");
   });
 
@@ -211,11 +214,18 @@ export const renderDigestEmail = (
   const unsubscribeUrl = `${APP_URL}/unsubscribe?token=${unsubscribeToken}`;
   const displayName = user.github_name || user.github_username;
 
+  const unstarUrls: Record<string, string> = {};
+  for (const repo of repos) {
+    const token = generateUnstarToken(user.id, repo.fullName);
+    unstarUrls[repo.starId] = `${APP_URL}/unstar?token=${token}`;
+  }
+
   const subject = generateSubjectLine(repos);
-  const html = `<!DOCTYPE html>${renderToString(<DigestEmail displayName={displayName} repos={repos} accountUrl={accountUrl} unsubscribeUrl={unsubscribeUrl} />)}`;
+  const html = `<!DOCTYPE html>${renderToString(<DigestEmail displayName={displayName} repos={repos} unstarUrls={unstarUrls} accountUrl={accountUrl} unsubscribeUrl={unsubscribeUrl} />)}`;
   const text = renderDigestPlainText(
     displayName,
     repos,
+    unstarUrls,
     accountUrl,
     unsubscribeUrl,
   );

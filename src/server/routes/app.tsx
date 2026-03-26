@@ -6,6 +6,7 @@ import {
   home,
   privacy,
   terms,
+  unstar,
   unsubscribe,
   welcome,
 } from "../controllers/app";
@@ -45,6 +46,10 @@ export const appRoutes = {
   }),
   "/account/cancel-verification": createRouteHandler({
     POST: account.cancelVerification,
+  }),
+  "/unstar": createRouteHandler({
+    GET: unstar.index,
+    POST: unstar.confirm,
   }),
   "/unsubscribe": createRouteHandler({
     GET: unsubscribe.index,
