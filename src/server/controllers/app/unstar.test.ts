@@ -54,7 +54,7 @@ describe("Unstar Controller", () => {
       const html = await response.text();
       expect(html).toContain("UNSTAR");
       expect(html).toContain("owner/repo");
-      expect(html).toContain("Confirm unstar");
+      expect(html).toContain("Confirm &amp; Unstar");
     });
 
     test("renders error page for invalid token", async () => {
