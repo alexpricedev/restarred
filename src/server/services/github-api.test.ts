@@ -2,8 +2,9 @@ import { afterEach, describe, expect, mock, test } from "bun:test";
 
 const mockFetch = mock<typeof fetch>();
 
-// @ts-expect-error mock global fetch
-globalThis.fetch = mockFetch;
+mock.module("../utils/http", () => ({
+  httpFetch: mockFetch,
+}));
 
 import { fetchAllStarredRepos } from "./github-api";
 

@@ -1,3 +1,4 @@
+import { httpFetch } from "../utils/http";
 import { log, maskEmail } from "./logger";
 
 const GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token";
@@ -11,7 +12,7 @@ export interface GitHubUserProfile {
 }
 
 export const exchangeCodeForToken = async (code: string): Promise<string> => {
-  const response = await fetch(GITHUB_TOKEN_URL, {
+  const response = await httpFetch(GITHUB_TOKEN_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -42,7 +43,7 @@ export const fetchGitHubUser = async (
     Accept: "application/vnd.github.v3+json",
   };
 
-  const response = await fetch(GITHUB_USER_URL, { headers });
+  const response = await httpFetch(GITHUB_USER_URL, { headers });
   if (!response.ok) {
     throw new Error(`GitHub API error: ${response.status}`);
   }
@@ -64,7 +65,7 @@ export const fetchGitHubUser = async (
 const fetchPrimaryEmail = async (
   accessToken: string,
 ): Promise<string | null> => {
-  const response = await fetch(`${GITHUB_USER_URL}/emails`, {
+  const response = await httpFetch(`${GITHUB_USER_URL}/emails`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       Accept: "application/vnd.github.v3+json",
@@ -94,7 +95,7 @@ export const revokeGitHubGrant = async (
     return false;
   }
 
-  const response = await fetch(
+  const response = await httpFetch(
     `https://api.github.com/applications/${clientId}/grant`,
     {
       method: "DELETE",
@@ -147,7 +148,7 @@ export const fetchAllStarredRepos = async (
   let page = 1;
 
   while (true) {
-    const response = await fetch(
+    const response = await httpFetch(
       `https://api.github.com/user/starred?per_page=100&page=${page}`,
       {
         headers: {
@@ -188,7 +189,7 @@ export const unstarRepo = async (
   accessToken: string,
   fullName: string,
 ): Promise<boolean> => {
-  const response = await fetch(
+  const response = await httpFetch(
     `https://api.github.com/user/starred/${fullName}`,
     {
       method: "DELETE",
