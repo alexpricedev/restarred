@@ -140,17 +140,14 @@ interface GitHubStarredResponse {
   };
 }
 
-type FetchFn = (url: string, init?: RequestInit) => Promise<Response>;
-
 export const fetchAllStarredRepos = async (
   accessToken: string,
-  fetchFn: FetchFn = fetch,
 ): Promise<StarredRepo[]> => {
   const allRepos: StarredRepo[] = [];
   let page = 1;
 
   while (true) {
-    const response = await fetchFn(
+    const response = await fetch(
       `https://api.github.com/user/starred?per_page=100&page=${page}`,
       {
         headers: {
@@ -190,9 +187,8 @@ export const fetchAllStarredRepos = async (
 export const unstarRepo = async (
   accessToken: string,
   fullName: string,
-  fetchFn: FetchFn = fetch,
 ): Promise<boolean> => {
-  const response = await fetchFn(
+  const response = await fetch(
     `https://api.github.com/user/starred/${fullName}`,
     {
       method: "DELETE",
