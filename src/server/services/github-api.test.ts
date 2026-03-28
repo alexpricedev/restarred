@@ -1,12 +1,7 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
+import { fetchAllStarredRepos } from "./github-api";
 
 const mockFetch = mock<typeof fetch>();
-
-mock.module("../utils/http", () => ({
-  httpFetch: mockFetch,
-}));
-
-import { fetchAllStarredRepos } from "./github-api";
 
 describe("fetchAllStarredRepos", () => {
   afterEach(() => {
@@ -45,7 +40,7 @@ describe("fetchAllStarredRepos", () => {
       }),
     );
 
-    const repos = await fetchAllStarredRepos("test-token");
+    const repos = await fetchAllStarredRepos("test-token", mockFetch);
 
     expect(repos).toHaveLength(1);
     expect(repos[0].repo_id).toBe(123);
@@ -88,7 +83,7 @@ describe("fetchAllStarredRepos", () => {
       }),
     );
 
-    const repos = await fetchAllStarredRepos("test-token");
+    const repos = await fetchAllStarredRepos("test-token", mockFetch);
 
     expect(repos).toHaveLength(101);
     expect(mockFetch).toHaveBeenCalledTimes(2);
@@ -102,7 +97,7 @@ describe("fetchAllStarredRepos", () => {
   test("throws on API error", async () => {
     mockFetch.mockResolvedValueOnce(new Response("Forbidden", { status: 403 }));
 
-    await expect(fetchAllStarredRepos("bad-token")).rejects.toThrow(
+    await expect(fetchAllStarredRepos("bad-token", mockFetch)).rejects.toThrow(
       "GitHub API error: 403",
     );
   });
