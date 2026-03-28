@@ -1,6 +1,9 @@
-import { afterEach, describe, expect, spyOn, test } from "bun:test";
+import { afterEach, describe, expect, mock, test } from "bun:test";
 
-const mockFetch = spyOn(globalThis, "fetch");
+const mockFetch = mock<typeof fetch>();
+
+// @ts-expect-error mock global fetch
+globalThis.fetch = mockFetch;
 
 import { fetchAllStarredRepos } from "./github-api";
 
