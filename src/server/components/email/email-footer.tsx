@@ -71,7 +71,22 @@ export const EmailFooter = ({
           fontSize: "12px",
           color: "#ababab",
           lineHeight: "18px",
-          paddingTop: "32px",
+          paddingTop: "24px",
+        }}
+      >
+        You're receiving this because you opted in to the re:starred weekly
+        digest.
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          textAlign: "center",
+          fontFamily: "Inter, sans-serif",
+          fontSize: "12px",
+          color: "#ababab",
+          lineHeight: "18px",
+          paddingTop: "12px",
         }}
       >
         {COMPANY_NAME}
