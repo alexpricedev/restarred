@@ -19,9 +19,22 @@ export const EmailFooter = ({
     style={{
       marginTop: "32px",
       borderTop: "1px solid rgba(198,198,198,0.15)",
-      paddingTop: "24px",
     }}
   >
+    <tr>
+      <td
+        style={{
+          textAlign: "center",
+          fontFamily: "Inter, sans-serif",
+          fontSize: "12px",
+          color: "#ababab",
+          lineHeight: "18px",
+        }}
+      >
+        You're receiving this because you opted in to the re:starred weekly
+        digest.
+      </td>
+    </tr>
     <tr>
       <td
         style={{
@@ -30,6 +43,7 @@ export const EmailFooter = ({
           fontSize: "13px",
           color: "#ababab",
           lineHeight: "20px",
+          paddingTop: "20px",
         }}
       >
         <a
@@ -71,22 +85,7 @@ export const EmailFooter = ({
           fontSize: "12px",
           color: "#ababab",
           lineHeight: "18px",
-          paddingTop: "24px",
-        }}
-      >
-        You're receiving this because you opted in to the re:starred weekly
-        digest.
-      </td>
-    </tr>
-    <tr>
-      <td
-        style={{
-          textAlign: "center",
-          fontFamily: "Inter, sans-serif",
-          fontSize: "12px",
-          color: "#ababab",
-          lineHeight: "18px",
-          paddingTop: "12px",
+          paddingTop: "20px",
         }}
       >
         {COMPANY_NAME}
