@@ -55,14 +55,16 @@ export const Feedback = ({ user, csrfToken }: FeedbackProps) => (
         <span className="feedback-contact-label">PREFER EMAIL?</span>
         <p className="feedback-contact-description">
           Reach out at{" "}
-          <a href="mailto:restarred@alexprice.dev">restarred@alexprice.dev</a>{" "}
+          <a href="mailto:feedback@digest.restarred.dev">
+            feedback@digest.restarred.dev
+          </a>{" "}
           or visit{" "}
           <a
-            href="https://alexprice.dev"
+            href="https://chptrs.tech"
             target="_blank"
             rel="noopener noreferrer"
           >
-            alexprice.dev
+            chptrs.tech
           </a>
         </p>
       </div>
