@@ -48,7 +48,7 @@ describe("Privacy Controller", () => {
     const html = await response.text();
 
     expect(html).toContain("Alex Price");
-    expect(html).toContain("restarred-privacy@alexprice.dev");
+    expect(html).toContain("privacy@digest.restarred.dev");
   });
 
   test("names third-party sub-processors", async () => {

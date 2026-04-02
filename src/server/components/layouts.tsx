@@ -108,11 +108,11 @@ export function Layout({
             <span>
               Made for the community by{" "}
               <a
-                href="https://alexprice.dev"
+                href="https://chptrs.tech"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                alexprice.dev
+                chptrs.tech
               </a>
             </span>
           </div>

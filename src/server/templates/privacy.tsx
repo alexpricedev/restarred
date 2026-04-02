@@ -35,8 +35,8 @@ export const Privacy = ({ user, csrfToken }: PrivacyProps) => (
         </p>
         <p>
           Contact:{" "}
-          <a href="mailto:restarred-privacy@alexprice.dev">
-            restarred-privacy@alexprice.dev
+          <a href="mailto:privacy@digest.restarred.dev">
+            privacy@digest.restarred.dev
           </a>
         </p>
 
@@ -218,8 +218,8 @@ export const Privacy = ({ user, csrfToken }: PrivacyProps) => (
 
         <p>
           For any of these requests, contact{" "}
-          <a href="mailto:restarred-privacy@alexprice.dev">
-            restarred-privacy@alexprice.dev
+          <a href="mailto:privacy@digest.restarred.dev">
+            privacy@digest.restarred.dev
           </a>
           .
         </p>
