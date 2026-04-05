@@ -51,6 +51,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "resend": "^6.9.4"
+    "resend": "^6.9.4",
+    "svix": "^1.90.0"
   }
 }
