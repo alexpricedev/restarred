@@ -89,28 +89,44 @@ export const RepoCard = ({ repo, unstarUrl }: RepoCardProps) => {
             <ActivityBadge activity={activity} />
           </div>
 
-          <p
-            style={{
-              fontFamily: "Inter, sans-serif",
-              fontSize: "12px",
-              color: "#ababab",
-              margin: "12px 0 0",
-            }}
+          <table
+            width="100%"
+            cellPadding={0}
+            cellSpacing={0}
+            role="presentation"
+            style={{ marginTop: "12px" }}
           >
-            You starred this {formatRelativeDate(repo.starredAt)}{" "}
-            <a
-              href={unstarUrl}
-              style={{
-                fontFamily: "Inter, sans-serif",
-                fontSize: "12px",
-                color: "#ababab",
-                textDecoration: "underline",
-                float: "right",
-              }}
-            >
-              Unstar
-            </a>
-          </p>
+            <tr>
+              <td
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "12px",
+                  color: "#ababab",
+                }}
+              >
+                You starred this {formatRelativeDate(repo.starredAt)}
+              </td>
+              <td
+                align="right"
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "12px",
+                }}
+              >
+                <a
+                  href={unstarUrl}
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: "12px",
+                    color: "#ababab",
+                    textDecoration: "underline",
+                  }}
+                >
+                  Unstar
+                </a>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
     </table>
