@@ -97,7 +97,7 @@ export const RepoCard = ({ repo, unstarUrl }: RepoCardProps) => {
               margin: "12px 0 0",
             }}
           >
-            You starred this {formatRelativeDate(repo.starredAt)}
+            You starred this {formatRelativeDate(repo.starredAt)}{" "}
             <a
               href={unstarUrl}
               style={{
