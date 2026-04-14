@@ -1,6 +1,6 @@
 const COMPANY_NAME = "INFINITE CHAPTERS LTD";
-const COMPANY_ADDRESS =
-  "Electric Works Digital Campus, 3 Concourse Way, Sheffield, S1 2BJ, United Kingdom";
+const COMPANY_ADDRESS_1 = "Electric Works Digital Campus, 3 Concourse Way";
+const COMPANY_ADDRESS_2 = "Sheffield, S1 2BJ, United Kingdom";
 
 interface EmailFooterProps {
   accountUrl: string;
@@ -88,9 +88,39 @@ export const EmailFooter = ({
           paddingTop: "20px",
         }}
       >
-        {COMPANY_NAME}
+        <a
+          href="https://restarred.dev/"
+          style={{
+            color: "#ababab",
+            textDecoration: "none",
+          }}
+        >
+          RE:STARRED
+        </a>
+        {" by "}
+        <a
+          href="https://chptrs.tech"
+          style={{
+            color: "#ababab",
+            textDecoration: "none",
+          }}
+        >
+          CHPTRS.TECH
+        </a>
         <br />
-        {COMPANY_ADDRESS}
+        <a
+          href="https://chptrs.tech"
+          style={{
+            color: "#ababab",
+            textDecoration: "none",
+          }}
+        >
+          {COMPANY_NAME}
+        </a>
+        <br />
+        {COMPANY_ADDRESS_1}
+        <br />
+        {COMPANY_ADDRESS_2}
       </td>
     </tr>
   </table>
