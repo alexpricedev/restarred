@@ -552,6 +552,67 @@
     color: var(--color-text-primary);
   }
 
+  /* ── FAQ ────────────────────────────────────────────── */
+
+  .landing-faq {
+    background: var(--color-surface-container-low);
+    padding: 8rem 0;
+
+    @media (width <= 768px) {
+      padding: 4rem 0;
+    }
+  }
+
+  .faq-header {
+    margin-bottom: 4rem;
+
+    @media (width >= 768px) {
+      margin-bottom: 6rem;
+    }
+  }
+
+  .faq-header h2 {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    color: var(--color-primary);
+    margin: 0;
+
+    @media (width >= 768px) {
+      font-size: 3.5rem;
+    }
+  }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+
+    @media (width >= 768px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4rem 6rem;
+    }
+  }
+
+  .faq-item h3 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--color-primary);
+    margin: 0 0 1rem;
+  }
+
+  .faq-item p {
+    font-family: var(--font-main);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+
   /* ── CTA ────────────────────────────────────────────── */
 
   .landing-cta {
