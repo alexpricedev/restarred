@@ -147,6 +147,65 @@ export const Home = ({ user, csrfToken, flash }: HomeProps) => (
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="landing-faq" id="faq">
+        <div className="landing-container">
+          <div className="faq-header">
+            <h2>QUESTIONS</h2>
+          </div>
+          <div className="faq-grid">
+            <div className="faq-item">
+              <h3>IS THERE A TEXT-ONLY VERSION?</h3>
+              <p>
+                Every digest is sent as a multipart email with both HTML and
+                plain text. If your mail client prefers plain text, you'll
+                automatically get a clean, text-only version — no settings to
+                change.
+              </p>
+            </div>
+            <div className="faq-item">
+              <h3>CAN I PICK THE DAY AND TIME?</h3>
+              <p>
+                Yes. From your account settings you can choose which day of the
+                week your digest arrives and what time works best for you.
+              </p>
+            </div>
+            <div className="faq-item">
+              <h3>WHAT GITHUB PERMISSIONS DO YOU NEED?</h3>
+              <p>
+                We request access to your profile, email, and public repos. The
+                public repo scope lets us read your starred list and unstar
+                repos on your behalf when you click "Unstar" in a digest. We
+                can't see your private repositories.
+              </p>
+            </div>
+            <div className="faq-item">
+              <h3>IS IT REALLY FREE?</h3>
+              <p>
+                Yes, completely. No premium tier, no trial period, no credit
+                card. re:starred is a free, open-source side project — not a
+                business.
+              </p>
+            </div>
+            <div className="faq-item">
+              <h3>WILL I GET REPEATS?</h3>
+              <p>
+                No. We cycle through your entire star list before showing any
+                repo a second time. If you have 300 stars, that's two years of
+                unique digests.
+              </p>
+            </div>
+            <div className="faq-item">
+              <h3>HOW DO I UNSUBSCRIBE?</h3>
+              <p>
+                Every email has a one-click unsubscribe link. You can also pause
+                or cancel from your account settings at any time — no hoops.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="landing-cta">
         <div className="landing-cta-inner">
