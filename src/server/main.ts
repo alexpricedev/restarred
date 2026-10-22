@@ -15,6 +15,10 @@ const server = Bun.serve({
   port: Number(process.env.PORT),
   idleTimeout: 30,
   routes: {
+    // Liveness check for the deploy proxy: answers before any app route and
+    // never touches the database or creates a session.
+    "/health": () =>
+      new Response("OK", { headers: { "Content-Type": "text/plain" } }),
     ...appRoutes,
     ...adminRoutes,
     ...apiRoutes,

@@ -1,0 +1,71 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "Kamal command: setup (first deploy only), deploy, or rollback"
+        type: choice
+        options: [deploy, setup, rollback]
+        default: deploy
+      version:
+        description: "For rollback: the commit SHA to roll back to"
+        required: false
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+
+      - name: Install Kamal
+        run: gem install kamal --no-document
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Join tailnet
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Run Kamal
+        env:
+          KAMAL_REGISTRY_USERNAME: ${{ github.actor }}
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CRYPTO_PEPPER: ${{ secrets.CRYPTO_PEPPER }}
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+          GITHUB_CLIENT_ID: ${{ secrets.GH_OAUTH_CLIENT_ID }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.GH_OAUTH_CLIENT_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_WEBHOOK_SECRET: ${{ secrets.RESEND_WEBHOOK_SECRET }}
+          FORWARD_EMAIL_TO: ${{ secrets.FORWARD_EMAIL_TO }}
+          COMMAND: ${{ inputs.command || 'deploy' }}
+          # Not VERSION: Kamal reads that as the image tag, so an empty value breaks the build.
+          ROLLBACK_VERSION: ${{ inputs.version }}
+        run: |
+          case "$COMMAND" in
+            setup)    kamal setup ;;
+            deploy)   kamal deploy ;;
+            rollback) kamal rollback "$ROLLBACK_VERSION" ;;
+          esac

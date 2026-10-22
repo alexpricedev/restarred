@@ -1,0 +1,52 @@
+# Kamal deploy config for restarred on the shared CHPTRS server.
+
+service: restarred
+image: alexpricedev/restarred
+
+servers:
+  web:
+    - chptrs-1
+
+ssh:
+  user: deploy
+
+proxy:
+  ssl: true
+  # Rehearsal host. At cutover, change to restarred.dev (and APP_URL below).
+  host: restarred.chptrs.tech
+  app_port: 3000
+  healthcheck:
+    path: /health
+    interval: 3
+    timeout: 3
+
+registry:
+  server: ghcr.io
+  username:
+    - KAMAL_REGISTRY_USERNAME
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+
+env:
+  clear:
+    NODE_ENV: production
+    PORT: 3000
+    APP_URL: https://restarred.chptrs.tech
+    # console for the rehearsal: nothing is emailed. Switch to resend at cutover.
+    EMAIL_PROVIDER: console
+    FROM_EMAIL: digest@restarred.dev
+    FROM_NAME: "re:starred"
+  secret:
+    - DATABASE_URL     # postgres://restarred:<password>@172.30.0.1:5432/restarred
+    - CRYPTO_PEPPER    # must match Railway's at cutover, or sessions break
+    - ENCRYPTION_KEY   # must match Railway's at cutover, or stored GitHub tokens can't be read
+    - GITHUB_CLIENT_ID
+    - GITHUB_CLIENT_SECRET
+    - RESEND_API_KEY
+    - RESEND_WEBHOOK_SECRET
+    - FORWARD_EMAIL_TO
+
+retain_containers: 5
