@@ -1,0 +1,15 @@
+.git
+.github
+.husky
+.claude
+.conductor
+.context
+.kamal
+node_modules
+dist
+coverage
+.env
+.env.*
+*.md
+railway.json
+conductor.json
