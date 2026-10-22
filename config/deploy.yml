@@ -12,8 +12,7 @@ ssh:
 
 proxy:
   ssl: true
-  # Rehearsal host. At cutover, change to restarred.dev (and APP_URL below).
-  host: restarred.chptrs.tech
+  host: restarred.dev
   app_port: 3000
   healthcheck:
     path: /health
@@ -34,9 +33,8 @@ env:
   clear:
     NODE_ENV: production
     PORT: 3000
-    APP_URL: https://restarred.chptrs.tech
-    # console for the rehearsal: nothing is emailed. Switch to resend at cutover.
-    EMAIL_PROVIDER: console
+    APP_URL: https://restarred.dev
+    EMAIL_PROVIDER: resend
     FROM_EMAIL: digest@restarred.dev
     FROM_NAME: "re:starred"
   secret:
