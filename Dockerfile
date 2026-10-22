@@ -12,7 +12,7 @@ FROM oven/bun:${BUN_VERSION}
 WORKDIR /app
 ENV NODE_ENV=production
 COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile --production --ignore-scripts
+RUN bun install --frozen-lockfile --ignore-scripts
 COPY tsconfig.json ./
 COPY public ./public
 COPY src ./src
