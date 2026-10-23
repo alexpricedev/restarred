@@ -19,7 +19,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # A push to main runs the full CI first and deploys only if it passes.
+  # Manual runs (setup, deploy, rollback) skip it.
+  ci:
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/ci.yml
+
   deploy:
+    needs: ci
+    if: ${{ !cancelled() && (needs.ci.result == 'success' || needs.ci.result == 'skipped') }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:

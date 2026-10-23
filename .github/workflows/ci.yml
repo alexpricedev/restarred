@@ -1,10 +1,11 @@
 name: CI
 
+# Pushes to main don't trigger this directly: deploy.yml calls it first and
+# only deploys if it passes.
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
+  workflow_call:
 
 jobs:
   lint:
